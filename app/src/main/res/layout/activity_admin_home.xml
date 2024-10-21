@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <Button
+        android:id="@+id/buttonViewUsers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Users"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/buttonViewBooking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Booking"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/buttonViewTutorProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Tutor Profile"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/buttonViewStudentProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Student Profile"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/buttonViewModules"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Modules"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/buttonViewTutorModules"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Tutor Modules"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/buttonDeleteUser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete User"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/textViewUsers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="User Records"
+        android:visibility="gone"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/textViewBooking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Booking Records"
+        android:visibility="gone"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/textViewTutorProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tutor Profile Records"
+        android:visibility="gone"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/textViewStudentProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tutor Profile Records"
+        android:visibility="gone"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/textViewTutorModule"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tutor Profile Records"
+        android:visibility="gone"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/textViewModules"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Module Records"
+        android:visibility="gone"
+        tools:ignore="HardcodedText" />
+</LinearLayout>
+
