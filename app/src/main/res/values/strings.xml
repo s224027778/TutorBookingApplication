@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">CC</string>
+    <string name="com_airbnb_android_lottie">com.airbnb.android:lottie:%1$s</string>
+    <string name="login">Login</string>
+    <string name="signup">Signup</string>
+    <string name="remember_me">Remember_me</string>
+    <string name="forgot_password">Forgot password</string>
+    <string name="or_login_with">or login With</string>
+    <string name="welcome_back">Welcome Back</string>
+    <string name="login_with_your_username_and_password_or_continue_with_social_media">Login with your username and password or continue with social media.</string>
+    <string name="enter_your_username">=Enter your username</string>
+    <string name="username">Username</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="password">Password</string>
+    <string name="next">Next</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="categories">Categories</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="modules_to_tutor">Modules to tutor:</string>
+    <string-array name="Modules">
+        <item>IEMT302</item>
+        <item>IAPP301</item>
+        <item>IMOB301</item>
+        <item>IDBD201</item>
+        <item>ACSD301</item>
+        <item>IWDV201</item>
+        <item>CNF01</item>
+        <item>IOS202</item>
+        <item>INOS302</item>
+        <item>ANRB302</item>
+        <item>INRB201</item>
+        <item>ADTA302</item>
+        <item>INDA102</item>
+        <item>DTMG401</item>
+        <item>BGTA101</item>
+        <item>DGD301</item>
+        <item>GMDN102</item>
+        <item>GMDN101</item>
+        <item>WDV202</item>
+        <item>WDV201</item>
+        <item>IRUD301</item>
+        <item>WRAV102</item>
+        <item>WRAV101</item>
+    </string-array>
+</resources>

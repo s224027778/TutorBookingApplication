@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- App Logo -->
+        <ImageView
+            android:id="@+id/appLogo"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_launcher_foreground"
+            android:contentDescription="App Logo" />
+
+        <!-- About Us Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="About Us"
+            android:textSize="24sp"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:paddingTop="20dp"
+            android:paddingBottom="10dp"/>
+
+        <!-- Description -->
+        <TextView
+            android:id="@+id/aboutDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Our app helps students find tutors quickly and efficiently. We aim to make learning accessible and convenient for everyone."
+            android:textSize="16sp"
+            android:paddingBottom="10dp"/>
+
+        <!-- Contact Information -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Contact Us"
+            android:textSize="18sp"
+            android:layout_gravity="start"
+            android:textStyle="bold"
+            android:paddingTop="10dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Email: codecoach@gmail.com\nPhone: +27 710 072 727\nWebsite: www.codecoach.com"
+            android:textSize="16sp"
+            android:paddingBottom="10dp"/>
+
+    </LinearLayout>
+</ScrollView>
