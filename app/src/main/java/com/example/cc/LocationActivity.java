@@ -1,12 +1,14 @@
 package com.example.cc;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -21,6 +23,7 @@ import java.util.Locale;
 public class LocationActivity extends AppCompatActivity {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private Button getLocationButton;
+    private ImageButton back;
     private TextView locationTextView;
     private ProgressBar locationProgressBar;
     private FusedLocationProviderClient fusedLocationClient;
@@ -33,6 +36,7 @@ public class LocationActivity extends AppCompatActivity {
         getLocationButton = findViewById(R.id.getLocationButton);
         locationTextView = findViewById(R.id.locationTextView);
         locationProgressBar = findViewById(R.id.locationProgressBar);
+        back = findViewById(R.id.back_button);
 
         // Initialize Fused Location Provider Client
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -41,6 +45,11 @@ public class LocationActivity extends AppCompatActivity {
             // Show progress bar while retrieving location
             locationProgressBar.setVisibility(View.VISIBLE);
             getLocation();
+        });
+
+        back.setOnClickListener(v -> {
+            Intent intent = new Intent(LocationActivity.this,TutorSettings.class);
+            startActivity(intent);
         });
     }
 

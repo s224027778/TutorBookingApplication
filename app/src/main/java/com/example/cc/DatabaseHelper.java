@@ -232,20 +232,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT LATITUDE, LONGITUDE, ADDRESS FROM Location WHERE TUTOR_NAME = ?", new String[]{tutorName});
     }
 
-    // Method to populate database with prices
     public void insertPrices() {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
 
-        String[] prices = {"Free", "R100", "R150", "R200"};
+        // Check if there are any rows in the price table
+        String query = "SELECT COUNT(*) FROM " + TABLE_NAME_PRICE;
+        Cursor cursor = db.rawQuery(query, null);
 
-        for (String price : prices) {
-            values.put(COL_PRICE_LABEL, price);
-            values.put(COL_PRICE_AMOUNT, convertPriceToAmount(price));
-            db.insert(TABLE_NAME_PRICE, null, values);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            int count = cursor.getInt(0); // Get the count of rows
+
+            // If there are no rows, populate the table
+            if (count == 0) {
+                ContentValues values = new ContentValues();
+                String[] prices = {"Free", "R100", "R150", "R200"};
+
+                for (String price : prices) {
+                    values.put(COL_PRICE_LABEL, price);
+                    values.put(COL_PRICE_AMOUNT, convertPriceToAmount(price));
+                    db.insert(TABLE_NAME_PRICE, null, values);
+                }
+            }
+            cursor.close();
         }
         db.close();
     }
+
 
     private double convertPriceToAmount(String price) {
         switch (price) {

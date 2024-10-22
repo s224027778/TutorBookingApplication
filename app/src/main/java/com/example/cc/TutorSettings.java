@@ -5,21 +5,24 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-
 import androidx.appcompat.app.AppCompatActivity;
-
+import com.example.cc.databinding.ActivityTutorSettingsBinding;
 import com.google.android.material.card.MaterialCardView;
 
 public class TutorSettings extends AppCompatActivity {
 
     private MaterialCardView accountCard, logoutCard, TutorFaqCard, AboutUsCard, locationCard;
+    private ActivityTutorSettingsBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tutor_settings);
 
-        // Initialize the Account Card
+        // Initialize binding first
+        binding = ActivityTutorSettingsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());  // Set the correct root view with binding
+
+        // Initialize the cards
         accountCard = findViewById(R.id.accountCard);
         logoutCard = findViewById(R.id.logoutCard);
         TutorFaqCard = findViewById(R.id.TutorFaqCard);
@@ -42,7 +45,6 @@ public class TutorSettings extends AppCompatActivity {
             }
         });
 
-        // Set OnClickListener to navigate to AccountActivity
         accountCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,7 +53,6 @@ public class TutorSettings extends AppCompatActivity {
             }
         });
 
-        // Set OnClickListener to navigate to AccountActivity
         locationCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,13 +61,11 @@ public class TutorSettings extends AppCompatActivity {
             }
         });
 
-
         logoutCard.setOnClickListener(v -> {
             new AlertDialog.Builder(TutorSettings.this)
                     .setTitle("Logout")
                     .setMessage("Are you sure you want to log out?")
                     .setPositiveButton("Yes", (dialog, which) -> {
-                        // Clear session data and redirect
                         SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.clear();
@@ -80,9 +79,24 @@ public class TutorSettings extends AppCompatActivity {
                     .show();
         });
 
-        // Similarly, you can set listeners for other settings cards
-        // For example:
-        // MaterialCardView locationCard = findViewById(R.id.locationCard);
-        // locationCard.setOnClickListener(...);
+        // Set up the bottom navigation and handle intents or fragment replacements
+        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.home) {
+                Intent intent = new Intent(TutorSettings.this, TutorBookingRequests.class);
+                startActivity(intent);
+            } else if (itemId == R.id.bookingRequests) {
+                Intent intent = new Intent(TutorSettings.this, ConfirmedBookingActivity.class);
+                startActivity(intent);
+            } else if (itemId == R.id.chat) {
+                // Handle chat logic
+            } else if (itemId == R.id.settings) {
+                Intent intent = new Intent(TutorSettings.this, TutorSettings.class);
+                startActivity(intent);
+            }
+
+            return true;
+        });
     }
 }

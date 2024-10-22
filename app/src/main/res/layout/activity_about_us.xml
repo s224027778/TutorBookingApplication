@@ -9,6 +9,35 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!-- Top Bar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp">
+
+            <ImageButton
+                android:id="@+id/back_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Back"
+                android:layout_gravity="start"
+                android:padding="12dp" />
+
+            <TextView
+                android:id="@+id/top_bar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="CodeCoach"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.Toolbar>
+
         <!-- App Logo -->
         <ImageView
             android:id="@+id/appLogo"
@@ -27,7 +56,7 @@
             android:layout_gravity="center"
             android:textStyle="bold"
             android:paddingTop="20dp"
-            android:paddingBottom="10dp"/>
+            android:paddingBottom="10dp" />
 
         <!-- Description -->
         <TextView
@@ -36,7 +65,7 @@
             android:layout_height="wrap_content"
             android:text="Our app helps students find tutors quickly and efficiently. We aim to make learning accessible and convenient for everyone."
             android:textSize="16sp"
-            android:paddingBottom="10dp"/>
+            android:paddingBottom="10dp" />
 
         <!-- Contact Information -->
         <TextView
@@ -53,7 +82,7 @@
             android:layout_height="wrap_content"
             android:text="Email: codecoach@gmail.com\nPhone: +27 710 072 727\nWebsite: www.codecoach.com"
             android:textSize="16sp"
-            android:paddingBottom="10dp"/>
+            android:paddingBottom="10dp" />
 
     </LinearLayout>
 </ScrollView>

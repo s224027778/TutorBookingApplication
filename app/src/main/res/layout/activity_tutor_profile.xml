@@ -5,28 +5,41 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TutorProfileActivity">
+    tools:context=".TutorProfileActivity"
+    android:padding="16dp">
 
+    <!-- Top toolbar with back button and centered title -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/topToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/lavender"
-        app:contentInsetStartWithNavigation="0dp"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
+        <!-- Back button on the left -->
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back"
+            android:background="?attr/selectableItemBackground"
+            android:layout_gravity="start"
+            android:contentDescription="Back" />
+
+        <!-- Title centered -->
         <TextView
             android:id="@+id/toolbarTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Code Coach"
+            android:text="CodeCoach"
             android:textColor="@color/white"
-            android:textSize="25sp"
-            android:layout_marginStart="16dp"/>
+            android:textSize="22sp"
+            android:layout_centerHorizontal="true" />
     </androidx.appcompat.widget.Toolbar>
 
+    <!-- Update Profile Title -->
     <TextView
         android:id="@+id/updateProfileTitle"
         android:layout_width="wrap_content"
@@ -35,117 +48,134 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
         android:text="Update Profile"
-        android:textSize="30sp"
+        android:textSize="26sp"
         android:textStyle="bold"/>
+
+    <!-- Edit icon next to the title -->
+
+    <!-- User Name EditText -->
 
     <ImageView
         android:id="@+id/editIcon"
-        android:layout_width="20dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="30dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_alignBottom="@id/updateProfileTitle"
-        android:src="@drawable/edit"/>
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="66dp"
+        android:layout_marginBottom="4dp"
+        android:src="@drawable/edit" />
 
     <EditText
         android:id="@+id/userName"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="48dp"
         android:layout_below="@id/updateProfileTitle"
         android:layout_marginTop="20dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:hint="UserName"
-        android:gravity="center"
-        android:padding="10dp" />
+        android:hint="Username"
+        android:padding="12dp"
+        android:background="@drawable/edittext_background"
+        android:gravity="center" />
 
+    <!-- First Name EditText -->
     <EditText
         android:id="@+id/editTextFirstName"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_below="@id/userName"
         android:layout_marginTop="12dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:hint="@string/first_name" />
+        android:hint="@string/first_name"
+        android:padding="12dp"
+        android:background="@drawable/edittext_background" />
 
+    <!-- Last Name EditText -->
     <EditText
         android:id="@+id/editTextLastName"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_below="@id/editTextFirstName"
         android:layout_marginTop="12dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:hint="@string/last_name" />
+        android:hint="@string/last_name"
+        android:padding="12dp"
+        android:background="@drawable/edittext_background" />
 
+    <!-- Phone Number EditText -->
     <EditText
         android:id="@+id/editTextPhoneNumber"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_below="@id/editTextLastName"
         android:layout_marginTop="12dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:hint="@string/phone_number" />
+        android:hint="@string/phone_number"
+        android:padding="12dp"
+        android:background="@drawable/edittext_background" />
 
+    <!-- Modules label -->
     <TextView
         android:id="@+id/modulesText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/editTextPhoneNumber"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="24dp"
         android:layout_marginStart="16dp"
         android:text="@string/modules_to_tutor"
         android:textSize="16sp"
         android:textStyle="bold"/>
 
+    <!-- Modules Spinner -->
     <Spinner
         android:id="@+id/moduleSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/modulesText"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
+        android:layout_marginTop="8dp"
+        android:background="@drawable/spinner_background"/>
 
+    <!-- Price label -->
     <TextView
         android:id="@+id/pricesText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/moduleSpinner"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="24dp"
         android:layout_marginStart="16dp"
         android:text="Price for selected module"
         android:textSize="16sp"
         android:textStyle="bold"/>
 
+    <!-- Price Spinner -->
     <Spinner
         android:id="@+id/priceSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/pricesText"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
+        android:layout_marginTop="8dp"
+        android:background="@drawable/spinner_background"/>
 
-    <Button
-        android:id="@+id/editProfile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/priceSpinner"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="Edit Profile"/>
-
+    <!-- Edit Profile Button -->
     <Button
         android:id="@+id/createProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editProfile"
+        android:layout_below="@id/priceSpinner"
         android:layout_marginTop="20dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/lavender"
+        android:textColor="@android:color/white"
+        android:padding="12dp"
         android:text="Create Profile"/>
+
+    <!-- Create Profile Button -->
+    <Button
+        android:id="@+id/editProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/createProfile"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/lavender"
+        android:textColor="@android:color/white"
+        android:padding="12dp"
+        android:text="Edit Profile"/>
+
 </RelativeLayout>
+
 
 

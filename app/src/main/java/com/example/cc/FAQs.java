@@ -1,6 +1,8 @@
 package com.example.cc;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +12,7 @@ public class FAQs extends AppCompatActivity {
 
     private ListView faqListView;
     private DatabaseHelper dbHelper;
+    private ImageButton back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +21,7 @@ public class FAQs extends AppCompatActivity {
 
         // Initialize the ListView
         faqListView = findViewById(R.id.faqListView);
+        back = findViewById(R.id.back_button);
 
         // Initialize the database helper
         dbHelper = new DatabaseHelper(this);
@@ -27,6 +31,11 @@ public class FAQs extends AppCompatActivity {
 
         // Load FAQ data from the database
         loadFAQData();
+
+        back.setOnClickListener(v -> {
+            Intent intent = new Intent(FAQs.this,TutorSettings.class);
+            startActivity(intent);
+        });
     }
 
     private void insertDefaultFAQs() {

@@ -1,5 +1,8 @@
 package com.example.cc;
 
+import static com.example.cc.R.id.back_button;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -8,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -22,7 +26,9 @@ import java.util.List;
 public class TutorProfileActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     DatabaseHelper db;
     EditText editTextUsername, editTextFirstName, editTextLastName, editTextPhoneNumber;
+    private ImageButton back;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +41,7 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
         editTextFirstName = findViewById(R.id.editTextFirstName);
         editTextLastName = findViewById(R.id.editTextLastName);
         editTextPhoneNumber = findViewById(R.id.editTextPhoneNumber);
+        back = findViewById(R.id.backButton);
 
         Spinner moduleSpinner = findViewById(R.id.moduleSpinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, db.getModuleNames());
@@ -88,20 +95,24 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
                     // Get tutor ID by username
                     int tutorId = db.getTutorIdByUsername(username);
 
-                    // Assign modules to the tutor (This will come from selected modules in the UI)
-                    Spinner moduleSpinner = findViewById(R.id.moduleSpinner); // Make sure to add this Spinner to the layout
+                    // Assign modules to the tutor
+                    Spinner moduleSpinner = findViewById(R.id.moduleSpinner);
                     String selectedModule = moduleSpinner.getSelectedItem().toString();
-                    int moduleId = db.getModuleIdByName(selectedModule);  // You need to implement this method in the DatabaseHelper class
+                    int moduleId = db.getModuleIdByName(selectedModule);
 
-                    db.assignTutorToModule(tutorId, moduleId);  // Assign the module to the tutor
+                    db.assignTutorToModule(tutorId, moduleId);
 
-                    Intent intent = new Intent(TutorProfileActivity.this, TutorHomeActivity.class);
+                    // Hide the create profile button
+                    v.setVisibility(View.GONE);
+
+                    Intent intent = new Intent(TutorProfileActivity.this, TutorBookingRequests.class);
                     startActivity(intent);
                 } else {
                     Toast.makeText(TutorProfileActivity.this, "Profile Update Failed", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
 
         profileEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,12 +143,17 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
 
                     db.assignTutorToModule(tutorId, moduleId);
 
-                    Intent intent = new Intent(TutorProfileActivity.this, TutorHomeActivity.class);
+                    Intent intent = new Intent(TutorProfileActivity.this, TutorBookingRequests.class);
                     startActivity(intent);
                 } else {
                     Toast.makeText(TutorProfileActivity.this, "Profile Update Failed", Toast.LENGTH_SHORT).show();
                 }
             }
+        });
+
+        back.setOnClickListener(v -> {
+            Intent intent = new Intent(TutorProfileActivity.this,TutorSettings.class);
+            startActivity(intent);
         });
 
     }
