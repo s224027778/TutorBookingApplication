@@ -1,35 +1,38 @@
 package com.example.cc;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
 import java.util.List;
 
-public class BookingAdapter extends ArrayAdapter<Booking> {
+public class BookingAdapter extends BaseAdapter {
     private Context context;
-    private List<Booking> bookings;
-    private DatabaseHelper databaseHelper;
+    private List<String> bookings;
+    private TutorBookingRequests activity;
 
-    public BookingAdapter(Context context, List<Booking> bookings, DatabaseHelper db) {
-        super(context, 0, bookings);
-        this.context = context;
+    public BookingAdapter(TutorBookingRequests activity, List<String> bookings) {
+        this.context = activity;
         this.bookings = bookings;
-        this.databaseHelper = db;
+        this.activity = activity;
+    }
+
+    @Override
+    public int getCount() {
+        return bookings.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return bookings.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
@@ -38,28 +41,29 @@ public class BookingAdapter extends ArrayAdapter<Booking> {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_booking, parent, false);
         }
 
-        Booking booking = bookings.get(position);
-
         TextView bookingInfo = convertView.findViewById(R.id.booking_info);
         Button confirmButton = convertView.findViewById(R.id.confirm_button);
+        Button declineButton = convertView.findViewById(R.id.decline_button);
 
-        bookingInfo.setText("Student: " + booking.getStudentName() + "\nModule: " + booking.getModuleName() + "\nDate: " + booking.getDate());
+        String bookingDetails = bookings.get(position);
+        bookingInfo.setText(bookingDetails);
 
+        // Handle the confirm button click
         confirmButton.setOnClickListener(v -> {
-            // Handle confirmation action
-            confirmBooking(booking.getId());
+            activity.confirmBooking(bookingDetails);  // Call the method in the activity
+            bookings.remove(position);  // Remove the confirmed booking from the list
+            notifyDataSetChanged();  // Notify the adapter that data has changed
+        });
+
+        // Handle the decline button click
+        declineButton.setOnClickListener(v -> {
+            activity.declineBooking(bookingDetails);  // Call the method in the activity
+            bookings.remove(position);  // Remove the declined booking from the list
+            notifyDataSetChanged();  // Notify the adapter that data has changed
         });
 
         return convertView;
     }
-
-    private void confirmBooking(int bookingId) {
-        // Update the booking status in the database
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseHelper.COL_BOOKING_STATUS, 1); // Mark as confirmed
-        db.update(DatabaseHelper.TABLE_NAME_BOOKING, contentValues, DatabaseHelper.COL_BOOKING_ID + " = ?", new String[]{String.valueOf(bookingId)});
-
-        Toast.makeText(context, "Booking confirmed!", Toast.LENGTH_SHORT).show();
-    }
 }
+
+

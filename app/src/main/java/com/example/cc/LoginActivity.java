@@ -67,7 +67,9 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(new Intent(LoginActivity.this, StudentHomeActivity.class));
                         break;
                     case "Tutor":
-                        startActivity(new Intent(LoginActivity.this, TutorHomeActivity.class));
+                        Intent intent = new Intent(LoginActivity.this, TutorBookingRequests.class);
+                        intent.putExtra("TUTOR_NAME", db.getLoggedInTutorName(username)); // Pass the tutor's name
+                        startActivity(intent);
                         finish();
                         break;
                     default:

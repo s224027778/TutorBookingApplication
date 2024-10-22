@@ -100,7 +100,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_CONFIRMEDBOOKING_DURATION = "DURATION";
     public static final String COL_CONFIRMEDBOOKING_STATUS = "STATUS";
 
-    public static final int DATABASE_VERSION = 5;
+    public static final int DATABASE_VERSION = 1;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -419,11 +419,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT * FROM " + TABLE_NAME_BOOKING, null);
     }
 
+
     public Cursor getBookingsByTutorName(String tutorName) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_NAME_BOOKING + " WHERE " + COL_BOOKING_TUTORNAME + " = ?", new String[]{tutorName});
     }
 
+    public Cursor getConfirmedBooking(String tutorName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME_BOOKING +
+                        " WHERE " + COL_BOOKING_TUTORNAME + " = ?" +
+                        " AND " + COL_BOOKING_STATUS + " = 1",
+                new String[]{tutorName});
+    }
 
     public Cursor getAllUsers() {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -631,7 +639,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean confirmBooking(String tutorName, String studentName, String moduleName) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_BOOKING_STATUS, 1); // Assuming 1 means confirmed
+        contentValues.put(COL_BOOKING_STATUS, 1);
+
+        // Update the booking status where tutor name, student name, and module name match
+        int result = db.update(TABLE_NAME_BOOKING, contentValues,
+                COL_BOOKING_TUTORNAME + " = ? AND " + COL_BOOKING_STUDENTNAME + " = ? AND " + COL_BOOKING_MODULENAME + " = ?",
+                new String[]{tutorName, studentName, moduleName});
+        return result > 0;
+    }
+
+    public boolean declineBooking(String tutorName, String studentName, String moduleName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_BOOKING_STATUS, 0);
 
         // Update the booking status where tutor name, student name, and module name match
         int result = db.update(TABLE_NAME_BOOKING, contentValues,
@@ -642,17 +662,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public String getLoggedInTutorName(String username) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String tutorName = null;
+        String TutorName = null;
 
         Cursor cursor = db.rawQuery("SELECT " + COL_TUTOR_NAME + " FROM " + TABLE_NAME_TUTORPROFILE + " WHERE " + COL_TUTOR_NAME + " = ?", new String[]{username});
 
         if (cursor.moveToFirst()) {
             @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex(COL_TUTOR_NAME));
-            tutorName = name;
+            TutorName = name;
         }
 
         cursor.close();
-        return tutorName;
+        return TutorName;
     }
 
     public String getLoggedInStudentName(String username) {
