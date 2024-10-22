@@ -10,13 +10,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.cc.databinding.ActivityTutorDetailBinding;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TutorDetailActivity extends AppCompatActivity {
     DatabaseHelper db;
     private TextView tvTutorName, tvFirstName, tvLastName, tvPhoneNumber, tvLat, tvLong, tvAddress;
-    private Button btnMakeBooking;
+    private Button btnMakeBooking, btnAddReview;
     private ActivityTutorDetailBinding binding;
+    private RecyclerView recyclerViewReviews; // RecyclerView for reviews
+    private ReviewAdapter reviewAdapter;
+    private List<Review> reviewList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +44,10 @@ public class TutorDetailActivity extends AppCompatActivity {
         tvLong = findViewById(R.id.tvLong); // TextView for Longitude
         tvAddress = findViewById(R.id.tvAddress); // TextView for Address
         btnMakeBooking = findViewById(R.id.btnMakeBooking);
+        btnAddReview = findViewById(R.id.btnAddReview);
+
+        recyclerViewReviews = findViewById(R.id.recyclerViewReviews); // Initialize RecyclerView
+        recyclerViewReviews.setLayoutManager(new LinearLayoutManager(this));
 
         // Get tutor data from intent
         Intent intent = getIntent();
@@ -49,6 +62,8 @@ public class TutorDetailActivity extends AppCompatActivity {
         tvLastName.setText(lastName);
         tvPhoneNumber.setText(phoneNumber);
 
+        displayReviews(tutorName);
+
         // Now that tutorName is initialized, we can call displayTutorLocation
         displayTutorLocation(tutorName);
 
@@ -58,20 +73,23 @@ public class TutorDetailActivity extends AppCompatActivity {
             startActivity(bookingIntent);
         });
 
-        // Set up the bottom navigation and handle intents or fragment replacements
+        btnAddReview.setOnClickListener(view -> {
+            Intent reviewIntent = new Intent(TutorDetailActivity.this, ReviewActivity.class);
+            startActivity(reviewIntent);
+        });
+
+        // Set up bottom navigation
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
 
             if (itemId == R.id.home) {
-                // Navigate to StudentHomeActivity
                 Intent homeIntent = new Intent(TutorDetailActivity.this, StudentHomeActivity.class);
                 startActivity(homeIntent);
             } else if (itemId == R.id.bookingRequests) {
-                // Navigate to TutorBookingRequests
                 Intent bookingRequestsIntent = new Intent(TutorDetailActivity.this, TutorBookingRequests.class);
                 startActivity(bookingRequestsIntent);
             } else if (itemId == R.id.chat) {
-                // Chat functionality (implementation pending)
+                // Chat functionality pending
             } else if (itemId == R.id.settings) {
                 Intent settingsIntent = new Intent(TutorDetailActivity.this, TutorSettings.class);
                 startActivity(settingsIntent);
@@ -83,7 +101,7 @@ public class TutorDetailActivity extends AppCompatActivity {
 
     // Method to display the tutor's location
     private void displayTutorLocation(String tutorName) {
-        Cursor cursor = db.getTutorLocation(tutorName);// Fetch location from database
+        Cursor cursor = db.getTutorLocation(tutorName); // Fetch location from database
         if (cursor != null && cursor.moveToFirst()) {
             double latitude = cursor.getDouble(cursor.getColumnIndexOrThrow("LATITUDE"));
             double longitude = cursor.getDouble(cursor.getColumnIndexOrThrow("LONGITUDE"));
@@ -94,17 +112,36 @@ public class TutorDetailActivity extends AppCompatActivity {
             tvLong.setText("Longitude: " + longitude);
             tvAddress.setText("Address: " + address);
 
-            Log.d("TutorDetailActivity", "Tutor Name: " + tutorName);
-            Log.d("TutorDetailActivity", "Latitude: " + latitude);
-            Log.d("TutorDetailActivity", "Longitude: " + longitude);
-
         } else {
-            // Display default message if location is not available
             tvLat.setText("Location not available");
             tvLong.setText("");
             tvAddress.setText("");
         }
         cursor.close();  // Close the cursor after use
+    }
+
+    // Method to fetch reviews and display them in RecyclerView
+    private void displayReviews(String tutorName) {
+        reviewList = new ArrayList<>();
+        Cursor cursor = db.getReviewsForTutor(tutorName); // Fetch reviews from database
+
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                int reviewId = cursor.getInt(cursor.getColumnIndexOrThrow("ID")); // Fetch ID
+                String reviewText = cursor.getString(cursor.getColumnIndexOrThrow("REVIEW_TEXT"));
+                int starRating = cursor.getInt(cursor.getColumnIndexOrThrow("RATING"));
+
+                // Create a new Review object and add it to the list
+                reviewList.add(new Review(reviewId, tutorName, reviewText, starRating));
+            }
+            cursor.close();
+        } else {
+            // Handle no reviews case (optional)
+        }
+
+        // Set the adapter with the list of reviews
+        reviewAdapter = new ReviewAdapter(reviewList, this);
+        recyclerViewReviews.setAdapter(reviewAdapter);
     }
 }
 

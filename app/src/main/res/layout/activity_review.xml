@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add a Review"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:layout_gravity="center"
+        android:fontFamily="sans-serif-medium"
+        android:paddingBottom="16dp"/>
+
+    <TextView
+        android:id="@+id/tv_tutor_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tutor Name"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/et_tutor_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter tutor name"
+        android:textColorHint="@color/grey"
+        android:textColor="@color/black"
+        android:inputType="text"
+        android:background="@drawable/edittext_border"
+        android:padding="12dp"/>
+
+    <TextView
+        android:id="@+id/tv_review_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your Review"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:id="@+id/et_review_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Write your review here"
+        android:textColorHint="@color/grey"
+        android:textColor="@color/black"
+        android:inputType="textMultiLine"
+        android:background="@drawable/edittext_border"
+        android:padding="12dp"
+        android:minHeight="120dp"
+        android:gravity="top"/>
+
+    <TextView
+        android:id="@+id/tv_star_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rate the Tutor"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:layout_marginTop="16dp"/>
+
+    <RatingBar
+        android:id="@+id/rb_star_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize="1"
+        android:rating="0"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:id="@+id/btn_submit_review"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit Review"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/blue"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="16sp"
+        android:layout_marginTop="24dp"/>
+
+</LinearLayout>

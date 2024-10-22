@@ -89,11 +89,28 @@
             android:text="Address"
             android:layout_marginTop="8dp" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewReviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvAddress"
+            android:padding="16dp"
+            android:layout_marginTop="20dp"
+            tools:listitem="@layout/item_review" />
+
+
         <Button
             android:id="@+id/btnMakeBooking"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Make a Booking"
+            android:layout_marginTop="20dp" />
+
+        <Button
+            android:id="@+id/btnAddReview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add A Review"
             android:layout_marginTop="20dp" />
     </LinearLayout>
 

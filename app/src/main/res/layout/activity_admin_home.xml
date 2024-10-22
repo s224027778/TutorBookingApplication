@@ -49,6 +49,27 @@
         tools:ignore="HardcodedText" />
 
     <Button
+        android:id="@+id/buttonViewLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Location"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/buttonViewPrices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Price"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/buttonViewReviews"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Reviews"
+        tools:ignore="HardcodedText" />
+
+    <Button
         android:id="@+id/buttonDeleteUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -100,6 +121,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Module Records"
+        android:visibility="gone"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/textViewLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Location Records"
+        android:visibility="gone"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/textViewPrices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Price Records"
+        android:visibility="gone"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/textViewReviews"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Review Records"
         android:visibility="gone"
         tools:ignore="HardcodedText" />
 </LinearLayout>

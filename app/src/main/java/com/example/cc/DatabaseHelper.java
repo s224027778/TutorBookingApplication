@@ -25,6 +25,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_NAME_FAQ = "faq";
     public static final String TABLE_NAME_PRICE = "price";
     public static final String TABLE_NAME_LOCATION = "location";
+    public static final String TABLE_NAME_REVIEW = "review";
+
+    // Review Table Columns
+    private static final String COL_REVIEW_ID = "ID";
+    private static final String COL_REVIEW_TUTOR_NAME = "TUTOR_NAME";
+    private static final String COL_REVIEW_TEXT = "REVIEW_TEXT";
+    private static final String COL_REVIEW_RATING = "RATING";
 
     // Location Table Columns
     private static final String COL_LOCATION_TUTOR_NAME = "TUTOR_NAME";
@@ -191,6 +198,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_LOCATION_ADDRESS + " TEXT, " +
                 "FOREIGN KEY (" + COL_LOCATION_TUTOR_NAME + ") REFERENCES " + TABLE_NAME_TUTORPROFILE + "(" + COL_TUTOR_NAME + "))");
 
+        // Create Review Table
+        db.execSQL("CREATE TABLE " + TABLE_NAME_REVIEW + " (" +
+                COL_REVIEW_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_REVIEW_TUTOR_NAME + " TEXT, " +
+                COL_REVIEW_TEXT + " TEXT, " +
+                COL_REVIEW_RATING + " INTEGER, " +
+                "FOREIGN KEY (" + COL_REVIEW_TUTOR_NAME + ") REFERENCES " + TABLE_NAME_TUTORPROFILE + "(" + COL_TUTOR_NAME + "))");
+
         // Insert initial data into Categories and Modules tables
         insertInitialData(db);
     }
@@ -208,6 +223,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_FAQ);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_PRICE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_LOCATION);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_REVIEW);
         onCreate(db);
     }
 
@@ -271,6 +287,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_PASSWORD, password);
         contentValues.put(COL_USERTYPE, userType);
         long result = db.insert(TABLE_NAME_USERS, null, contentValues);
+        return result != -1;
+    }
+
+    public boolean insertReview(String tutorname, String text, String rating) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_REVIEW_TUTOR_NAME, tutorname);
+        contentValues.put(COL_REVIEW_TEXT, text);
+        contentValues.put(COL_REVIEW_RATING, rating);
+        long result = db.insert(TABLE_NAME_REVIEW, null, contentValues);
         return result != -1;
     }
 
@@ -422,6 +448,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getAllTutorModules() {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_NAME_TUTORMODULES, null);
+    }
+
+    public Cursor getAllReviews() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME_REVIEW, null);
+    }
+
+    public Cursor getAllLocations() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME_LOCATION, null);
     }
 
     // Method to delete all modules from the modules table
@@ -640,6 +676,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + TABLE_NAME_BOOKING +
                 " WHERE " + COL_BOOKING_STUDENTNAME + " = ?";
         return db.rawQuery(query, new String[]{studentName});
+    }
+
+    public Cursor getReviewsForTutor(String tutorName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_NAME_REVIEW +
+                " WHERE " + COL_REVIEW_TUTOR_NAME + " = ?";
+        return db.rawQuery(query, new String[] { tutorName });
     }
 
 }

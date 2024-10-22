@@ -17,8 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 public class AdminHomeActivity extends AppCompatActivity {
 
     DatabaseHelper db;
-    TextView textViewUsers, textViewBooking, textViewModules, textViewTutorProfile, textViewStudentProfile, textViewTutorModule;
-    Button buttonViewUsers, buttonViewBooking, buttonDeleteUser, buttonViewTutorProfile, buttonViewStudentProfile, buttonViewTutorModule, buttonViewModules;
+    TextView textViewUsers, textViewBooking, textViewModules, textViewTutorProfile, textViewStudentProfile, textViewTutorModule, textViewLocation, textViewReviews, textViewPrice;
+    Button buttonViewUsers, buttonViewBooking, buttonDeleteUser, buttonViewTutorProfile, buttonViewStudentProfile, buttonViewTutorModule, buttonViewModules, buttonViewLocation, buttonViewReviews, buttonViewPrices;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -33,6 +33,9 @@ public class AdminHomeActivity extends AppCompatActivity {
         textViewTutorModule = findViewById(R.id.textViewTutorModule);
         textViewTutorProfile = findViewById(R.id.textViewTutorProfile);
         textViewStudentProfile = findViewById(R.id.textViewStudentProfile);
+        textViewLocation = findViewById(R.id.textViewLocation);
+        textViewPrice = findViewById(R.id.textViewPrices);
+        textViewReviews = findViewById(R.id.textViewReviews);
         buttonViewUsers = findViewById(R.id.buttonViewUsers);
         buttonViewBooking = findViewById(R.id.buttonViewBooking);
         buttonViewModules = findViewById(R.id.buttonViewModules);
@@ -40,6 +43,9 @@ public class AdminHomeActivity extends AppCompatActivity {
         buttonViewStudentProfile = findViewById(R.id.buttonViewStudentProfile);
         buttonDeleteUser = findViewById(R.id.buttonDeleteUser);
         buttonViewTutorModule = findViewById(R.id.buttonViewTutorModules);
+        buttonViewLocation = findViewById(R.id.buttonViewLocation);
+        buttonViewPrices = findViewById(R.id.buttonViewPrices);
+        buttonViewReviews = findViewById(R.id.buttonViewReviews);
 
         buttonViewUsers.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +93,27 @@ public class AdminHomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 viewTutorModules();
+            }
+        });
+
+        buttonViewLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewLocation();
+            }
+        });
+
+        buttonViewPrices.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //viewStudentProfiles();
+            }
+        });
+
+        buttonViewReviews.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewReviews();
             }
         });
     }
@@ -153,6 +180,25 @@ public class AdminHomeActivity extends AppCompatActivity {
         textViewTutorModule.setVisibility(View.VISIBLE);
     }
 
+    private void viewReviews() {
+        Cursor res = db.getAllReviews();
+        StringBuilder sb = new StringBuilder();
+        while (res.moveToNext()) {
+            sb.append("ID: ").append(res.getString(0)).append(", TutorName: ").append(res.getString(1)).append(", Review: ").append(res.getString(2)).append(", Star Rating: ").append(res.getString(3)).append("\n");
+        }
+        textViewReviews.setText(sb.toString());
+        textViewReviews.setVisibility(View.VISIBLE);
+    }
+
+    private void viewLocation() {
+        Cursor res = db.getAllLocations();
+        StringBuilder sb = new StringBuilder();
+        while (res.moveToNext()) {
+            sb.append("TutorName: ").append(res.getString(0)).append(", Latitude: ").append(res.getString(1)).append(", Longitude: ").append(res.getString(2)).append(", Address: ").append(res.getString(3)).append("\n");
+        }
+        textViewLocation.setText(sb.toString());
+        textViewLocation.setVisibility(View.VISIBLE);
+    }
 
     private void deleteUser() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -181,4 +227,6 @@ public class AdminHomeActivity extends AppCompatActivity {
         builder.show();
     }
 }
+
+
 
