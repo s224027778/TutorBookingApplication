@@ -4,30 +4,41 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".StudentProfileActivity">
+    tools:context=".StudentProfileActivity"
+    android:padding="16dp">
 
-    <!-- Toolbar -->
+    <!-- Top toolbar with back button and centered title -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/topToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/lavender"
-        app:contentInsetStartWithNavigation="0dp"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
+        <!-- Back button on the left -->
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back"
+            android:background="?attr/selectableItemBackground"
+            android:layout_gravity="start"
+            android:contentDescription="Back" />
+
+        <!-- Title centered -->
         <TextView
             android:id="@+id/toolbarTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="Code Coach"
+            android:layout_gravity="center"
+            android:text="CodeCoach"
             android:textColor="@color/white"
-            android:textSize="25sp"
-            android:layout_marginStart="16dp" />
+            android:textSize="22sp"
+            android:layout_centerHorizontal="true" />
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- Profile Update Title -->
+    <!-- Update Profile Title -->
     <TextView
         android:id="@+id/updateProfileTitle"
         android:layout_width="wrap_content"
@@ -36,73 +47,90 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
         android:text="Update Profile"
-        android:textSize="30sp" />
+        android:textSize="26sp"
+        android:textStyle="bold"/>
 
-    <!-- Edit Icon -->
+    <!-- Edit icon next to the title -->
+
+    <!-- User Name EditText -->
+
     <ImageView
         android:id="@+id/editIcon"
-        android:layout_width="20dp"
-        android:layout_height="41dp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="30dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_alignBottom="@id/updateProfileTitle"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="66dp"
+        android:layout_marginBottom="4dp"
         android:src="@drawable/edit" />
 
-    <!-- Username Input -->
     <EditText
         android:id="@+id/userName"
-        android:layout_width="300dp"
-        android:layout_height="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
         android:layout_below="@id/updateProfileTitle"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:hint="UserName" />
+        android:hint="Username"
+        android:padding="12dp"
+        android:background="@drawable/edittext_background"
+        android:gravity="center" />
 
-    <!-- First Name Input -->
+    <!-- First Name EditText -->
     <EditText
         android:id="@+id/editTextFirstName"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_below="@id/userName"
-        android:hint="@string/first_name" />
+        android:layout_marginTop="12dp"
+        android:hint="@string/first_name"
+        android:padding="12dp"
+        android:background="@drawable/edittext_background" />
 
-    <!-- Last Name Input -->
+    <!-- Last Name EditText -->
     <EditText
         android:id="@+id/editTextLastName"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_below="@id/editTextFirstName"
-        android:hint="@string/last_name" />
+        android:layout_marginTop="12dp"
+        android:hint="@string/last_name"
+        android:padding="12dp"
+        android:background="@drawable/edittext_background" />
 
-    <!-- Phone Number Input -->
+    <!-- Phone Number EditText -->
     <EditText
         android:id="@+id/editTextPhoneNumber"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_below="@id/editTextLastName"
-        android:hint="@string/phone_number" />
+        android:layout_marginTop="12dp"
+        android:hint="@string/phone_number"
+        android:padding="12dp"
+        android:background="@drawable/edittext_background" />
 
     <!-- Edit Profile Button -->
-
-    <Button
-        android:id="@+id/editProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/createProfile"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="45dp"
-        android:layout_marginEnd="141dp"
-        android:text="Edit Profile" />
-
     <Button
         android:id="@+id/createProfile"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/editTextPhoneNumber"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="14dp"
-        android:text="Create Profile" />
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/lavender"
+        android:textColor="@android:color/white"
+        android:padding="12dp"
+        android:text="Create Profile"/>
+
+    <!-- Create Profile Button -->
+    <Button
+        android:id="@+id/editProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/createProfile"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/lavender"
+        android:textColor="@android:color/white"
+        android:padding="12dp"
+        android:text="Edit Profile"/>
 
 </RelativeLayout>
 

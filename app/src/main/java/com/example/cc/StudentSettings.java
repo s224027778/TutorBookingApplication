@@ -6,22 +6,56 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.cc.databinding.ActivityStudentSettingsBinding;
 import com.google.android.material.card.MaterialCardView;
 
 public class StudentSettings extends AppCompatActivity {
 
     private MaterialCardView accountCard, logoutCard, StudentFaqCard, StudentAboutUsCard, locationCard;
+    private ActivityStudentSettingsBinding binding;
+    String studentName;
+    private DatabaseHelper dbHelp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_student_settings);
+        binding = ActivityStudentSettingsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         accountCard = findViewById(R.id.studentAccountCard);
         logoutCard = findViewById(R.id.studentLogoutCard);
         StudentFaqCard = findViewById(R.id.StudentFaqCard);
         StudentAboutUsCard = findViewById(R.id.StudentAboutUs);
         locationCard = findViewById(R.id.locationCard);
+
+        SharedPreferences userSession = getSharedPreferences("UserSession", MODE_PRIVATE);
+        String loggedInUsername = userSession.getString("LoggedInStudentUsername", null);
+
+        // Initialize the DatabaseHelper
+        dbHelp = new DatabaseHelper(this);
+
+        // Retrieve the logged-in student's name from the database using the method
+        studentName = dbHelp.getLoggedInStudentName(loggedInUsername);
+
+        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.home) {
+                Intent homeIntent = new Intent(StudentSettings.this, StudentHomeActivity.class);
+                startActivity(homeIntent);
+            } else if (itemId == R.id.bookingRequests) {
+                Intent intent = new Intent(StudentSettings.this, StudentSessions.class);
+                intent.putExtra("STUDENT_NAME", studentName);
+                startActivity(intent);
+            } else if (itemId == R.id.chat) {
+                // Handle chat navigation
+            } else if (itemId == R.id.settings) {
+                Intent intent = new Intent(StudentSettings.this, StudentSettings.class);
+                startActivity(intent);
+            }
+
+            return true;
+        });
 
         StudentAboutUsCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,5 +109,6 @@ public class StudentSettings extends AppCompatActivity {
                     .setNegativeButton("No", null)
                     .show();
         });
+
     }
 }

@@ -8,6 +8,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.cc.databinding.ActivityStudentHomeBinding;
 import com.example.cc.databinding.ActivityStudentSessionsBinding;
 
 import java.util.ArrayList;
@@ -24,7 +26,8 @@ public class StudentSessions extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_student_sessions);
+        binding = ActivityStudentSessionsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         recyclerView = findViewById(R.id.recyclerViewBookings);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -41,6 +44,26 @@ public class StudentSessions extends AppCompatActivity {
             Toast.makeText(this, "Student name is missing!", Toast.LENGTH_SHORT).show();
             finish();
         }
+
+        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.home) {
+                Intent intent = new Intent(StudentSessions.this, StudentHomeActivity.class);
+                startActivity(intent);
+            } else if (itemId == R.id.bookingRequests) {
+                Intent intent = new Intent(StudentSessions.this, StudentSessions.class);
+                intent.putExtra("STUDENT_NAME", studentName);
+                startActivity(intent);
+            } else if (itemId == R.id.chat) {
+                // Handle chat navigation
+            } else if (itemId == R.id.settings) {
+                Intent intent = new Intent(StudentSessions.this, StudentSettings.class);
+                startActivity(intent);
+            }
+
+            return true;
+        });
 
     }
 

@@ -24,32 +24,22 @@ public class CategoryList extends AppCompatActivity {
 
         // Get categories from the database
         List<Category> categories = dbHelp.getAllCategories();
-        final List<String> categoryNames = new ArrayList<>();
 
-        for (Category category : categories) {
-            categoryNames.add(category.getName());
-        }
-
-        // Create an ArrayAdapter
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, categoryNames);
+        // Create and set the custom adapter
+        CategoryAdapter adapter = new CategoryAdapter(this, categories);
         listView.setAdapter(adapter);
 
         // Set an item click listener
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Category selectedCategory = categories.get(position);
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Category selectedCategory = categories.get(position);
 
-                // Fetch the modules for the selected category
-                List<Module> modules = dbHelp.getModulesByCategory(selectedCategory.getId());
+            // Fetch the modules for the selected category
+            List<Module> modules = dbHelp.getModulesByCategory(selectedCategory.getId());
 
-                // Create an intent to start the ModuleListActivity
-                Intent intent = new Intent(CategoryList.this, ModuleList.class);
-                intent.putExtra("modules", new ArrayList<>(modules)); // Convert List to ArrayList
-                startActivity(intent);
-
-            }
+            // Create an intent to start the ModuleListActivity
+            Intent intent = new Intent(CategoryList.this, ModuleList.class);
+            intent.putExtra("modules", new ArrayList<>(modules)); // Convert List to ArrayList
+            startActivity(intent);
         });
-
     }
 }

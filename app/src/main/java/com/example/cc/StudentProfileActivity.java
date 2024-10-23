@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -28,6 +29,13 @@ public class StudentProfileActivity extends AppCompatActivity {
 
         Button profileCreate = findViewById(R.id.createProfile);
         Button profileEdit = findViewById(R.id.editProfile);
+
+        ImageButton back = findViewById(R.id.backButton);
+
+        back.setOnClickListener(v -> {
+            Intent intent = new Intent(StudentProfileActivity.this,TutorSettings.class);
+            startActivity(intent);
+        });
 
         profileCreate.setOnClickListener(new View.OnClickListener() {
             @Override

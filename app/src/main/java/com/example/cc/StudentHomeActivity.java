@@ -58,14 +58,9 @@ public class StudentHomeActivity extends AppCompatActivity {
 
         // Get categories from the database
         List<Category> categories = dbHelp.getAllCategories();
-        final List<String> categoryNames = new ArrayList<>();
 
-        for (Category category : categories) {
-            categoryNames.add(category.getName());
-        }
-
-        // Create an ArrayAdapter
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, categoryNames);
+        // Create a custom CategoryAdapter
+        CategoryAdapter adapter = new CategoryAdapter(this, categories);
         listView.setAdapter(adapter);
 
         // Set an item click listener

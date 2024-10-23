@@ -39,6 +39,8 @@ android {
 }
 
 dependencies {
+    // Add the CardView dependency
+    implementation ("androidx.cardview:cardview:1.0.0")
     implementation(platform("com.google.firebase:firebase-bom:33.4.0")) // Use BoM for version management
     implementation("com.google.firebase:firebase-firestore") // No need for version
     implementation("com.google.firebase:firebase-auth") // No need for version

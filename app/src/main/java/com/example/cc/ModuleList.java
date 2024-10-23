@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -22,10 +23,17 @@ public class ModuleList extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityModuleListBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_module_list);
+
+        // Initialize the ImageButton (make sure the ID matches your XML layout)
+        ImageButton back = findViewById(R.id.back_button);
 
         ListView listView = findViewById(R.id.moduleView);
+
+        back.setOnClickListener(v -> {
+            Intent intent = new Intent(ModuleList.this,StudentHomeActivity.class);
+            startActivity(intent);
+        });
 
         // Get the module list from the intent
         ArrayList<Module> modules = (ArrayList<Module>) getIntent().getSerializableExtra("modules");
@@ -66,31 +74,5 @@ public class ModuleList extends AppCompatActivity {
             // Handle the case where modules are null
             Log.e("ModuleList", "Modules list is null");
         }
-
-        // Set up the bottom navigation and handle intents or fragment replacements
-        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-
-            if (itemId == R.id.home) {
-                // Avoid reloading the activity unnecessarily if already on it
-                Intent intent = new Intent(ModuleList.this, StudentHomeActivity.class);
-                startActivity(intent);
-            } else if (itemId == R.id.bookingRequests) {
-                Intent intent = new Intent(ModuleList.this, TutorBookingRequests.class);
-                startActivity(intent);
-            } else if (itemId == R.id.chat) {
-
-            } else if (itemId == R.id.settings) {
-
-            }
-
-            return true;
-        });
-    }
-    private void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);  // Ensure the frame_layout exists in your layout
-        fragmentTransaction.commit();
     }
 }

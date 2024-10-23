@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -30,8 +31,10 @@ public class TutorDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityTutorDetailBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_tutor_detail);
+
+        // Initialize the ImageButton (make sure the ID matches your XML layout)
+        ImageButton back = findViewById(R.id.back_button);
 
         db = new DatabaseHelper(this);
 
@@ -45,6 +48,11 @@ public class TutorDetailActivity extends AppCompatActivity {
         tvAddress = findViewById(R.id.tvAddress); // TextView for Address
         btnMakeBooking = findViewById(R.id.btnMakeBooking);
         btnAddReview = findViewById(R.id.btnAddReview);
+
+        back.setOnClickListener(v -> {
+            Intent intent = new Intent(TutorDetailActivity.this,TutorList.class);
+            startActivity(intent);
+        });
 
         recyclerViewReviews = findViewById(R.id.recyclerViewReviews); // Initialize RecyclerView
         recyclerViewReviews.setLayoutManager(new LinearLayoutManager(this));
@@ -78,25 +86,6 @@ public class TutorDetailActivity extends AppCompatActivity {
             startActivity(reviewIntent);
         });
 
-        // Set up bottom navigation
-        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-
-            if (itemId == R.id.home) {
-                Intent homeIntent = new Intent(TutorDetailActivity.this, StudentHomeActivity.class);
-                startActivity(homeIntent);
-            } else if (itemId == R.id.bookingRequests) {
-                Intent bookingRequestsIntent = new Intent(TutorDetailActivity.this, TutorBookingRequests.class);
-                startActivity(bookingRequestsIntent);
-            } else if (itemId == R.id.chat) {
-                // Chat functionality pending
-            } else if (itemId == R.id.settings) {
-                Intent settingsIntent = new Intent(TutorDetailActivity.this, TutorSettings.class);
-                startActivity(settingsIntent);
-            }
-
-            return true;
-        });
     }
 
     // Method to display the tutor's location
