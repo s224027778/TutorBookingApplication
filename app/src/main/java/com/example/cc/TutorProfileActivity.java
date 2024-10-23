@@ -104,9 +104,6 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
 
                     // Hide the create profile button
                     v.setVisibility(View.GONE);
-
-                    Intent intent = new Intent(TutorProfileActivity.this, TutorBookingRequests.class);
-                    startActivity(intent);
                 } else {
                     Toast.makeText(TutorProfileActivity.this, "Profile Update Failed", Toast.LENGTH_SHORT).show();
                 }
@@ -142,9 +139,6 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
                     int moduleId = db.getModuleIdByName(selectedModule);
 
                     db.assignTutorToModule(tutorId, moduleId);
-
-                    Intent intent = new Intent(TutorProfileActivity.this, TutorBookingRequests.class);
-                    startActivity(intent);
                 } else {
                     Toast.makeText(TutorProfileActivity.this, "Profile Update Failed", Toast.LENGTH_SHORT).show();
                 }

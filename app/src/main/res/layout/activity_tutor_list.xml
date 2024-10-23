@@ -12,7 +12,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="4dp">
 
@@ -36,12 +36,38 @@
             android:textSize="20sp"
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
-    <!-- ListView below the Toolbar -->
-    <ListView
-        android:id="@+id/tutorListView"
+
+    <!-- Content Area below the Top Bar -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_marginTop="?attr/actionBarSize"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        android:padding="16dp">
 
+        <!-- Heading for Available Tutors -->
+        <TextView
+            android:id="@+id/tvAvailableTutors"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Available Tutors"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorPrimary"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp" />
+
+        <!-- ListView for tutors -->
+        <ListView
+            android:id="@+id/tutorListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@color/white"
+            android:dividerHeight="1dp"
+            android:padding="8dp"
+            android:background="@android:color/white"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,51 +29,40 @@ public class ModuleList extends AppCompatActivity {
         // Initialize the ImageButton (make sure the ID matches your XML layout)
         ImageButton back = findViewById(R.id.back_button);
 
-        ListView listView = findViewById(R.id.moduleView);
-
         back.setOnClickListener(v -> {
             Intent intent = new Intent(ModuleList.this,StudentHomeActivity.class);
             startActivity(intent);
         });
 
+        GridView gridView = findViewById(R.id.moduleGridView);
+
         // Get the module list from the intent
         ArrayList<Module> modules = (ArrayList<Module>) getIntent().getSerializableExtra("modules");
 
         if (modules != null) {
-            List<String> moduleNames = new ArrayList<>();
-            for (Module module : modules) {
-                moduleNames.add(module.getName());
-            }
-
-            // Create an ArrayAdapter to display the modules
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, moduleNames);
-            listView.setAdapter(adapter);
+            ModuleGridAdapter adapter = new ModuleGridAdapter(this, modules);
+            gridView.setAdapter(adapter);
 
             // Set an item click listener
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    // Get the selected module
-                    Module selectedModule = modules.get(position);
+            gridView.setOnItemClickListener((parent, view, position, id) -> {
+                // Get the selected module
+                Module selectedModule = modules.get(position);
 
-                    // Log the selected module ID
-                    Log.d("ModuleList", "Selected Module ID: " + selectedModule.getId());
+                // Log the selected module ID
+                Log.d("ModuleList", "Selected Module ID: " + selectedModule.getId());
 
-                    // Create an intent to start TutorList activity
-                    Intent intent = new Intent(ModuleList.this, TutorList.class);
+                // Create an intent to start TutorList activity
+                Intent intent = new Intent(ModuleList.this, TutorList.class);
 
-                    // Pass the MODULE_ID to the TutorList activity
-                    intent.putExtra("MODULE_ID", String.valueOf(selectedModule.getId()));
+                // Pass the MODULE_ID to the TutorList activity
+                intent.putExtra("MODULE_ID", String.valueOf(selectedModule.getId()));
 
-                    // Start the TutorList activity
-                    startActivity(intent);
-                }
+                // Start the TutorList activity
+                startActivity(intent);
             });
-
-
         } else {
-            // Handle the case where modules are null
             Log.e("ModuleList", "Modules list is null");
         }
+
     }
 }

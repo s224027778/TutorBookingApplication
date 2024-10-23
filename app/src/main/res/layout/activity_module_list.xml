@@ -37,12 +37,29 @@
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- ListView below the Toolbar -->
-    <ListView
-        android:id="@+id/moduleView"
+    <!-- Heading -->
+    <TextView
+        android:id="@+id/tvAvailableModules"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Available Modules"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="?attr/colorPrimary"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- GridView for modules -->
+    <GridView
+        android:id="@+id/moduleGridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="?attr/actionBarSize"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
+        android:columnWidth="100dp"
+        android:gravity="center"
+        android:horizontalSpacing="10dp"
+        android:numColumns="2"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="10dp"
+        android:padding="16dp" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

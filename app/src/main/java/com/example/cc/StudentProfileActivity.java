@@ -57,9 +57,6 @@ public class StudentProfileActivity extends AppCompatActivity {
 
                     // Get student ID by username
                     int studentId = db.getStudentIdByUsername(username);
-
-                    Intent intent = new Intent(StudentProfileActivity.this, TutorHomeActivity.class);
-                    startActivity(intent);
                 } else {
                     Toast.makeText(StudentProfileActivity.this, "Profile Update Failed", Toast.LENGTH_SHORT).show();
                 }
@@ -86,9 +83,6 @@ public class StudentProfileActivity extends AppCompatActivity {
 
                     // Get tutor ID by username
                     int studentId = db.getStudentIdByUsername(username);
-
-                    Intent intent = new Intent(StudentProfileActivity.this, StudentHomeActivity.class);
-                    startActivity(intent);
                 } else {
                     Toast.makeText(StudentProfileActivity.this, "Profile Update Failed", Toast.LENGTH_SHORT).show();
                 }
