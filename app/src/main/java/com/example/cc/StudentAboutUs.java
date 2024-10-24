@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class AboutUs extends AppCompatActivity {
+public class StudentAboutUs extends AppCompatActivity {
     private ImageButton back;
 
     @Override
@@ -16,7 +16,7 @@ public class AboutUs extends AppCompatActivity {
         back = findViewById(R.id.back_button);
 
         back.setOnClickListener(v -> {
-            Intent intent = new Intent(AboutUs.this,TutorSettings.class);
+            Intent intent = new Intent(StudentAboutUs.this,StudentSettings.class);
             startActivity(intent);
         });
     }

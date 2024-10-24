@@ -27,7 +27,7 @@ public class TutorList extends AppCompatActivity {
         dbHelper = new DatabaseHelper(this);
 
         back.setOnClickListener(v -> {
-            Intent intent = new Intent(TutorList.this,ModuleList.class);
+            Intent intent = new Intent(TutorList.this,StudentHomeActivity.class);
             startActivity(intent);
         });
 

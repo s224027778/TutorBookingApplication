@@ -11,7 +11,7 @@ import com.google.android.material.card.MaterialCardView;
 
 public class StudentSettings extends AppCompatActivity {
 
-    private MaterialCardView accountCard, logoutCard, StudentFaqCard, StudentAboutUsCard, locationCard;
+    private MaterialCardView accountCard, logoutCard, StudentFaqCard, StudentAboutUsCard;
     private ActivityStudentSettingsBinding binding;
     String studentName;
     private DatabaseHelper dbHelp;
@@ -26,7 +26,6 @@ public class StudentSettings extends AppCompatActivity {
         logoutCard = findViewById(R.id.studentLogoutCard);
         StudentFaqCard = findViewById(R.id.StudentFaqCard);
         StudentAboutUsCard = findViewById(R.id.StudentAboutUs);
-        locationCard = findViewById(R.id.locationCard);
 
         SharedPreferences userSession = getSharedPreferences("UserSession", MODE_PRIVATE);
         String loggedInUsername = userSession.getString("LoggedInStudentUsername", null);
@@ -45,7 +44,7 @@ public class StudentSettings extends AppCompatActivity {
                 startActivity(homeIntent);
             } else if (itemId == R.id.bookingRequests) {
                 Intent intent = new Intent(StudentSettings.this, StudentSessions.class);
-                intent.putExtra("STUDENT_NAME", studentName);
+               // intent.putExtra("STUDENT_NAME", studentName);
                 startActivity(intent);
             } else if (itemId == R.id.chat) {
                 // Handle chat navigation
@@ -60,24 +59,15 @@ public class StudentSettings extends AppCompatActivity {
         StudentAboutUsCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 Intent intent= new Intent(StudentSettings.this, AboutUs.class);
+                 Intent intent= new Intent(StudentSettings.this, StudentAboutUs.class);
                  startActivity(intent);
-            }
-        });
-
-        // Set OnClickListener to navigate to Location Activity
-        locationCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(StudentSettings.this, LocationActivity.class);
-                startActivity(intent);
             }
         });
 
         StudentFaqCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(StudentSettings.this, FAQs.class);
+                Intent intent = new Intent(StudentSettings.this, StudentFAQs.class);
                 startActivity(intent);
             }
         });

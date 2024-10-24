@@ -355,6 +355,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
+    // Insert location into the Location table
+    public boolean insertLocationData(String tutorName, double latitude, double longitude, String address) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COL_LOCATION_TUTOR_NAME, tutorName);
+        values.put(COL_LOCATION_LATITUDE, latitude);
+        values.put(COL_LOCATION_LONGITUDE, longitude);
+        values.put(COL_LOCATION_ADDRESS, address);
+
+        long result = db.insert(TABLE_NAME_LOCATION, null, values);
+        return result != -1;  // If result is -1, insertion failed
+    }
+
     // Update TutorModule Table
     public boolean updateProfile(String username, String firstName, String lastName, String phoneNumber) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -427,6 +440,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT * FROM " + TABLE_NAME_USERS + " WHERE USERNAME=?", new String[]{username});
     }
 
+    public Cursor getTutorProfile(String tutorUsername) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME_TUTORPROFILE + " WHERE NAME=?", new String[]{tutorUsername});
+    }
+
+    public Cursor getStudentProfile(String studentUsername) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME_STUDENTPROFILE + " WHERE NAME=?", new String[]{studentUsername});
+    }
+
     public Cursor getAllBookings() {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_NAME_BOOKING, null);
@@ -444,6 +467,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         " WHERE " + COL_BOOKING_TUTORNAME + " = ?" +
                         " AND " + COL_BOOKING_STATUS + " = 1",
                 new String[]{tutorName});
+    }
+
+    public boolean checkUser(String username) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM users WHERE username = ?", new String[]{username});
+        boolean exists = (cursor.getCount() > 0);
+        cursor.close();
+        return exists;
     }
 
     public Cursor getAllUsers() {

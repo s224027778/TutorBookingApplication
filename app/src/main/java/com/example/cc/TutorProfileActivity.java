@@ -62,7 +62,6 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedPrice = parent.getItemAtPosition(position).toString();
-                Toast.makeText(parent.getContext(), "Selected: " + selectedPrice, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -85,12 +84,21 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
                 Cursor res = db.getUserProfile(username);
                 if (res == null || res.getCount() == 0) {
                     Toast.makeText(TutorProfileActivity.this, "User profile not found", Toast.LENGTH_SHORT).show();
+                    res.close();
                     return;
                 }
 
+                Cursor res1 = db.getTutorProfile(username);
+                if (res1 != null && res1.getCount() > 0) {
+                    Toast.makeText(TutorProfileActivity.this, "Tutor profile already exists", Toast.LENGTH_SHORT).show();
+                    res1.close();
+                    return;
+                }
+
+
                 boolean isInserted = db.insertProfile(username, firstName, lastName, phoneNumber);
                 if (isInserted) {
-                    Toast.makeText(TutorProfileActivity.this, "Profile Updated", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TutorProfileActivity.this, "Profile Created", Toast.LENGTH_SHORT).show();
 
                     // Get tutor ID by username
                     int tutorId = db.getTutorIdByUsername(username);
@@ -105,7 +113,7 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
                     // Hide the create profile button
                     v.setVisibility(View.GONE);
                 } else {
-                    Toast.makeText(TutorProfileActivity.this, "Profile Update Failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TutorProfileActivity.this, "Profile Not Created", Toast.LENGTH_SHORT).show();
                 }
             }
         });

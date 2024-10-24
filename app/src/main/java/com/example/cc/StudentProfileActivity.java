@@ -33,7 +33,7 @@ public class StudentProfileActivity extends AppCompatActivity {
         ImageButton back = findViewById(R.id.backButton);
 
         back.setOnClickListener(v -> {
-            Intent intent = new Intent(StudentProfileActivity.this,TutorSettings.class);
+            Intent intent = new Intent(StudentProfileActivity.this,StudentSettings.class);
             startActivity(intent);
         });
 
@@ -48,17 +48,25 @@ public class StudentProfileActivity extends AppCompatActivity {
                 Cursor res = db.getUserProfile(username);
                 if (res == null || res.getCount() == 0) {
                     Toast.makeText(StudentProfileActivity.this, "User profile not found", Toast.LENGTH_SHORT).show();
+                    res.close();
+                    return;
+                }
+
+                Cursor res1 = db.getStudentProfile(username);
+                if (res1 != null && res1.getCount() > 0) {
+                    Toast.makeText(StudentProfileActivity.this, "Student profile already exists", Toast.LENGTH_SHORT).show();
+                    res1.close();
                     return;
                 }
 
                 boolean isInserted = db.insertStudentProfile(username, firstName, lastName, phoneNumber);
                 if (isInserted) {
-                    Toast.makeText(StudentProfileActivity.this, "Profile Updated", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StudentProfileActivity.this, "Profile Created", Toast.LENGTH_SHORT).show();
 
                     // Get student ID by username
                     int studentId = db.getStudentIdByUsername(username);
                 } else {
-                    Toast.makeText(StudentProfileActivity.this, "Profile Update Failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StudentProfileActivity.this, "Profile not created", Toast.LENGTH_SHORT).show();
                 }
             }
         });
