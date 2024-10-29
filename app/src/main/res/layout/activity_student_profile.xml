@@ -1,4 +1,5 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -51,9 +52,6 @@
         android:textStyle="bold"/>
 
     <!-- Edit icon next to the title -->
-
-    <!-- User Name EditText -->
-
     <ImageView
         android:id="@+id/editIcon"
         android:layout_width="30dp"
@@ -64,6 +62,7 @@
         android:layout_marginBottom="4dp"
         android:src="@drawable/edit" />
 
+    <!-- User Name EditText -->
     <EditText
         android:id="@+id/userName"
         android:layout_width="match_parent"
@@ -97,40 +96,58 @@
         android:padding="12dp"
         android:background="@drawable/edittext_background" />
 
-    <!-- Phone Number EditText -->
-    <EditText
-        android:id="@+id/editTextPhoneNumber"
+    <!-- Phone Layout with Country Code Picker and Phone Number EditText -->
+    <LinearLayout
+        android:id="@+id/phoneLayout"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/editTextLastName"
         android:layout_marginTop="12dp"
-        android:hint="@string/phone_number"
-        android:padding="12dp"
-        android:background="@drawable/edittext_background" />
+        android:orientation="horizontal">
 
-    <!-- Edit Profile Button -->
+        <!-- Country Code Picker -->
+        <com.hbb20.CountryCodePicker
+            android:id="@+id/studentcountryCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:ccp_showFlag="false"
+            app:ccp_showNameCode="false"/>
+
+        <!-- Phone Number EditText -->
+        <EditText
+            android:id="@+id/editTextPhoneNumber"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:hint="@string/phone_number"
+            android:padding="12dp"
+            android:inputType="phone"
+            android:background="@drawable/edittext_background"/>
+    </LinearLayout>
+
+    <!-- Create Profile Button -->
     <Button
         android:id="@+id/createProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editTextPhoneNumber"
+        android:layout_below="@id/phoneLayout"
         android:layout_marginTop="20dp"
         android:backgroundTint="@color/lavender"
-        android:textColor="@android:color/white"
         android:padding="12dp"
-        android:text="Create Profile"/>
+        android:text="Create Profile"
+        android:textColor="@android:color/white" />
 
-    <!-- Create Profile Button -->
+    <!-- Edit Profile Button -->
     <Button
         android:id="@+id/editProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/createProfile"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="27dp"
         android:backgroundTint="@color/lavender"
-        android:textColor="@android:color/white"
         android:padding="12dp"
-        android:text="Edit Profile"/>
+        android:text="Edit Profile"
+        android:textColor="@android:color/white" />
 
 </RelativeLayout>
 

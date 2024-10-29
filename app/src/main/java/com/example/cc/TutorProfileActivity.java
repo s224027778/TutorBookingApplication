@@ -21,12 +21,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.hbb20.CountryCodePicker;
+
 import java.util.List;
 
 public class TutorProfileActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     DatabaseHelper db;
     EditText editTextUsername, editTextFirstName, editTextLastName, editTextPhoneNumber;
     private ImageButton back;
+    CountryCodePicker countryCodePicker;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -42,6 +45,7 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
         editTextLastName = findViewById(R.id.editTextLastName);
         editTextPhoneNumber = findViewById(R.id.editTextPhoneNumber);
         back = findViewById(R.id.backButton);
+        countryCodePicker = findViewById(R.id.tutorcountryCode);
 
         Spinner moduleSpinner = findViewById(R.id.moduleSpinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, db.getModuleNames());
@@ -81,6 +85,10 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
                 String lastName = editTextLastName.getText().toString().trim();
                 String phoneNumber = editTextPhoneNumber.getText().toString().trim();
 
+                if(!validatePhoneNumber()){
+                    return;
+                }
+
                 Cursor res = db.getUserProfile(username);
                 if (res == null || res.getCount() == 0) {
                     Toast.makeText(TutorProfileActivity.this, "User profile not found", Toast.LENGTH_SHORT).show();
@@ -94,7 +102,6 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
                     res1.close();
                     return;
                 }
-
 
                 boolean isInserted = db.insertProfile(username, firstName, lastName, phoneNumber);
                 if (isInserted) {
@@ -127,12 +134,16 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
                 String lastName = editTextLastName.getText().toString().trim();
                 String phoneNumber = editTextPhoneNumber.getText().toString().trim();
 
+                if(!validatePhoneNumber()){
+                    return;
+                }
+
                 Cursor res = db.getUserProfile(username);
                 if (res == null || res.getCount() == 0) {
                     Toast.makeText(TutorProfileActivity.this, "User profile not found", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                validatePhoneNumber();
                 // Call the updateProfile method
                 boolean isUpdated = db.updateProfile(username, firstName, lastName, phoneNumber);
                 if (isUpdated) {
@@ -159,6 +170,22 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
         });
 
     }
+    private boolean validatePhoneNumber() {
+        String countryCode = countryCodePicker.getSelectedCountryCodeWithPlus();
+        String phoneNumber = editTextPhoneNumber.getText().toString();
+
+        if (countryCode.equals("+27")) {
+            if (phoneNumber.length() != 9) {
+                editTextPhoneNumber.setError("Mobile number should be 9 digits after +27.");
+                return false;
+            }
+        } else{
+            editTextPhoneNumber.setError("South African numbers should have +27");
+            return false;
+        }
+        return true;
+    }
+
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

@@ -12,9 +12,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.hbb20.CountryCodePicker;
+
 public class StudentProfileActivity extends AppCompatActivity {
     DatabaseHelper db;
     EditText editTextUsername, editTextFirstName, editTextLastName, editTextPhoneNumber;
+    CountryCodePicker countryCodePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +29,7 @@ public class StudentProfileActivity extends AppCompatActivity {
         editTextFirstName = findViewById(R.id.editTextFirstName);
         editTextLastName = findViewById(R.id.editTextLastName);
         editTextPhoneNumber = findViewById(R.id.editTextPhoneNumber);
+        countryCodePicker = findViewById(R.id.studentcountryCode);
 
         Button profileCreate = findViewById(R.id.createProfile);
         Button profileEdit = findViewById(R.id.editProfile);
@@ -45,6 +49,9 @@ public class StudentProfileActivity extends AppCompatActivity {
                 String lastName = editTextLastName.getText().toString().trim();
                 String phoneNumber = editTextPhoneNumber.getText().toString().trim();
 
+                if(!validatePhoneNumber()){
+                    return;
+                }
                 Cursor res = db.getUserProfile(username);
                 if (res == null || res.getCount() == 0) {
                     Toast.makeText(StudentProfileActivity.this, "User profile not found", Toast.LENGTH_SHORT).show();
@@ -78,6 +85,10 @@ public class StudentProfileActivity extends AppCompatActivity {
                 String lastName = editTextLastName.getText().toString().trim();
                 String phoneNumber = editTextPhoneNumber.getText().toString().trim();
 
+                if(!validatePhoneNumber()){
+                    return;
+                }
+
                 Cursor res = db.getUserProfile(username);
                 if (res == null || res.getCount() == 0) {
                     Toast.makeText(StudentProfileActivity.this, "User profile not found", Toast.LENGTH_SHORT).show();
@@ -96,5 +107,20 @@ public class StudentProfileActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    private boolean validatePhoneNumber() {
+        String countryCode = countryCodePicker.getSelectedCountryCodeWithPlus();
+        String phoneNumber = editTextPhoneNumber.getText().toString();
+
+        if (countryCode.equals("+27")) {
+            if (phoneNumber.length() != 9) {
+                editTextPhoneNumber.setError("Mobile number should be 9 digits after +27.");
+                return false;
+            }
+        } else{
+            editTextPhoneNumber.setError("South African numbers should have +27");
+            return false;
+        }
+        return true;
     }
 }
