@@ -29,10 +29,8 @@ public class TutorBookingRequests extends AppCompatActivity {
     private ActivityTutorBookingRequestsBinding binding;
     private TextView noBookingsMessage;  // Reference to the "no bookings" message TextView
 
-
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +56,6 @@ public class TutorBookingRequests extends AppCompatActivity {
 
         bookingsListView = findViewById(R.id.listViewBookingRequests);
         noBookingsMessage = findViewById(R.id.noBookingsMessage);  // Initialize the message TextView
-
 
         firebaseFirestore=FirebaseFirestore.getInstance();
         firebaseAuth=FirebaseAuth.getInstance();
@@ -97,8 +94,6 @@ public class TutorBookingRequests extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"Now User is Offline",Toast.LENGTH_SHORT).show();
             }
         });
-
-
 
     }
 

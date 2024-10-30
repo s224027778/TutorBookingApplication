@@ -46,9 +46,8 @@ public class ConfirmedBookingActivity extends AppCompatActivity {
                 Intent intent = new Intent(ConfirmedBookingActivity.this, ConfirmedBookingActivity.class);
                 startActivity(intent);
             } else if (itemId == R.id.chat) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new ChatFragment())
-                        .commit();
+                Intent intent = new Intent(ConfirmedBookingActivity.this, ChatActivity.class);
+                startActivity(intent);
             } else if (itemId == R.id.settings) {
                 Intent intent = new Intent(ConfirmedBookingActivity.this, TutorSettings.class);
                 startActivity(intent);

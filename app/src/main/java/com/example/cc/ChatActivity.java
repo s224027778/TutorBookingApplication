@@ -1,31 +1,20 @@
 package com.example.cc;
 
-
-import static java.security.AccessController.getContext;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cc.databinding.FragmentChatBinding;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,83 +29,59 @@ public class ChatActivity extends AppCompatActivity {
     private FirestoreRecyclerAdapter<firebasemodel, NoteViewHolder> chatAdapter;
     private RecyclerView mrecyclerview;
     private LinearLayoutManager linearLayoutManager;
+    private FragmentChatBinding binding;
 
-    // Add TextViews for the logged-in user
     private TextView loggedInUsername;
     private TextView loggedInStatus;
     private ImageView loggedInImage;
 
     @SuppressLint("MissingInflatedId")
-    @Nullable
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_chat); // Use setContentView instead of onCreateView
+        binding = FragmentChatBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());  // Set the correct root view with binding
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
         mrecyclerview = findViewById(R.id.recyclerview);
 
-        // Initialize TextViews and ImageView for the logged-in user
-        loggedInUsername = findViewById(R.id.logged_in_username);
-        loggedInStatus = findViewById(R.id.logged_in_status);
-        loggedInImage = findViewById(R.id.logged_in_image);
 
-        // Retrieve logged-in user's information
         String currentUserUid = firebaseAuth.getUid();
-        firebaseFirestore.collection("Users").document(currentUserUid)
-                .get().addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        firebasemodel currentUser = documentSnapshot.toObject(firebasemodel.class);
-                        if (currentUser != null) {
-                            loggedInUsername.setText(currentUser.getName());
-                            loggedInStatus.setText(currentUser.getStatus());
-                            String uri = currentUser.getImage();
-                            if (uri != null && !uri.isEmpty()) {
-                                Picasso.get()
-                                        .load(uri)
-                                        .into(loggedInImage);
-                            } else {
-                                loggedInImage.setImageResource(R.drawable.defaultprofile);
-                            }
-                        }
-                    }
-                }).addOnFailureListener(e -> {
-                    Log.e("FirestoreError", "Error retrieving logged-in user data: " + e.getMessage());
-                });
 
-        // Query to get other users
+        // Query to exclude the current user from the chat list
         Query query = firebaseFirestore.collection("Users")
                 .whereNotEqualTo("uid", currentUserUid);
 
-        // Set up FirestoreRecyclerOptions
-        FirestoreRecyclerOptions<firebasemodel> allusername = new FirestoreRecyclerOptions.Builder<firebasemodel>()
+        FirestoreRecyclerOptions<firebasemodel> allUsernames = new FirestoreRecyclerOptions.Builder<firebasemodel>()
                 .setQuery(query, firebasemodel.class)
                 .build();
 
-        chatAdapter = new FirestoreRecyclerAdapter<firebasemodel, NoteViewHolder>(allusername) {
+        // Firestore adapter setup
+        chatAdapter = new FirestoreRecyclerAdapter<firebasemodel, NoteViewHolder>(allUsernames) {
             @Override
             protected void onBindViewHolder(@NonNull NoteViewHolder noteViewHolder, int position, @NonNull firebasemodel userModel) {
-                noteViewHolder.particularusername.setText(userModel.getName());
+                noteViewHolder.particularUsername.setText(userModel.getName());
 
+                // Load user profile image or set default
                 String uri = userModel.getImage();
                 if (uri != null && !uri.isEmpty()) {
-                    Picasso.get()
-                            .load(uri)
-                            .into(noteViewHolder.mimageviewofuser);
+                    Picasso.get().load(uri).into(noteViewHolder.imageViewOfUser);
                 } else {
-                    noteViewHolder.mimageviewofuser.setImageResource(R.drawable.defaultprofile);
+                    noteViewHolder.imageViewOfUser.setImageResource(R.drawable.defaultprofile);
                 }
 
+                // Set user status color
                 String status = userModel.getStatus();
-                noteViewHolder.statusofuser.setText(status);
-                noteViewHolder.statusofuser.setTextColor("Online".equals(status) ? Color.GREEN : Color.BLACK);
+                noteViewHolder.statusOfUser.setText(status);
+                noteViewHolder.statusOfUser.setTextColor("Online".equals(status) ? Color.GREEN : Color.BLACK);
 
+                // Intent to open chat with specific user
                 noteViewHolder.itemView.setOnClickListener(view -> {
                     Intent intent = new Intent(ChatActivity.this, specificchat.class);
                     intent.putExtra("name", userModel.getName());
-                    intent.putExtra("receiveruid", userModel.getUid());
-                    intent.putExtra("imageuri", userModel.getImage());
+                    intent.putExtra("receiverUid", userModel.getUid());
+                    intent.putExtra("imageUri", userModel.getImage());
                     startActivity(intent);
                 });
             }
@@ -129,10 +94,27 @@ public class ChatActivity extends AppCompatActivity {
             }
         };
 
+        // Set RecyclerView properties
         mrecyclerview.setHasFixedSize(true);
         linearLayoutManager = new LinearLayoutManager(this);
         mrecyclerview.setLayoutManager(linearLayoutManager);
         mrecyclerview.setAdapter(chatAdapter);
+
+        // Bottom Navigation functionality
+        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.home) {
+                startActivity(new Intent(ChatActivity.this, TutorBookingRequests.class));
+            } else if (itemId == R.id.bookingRequests) {
+                startActivity(new Intent(ChatActivity.this, ConfirmedBookingActivity.class));
+            } else if (itemId == R.id.chat) {
+                startActivity(new Intent(ChatActivity.this, ChatActivity.class));
+            } else if (itemId == R.id.settings) {
+                startActivity(new Intent(ChatActivity.this, TutorSettings.class));
+            }
+            return true;
+        });
     }
 
     @Override
@@ -147,17 +129,19 @@ public class ChatActivity extends AppCompatActivity {
         chatAdapter.stopListening();
     }
 
+    // ViewHolder class
     public static class NoteViewHolder extends RecyclerView.ViewHolder {
-        private TextView particularusername;
-        private TextView statusofuser;
-        private ImageView mimageviewofuser;
+        private final TextView particularUsername;
+        private final TextView statusOfUser;
+        private final ImageView imageViewOfUser;
 
         public NoteViewHolder(@NonNull View itemView) {
             super(itemView);
-            particularusername = itemView.findViewById(R.id.nameofuser);
-            statusofuser = itemView.findViewById(R.id.statusofuser);
-            mimageviewofuser = itemView.findViewById(R.id.imageviewofuser);
+            particularUsername = itemView.findViewById(R.id.nameofuser);
+            statusOfUser = itemView.findViewById(R.id.statusofuser);
+            imageViewOfUser = itemView.findViewById(R.id.imageviewofuser);
         }
     }
 }
+
 
