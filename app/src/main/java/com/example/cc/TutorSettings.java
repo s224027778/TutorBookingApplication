@@ -90,7 +90,9 @@ public class TutorSettings extends AppCompatActivity {
                 Intent intent = new Intent(TutorSettings.this, ConfirmedBookingActivity.class);
                 startActivity(intent);
             } else if (itemId == R.id.chat) {
-                // Handle chat logic
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new ChatFragment())
+                        .commit();
             } else if (itemId == R.id.settings) {
                 Intent intent = new Intent(TutorSettings.this, TutorSettings.class);
                 startActivity(intent);

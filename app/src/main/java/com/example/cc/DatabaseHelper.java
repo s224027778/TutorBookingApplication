@@ -695,7 +695,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean declineBooking(String tutorName, String studentName, String moduleName) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_BOOKING_STATUS, 0);
+        contentValues.put(COL_BOOKING_STATUS, 2);
 
         // Update the booking status where tutor name, student name, and module name match
         int result = db.update(TABLE_NAME_BOOKING, contentValues,
@@ -704,14 +704,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result > 0;
     }
 
+    // Method to update booking status based on booking ID
+    public void updateBookingStatusInDatabase(int bookingId, int status) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COL_BOOKING_STATUS, status); // Set new status (0 = pending, 1 = confirmed, 2 = declined)
+
+        // Update the booking status where the booking ID matches
+        int rowsAffected = db.update(TABLE_NAME_BOOKING, values, COL_BOOKING_ID + " = ?", new String[]{String.valueOf(bookingId)});
+        db.close();
+
+        // Optional: Log or handle if no rows were affected
+        if (rowsAffected == 0) {
+            Log.d("DatabaseHelper", "No booking found with ID: " + bookingId);
+        }
+    }
+
     public String getLoggedInTutorName(String username) {
         SQLiteDatabase db = this.getReadableDatabase();
         String TutorName = null;
 
-        Cursor cursor = db.rawQuery("SELECT " + COL_TUTOR_NAME + " FROM " + TABLE_NAME_TUTORPROFILE + " WHERE " + COL_TUTOR_NAME + " = ?", new String[]{username});
+        Cursor cursor = db.rawQuery("SELECT " + COL_USERNAME + " FROM " + TABLE_NAME_USERS + " WHERE " + COL_USERNAME + " = ?", new String[]{username});
 
         if (cursor.moveToFirst()) {
-            @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex(COL_TUTOR_NAME));
+            @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex(COL_USERNAME));
             TutorName = name;
         }
 

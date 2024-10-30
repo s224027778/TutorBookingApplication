@@ -207,6 +207,15 @@
         </LinearLayout>
     </ScrollView>
 
+    <!-- Fragment container for ChatFragment -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNavigationView"
+        android:visibility="gone"
+        tools:ignore="NotSibling" />
+
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"

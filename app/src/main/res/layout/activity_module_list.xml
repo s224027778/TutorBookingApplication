@@ -37,7 +37,7 @@
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- Heading -->
+    <!-- Screen Heading -->
     <TextView
         android:id="@+id/tvAvailableModules"
         android:layout_width="wrap_content"
@@ -50,17 +50,16 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp" />
 
-    <!-- GridView for modules -->
+    <!-- GridView for Modules -->
     <GridView
         android:id="@+id/moduleGridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="8dp"
-    android:columnWidth="100dp"
-    android:horizontalSpacing="10dp"
-    android:numColumns="2"
-    android:stretchMode="columnWidth"
-    android:verticalSpacing="10dp"
-    android:padding="16dp" />
+        android:columnWidth="150dp"
+        android:numColumns="2"
+        android:horizontalSpacing="6dp"
+        android:verticalSpacing="6dp"
+        android:stretchMode="columnWidth"
+        android:padding="16dp" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

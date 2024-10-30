@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -123,12 +125,12 @@ public class LocationActivity extends AppCompatActivity {
         if (latitude != 0 && longitude != 0 && address != null) {
             boolean insertSuccess = db.insertLocationData(tutorName, latitude, longitude, address);
             if (insertSuccess) {
-                locationTextView.append("\nLocation added to database.");
+                Toast.makeText(this, "Location added to database.", Toast.LENGTH_SHORT).show();
             } else {
-                locationTextView.append("\nFailed to add location to database.");
+                Toast.makeText(this, "Failed to add location to database.", Toast.LENGTH_SHORT).show();
             }
         } else {
-            locationTextView.append("\nLocation data is incomplete.");
+            Toast.makeText(this, "Location data is incomplete", Toast.LENGTH_SHORT).show();
         }
     }
 }

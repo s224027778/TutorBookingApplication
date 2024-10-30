@@ -39,8 +39,25 @@ public class BookingsAdapter extends RecyclerView.Adapter<BookingsAdapter.Bookin
         holder.date.setText(booking.getDate());
         holder.time.setText(booking.getTime());
         holder.duration.setText(booking.getDuration());
-        holder.status.setText(booking.getStatus() == 0 ? "Pending" : "Confirmed");
+
+        // Set the status text based on the status value
+        String statusText;
+        switch (booking.getStatus()) {
+            case 0:
+                statusText = "Pending";
+                break;
+            case 1:
+                statusText = "Confirmed";
+                break;
+            case 2:
+                statusText = "Declined";
+                break;
+            default:
+                statusText = "Unknown";
+        }
+        holder.status.setText(statusText);
     }
+
 
     @Override
     public int getItemCount() {

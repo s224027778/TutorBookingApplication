@@ -44,7 +44,7 @@
         android:id="@+id/updateProfileTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/topToolbar"
+        android:layout_below="@id/viewuserimage"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
         android:text="Update Profile"
@@ -52,9 +52,6 @@
         android:textStyle="bold"/>
 
     <!-- Edit icon next to the title -->
-
-    <!-- User Name EditText -->
-
     <ImageView
         android:id="@+id/editIcon"
         android:layout_width="30dp"
@@ -65,6 +62,26 @@
         android:layout_marginBottom="4dp"
         android:src="@drawable/edit" />
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_below="@+id/topToolbar"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="80dp"
+        android:id="@+id/viewuserimage"
+        android:layout_centerHorizontal="true"
+        app:cardCornerRadius="130dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/defaultprofile"
+            android:id="@+id/viewuserimageinimageview"
+            android:scaleType="centerCrop">
+        </ImageView>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Username EditText -->
     <EditText
         android:id="@+id/userName"
         android:layout_width="match_parent"
@@ -98,23 +115,41 @@
         android:padding="12dp"
         android:background="@drawable/edittext_background" />
 
-    <!-- Phone Number EditText -->
-    <EditText
-        android:id="@+id/editTextPhoneNumber"
+    <!-- Phone Number with Country Code Picker -->
+    <LinearLayout
+        android:id="@+id/phoneLayout"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/editTextLastName"
         android:layout_marginTop="12dp"
-        android:hint="@string/phone_number"
-        android:padding="12dp"
-        android:background="@drawable/edittext_background" />
+        android:orientation="horizontal">
+
+        <!-- Country Code Picker -->
+        <com.hbb20.CountryCodePicker
+            android:id="@+id/tutorcountryCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:ccp_showFlag="false"
+            app:ccp_showNameCode="false"/>
+
+        <!-- Phone Number EditText -->
+        <EditText
+            android:id="@+id/editTextPhoneNumber"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:hint="@string/phone_number"
+            android:padding="12dp"
+            android:inputType="phone"
+            android:background="@drawable/edittext_background"/>
+    </LinearLayout>
 
     <!-- Modules label -->
     <TextView
         android:id="@+id/modulesText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editTextPhoneNumber"
+        android:layout_below="@id/phoneLayout"
         android:layout_marginTop="24dp"
         android:layout_marginStart="16dp"
         android:text="@string/modules_to_tutor"
@@ -151,7 +186,7 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/spinner_background"/>
 
-    <!-- Edit Profile Button -->
+    <!-- Create Profile Button -->
     <Button
         android:id="@+id/createProfile"
         android:layout_width="match_parent"
@@ -163,7 +198,7 @@
         android:padding="12dp"
         android:text="Create Profile"/>
 
-    <!-- Create Profile Button -->
+    <!-- Edit Profile Button -->
     <Button
         android:id="@+id/editProfile"
         android:layout_width="match_parent"
@@ -176,6 +211,3 @@
         android:text="Edit Profile"/>
 
 </RelativeLayout>
-
-
-

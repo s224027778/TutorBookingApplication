@@ -74,6 +74,14 @@
 
     </LinearLayout>
 
+    <!-- Fragment container for ChatFragment -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNavigationView"
+        android:visibility="gone"/>
+
     <!-- Bottom App Bar -->
     <com.google.android.material.bottomappbar.BottomAppBar
         android:layout_width="match_parent"
@@ -93,6 +101,7 @@
             android:background="@android:color/transparent"
             app:menu="@menu/bottom_menu"/>
     </com.google.android.material.bottomappbar.BottomAppBar>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

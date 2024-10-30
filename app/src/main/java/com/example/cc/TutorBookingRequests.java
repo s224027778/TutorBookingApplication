@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.cc.databinding.ActivityTutorBookingRequestsBinding;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +28,11 @@ public class TutorBookingRequests extends AppCompatActivity {
     private String TutorName;  // Tutor name retrieved from shared preferences
     private ActivityTutorBookingRequestsBinding binding;
     private TextView noBookingsMessage;  // Reference to the "no bookings" message TextView
+
+
+    FirebaseAuth firebaseAuth;
+    FirebaseFirestore firebaseFirestore;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +59,16 @@ public class TutorBookingRequests extends AppCompatActivity {
         bookingsListView = findViewById(R.id.listViewBookingRequests);
         noBookingsMessage = findViewById(R.id.noBookingsMessage);  // Initialize the message TextView
 
+
+        firebaseFirestore=FirebaseFirestore.getInstance();
+        firebaseAuth=FirebaseAuth.getInstance();
+
         // Load bookings for the tutor retrieved from SharedPreferences
         loadBookingsForTutor(TutorName);
 
         // Set up the bottom navigation and handle intents or fragment replacements
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
-
             if (itemId == R.id.home) {
                 Intent intent = new Intent(TutorBookingRequests.this, TutorBookingRequests.class);
                 startActivity(intent);
@@ -62,14 +76,43 @@ public class TutorBookingRequests extends AppCompatActivity {
                 Intent intent = new Intent(TutorBookingRequests.this, ConfirmedBookingActivity.class);
                 startActivity(intent);
             } else if (itemId == R.id.chat) {
-                // Handle chat logic
+                Intent intent = new Intent(TutorBookingRequests.this, ChatActivity.class);
+                startActivity(intent);
             } else if (itemId == R.id.settings) {
                 Intent intent = new Intent(TutorBookingRequests.this, TutorSettings.class);
                 startActivity(intent);
             }
-
             return true;
         });
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        DocumentReference documentReference=firebaseFirestore.collection("Users").document(firebaseAuth.getUid());
+        documentReference.update("status","Offline").addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(getApplicationContext(),"Now User is Offline",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        DocumentReference documentReference=firebaseFirestore.collection("Users").document(firebaseAuth.getUid());
+        documentReference.update("status","Online").addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(getApplicationContext(),"Now User is Online",Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     private void loadBookingsForTutor(String tutorName) {
@@ -101,28 +144,46 @@ public class TutorBookingRequests extends AppCompatActivity {
         }
     }
 
-    // Method to confirm the booking (already present)
+    // Inside TutorBookingRequests
+
     public void confirmBooking(String bookingDetails) {
-        String[] details = bookingDetails.split("\n");
-        String studentName = details[0].split(": ")[1];
-        String moduleName = details[1].split(": ")[1];
-
-        // Use the tutor name from SharedPreferences
-        dbHelper.confirmBooking(TutorName, studentName, moduleName);
-
-        Toast.makeText(this, "Booking confirmed for " + studentName, Toast.LENGTH_SHORT).show();
+        int bookingId = getBookingIdFromDetails(bookingDetails);
+        dbHelper.updateBookingStatusInDatabase(bookingId, 1);
+        Toast.makeText(this, "Booking confirmed.", Toast.LENGTH_SHORT).show();
     }
 
-    // New method to decline the booking
     public void declineBooking(String bookingDetails) {
+        int bookingId = getBookingIdFromDetails(bookingDetails);
+        dbHelper.updateBookingStatusInDatabase(bookingId, 2);
+        Toast.makeText(this, "Booking declined.", Toast.LENGTH_SHORT).show();
+    }
+
+    @SuppressLint("Range")
+    private int getBookingIdFromDetails(String bookingDetails) {
+        // Assuming bookingDetails has lines structured as:
+        // "Student: <studentName>\nModule: <moduleName>\nDate: <date>\nTime: <time>"
         String[] details = bookingDetails.split("\n");
         String studentName = details[0].split(": ")[1];
         String moduleName = details[1].split(": ")[1];
+        String date = details[2].split(": ")[1];
+        String time = details[3].split(": ")[1];
 
-        // Use the tutor name from SharedPreferences
-        dbHelper.declineBooking(TutorName, studentName, moduleName);
+        // Query the database to find the matching bookingId
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = "SELECT " + DatabaseHelper.COL_BOOKING_ID + " FROM " + DatabaseHelper.TABLE_NAME_BOOKING +
+                " WHERE " + DatabaseHelper.COL_BOOKING_STUDENTNAME + " = ? AND " +
+                DatabaseHelper.COL_BOOKING_MODULENAME + " = ? AND " +
+                DatabaseHelper.COL_BOOKING_DATE + " = ? AND " +
+                DatabaseHelper.COL_BOOKING_TIME + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{studentName, moduleName, date, time});
 
-        // Notify the user that the booking has been declined
-        Toast.makeText(this, "Booking declined for " + studentName, Toast.LENGTH_SHORT).show();
+        int bookingId = -1;
+        if (cursor.moveToFirst()) {
+            bookingId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COL_BOOKING_ID));
+        }
+        cursor.close();
+        return bookingId;
     }
+
+
 }

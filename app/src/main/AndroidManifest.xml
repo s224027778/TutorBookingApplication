@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -19,6 +20,18 @@
         android:theme="@style/Theme.CC"
         tools:targetApi="31">
         <activity
+            android:name=".ChatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".specificchat"
+            android:exported="false" />
+        <activity
+            android:name=".MainOTP"
+            android:exported="false" />
+        <activity
+            android:name=".otpAuthentication"
+            android:exported="false" />
+        <activity
             android:name=".StudentFAQs"
             android:exported="false" />
         <activity
@@ -26,13 +39,16 @@
             android:exported="false" />
         <activity
             android:name=".ModuleGridAdapter"
-            android:exported="false" />
+            android:exported="false"
+            tools:ignore="Instantiatable" />
         <activity
             android:name=".CategoryAdapter"
-            android:exported="false" />
+            android:exported="false"
+            tools:ignore="Instantiatable" />
         <activity
             android:name=".ConfirmedBookingAdapter"
-            android:exported="false" />
+            android:exported="false"
+            tools:ignore="Instantiatable" />
         <activity
             android:name=".ConfirmedBookingActivity"
             android:exported="false" />
@@ -47,15 +63,6 @@
             android:name=".ReviewAdapter"
             android:exported="false"
             tools:ignore="Instantiatable" />
-        <activity
-            android:name=".UsernameActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SignUpOTP"
-            android:exported="false" />
-        <activity
-            android:name=".SignupMobile"
-            android:exported="false" />
         <activity
             android:name=".LocationActivity"
             android:exported="false" />
@@ -108,9 +115,6 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false" />
-        <activity
-            android:name=".TutorHomeActivity"
             android:exported="false" />
         <activity
             android:name=".StudentHomeActivity"
