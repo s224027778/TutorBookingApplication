@@ -1,5 +1,6 @@
 package com.example.cc;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -7,6 +8,8 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -22,16 +25,23 @@ import java.util.List;
 public class TutorDetailActivity extends AppCompatActivity {
     DatabaseHelper db;
     private TextView tvTutorName, tvFirstName, tvLastName, tvPhoneNumber, tvLat, tvLong, tvAddress;
-    private Button btnMakeBooking, btnAddReview;
+    private Button btnMakeBooking, btnAddReview, chatInit;
     private ActivityTutorDetailBinding binding;
     private RecyclerView recyclerViewReviews; // RecyclerView for reviews
     private ReviewAdapter reviewAdapter;
     private List<Review> reviewList;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_detail);
+        String tutorName = getIntent().getStringExtra("TUTOR_NAME");
+        String moduleName = getIntent().getStringExtra("MODULE_NAME");
+        String username = getIntent().getStringExtra("USERNAME");
+
+        // Use the data as needed
+        Toast.makeText(this, "Tutor: " + tutorName + ", Module: " + moduleName + ", Username: " + username, Toast.LENGTH_SHORT).show();
 
         // Initialize the ImageButton (make sure the ID matches your XML layout)
         ImageButton back = findViewById(R.id.back_button);
@@ -48,6 +58,7 @@ public class TutorDetailActivity extends AppCompatActivity {
         tvAddress = findViewById(R.id.tvAddress); // TextView for Address
         btnMakeBooking = findViewById(R.id.btnMakeBooking);
         btnAddReview = findViewById(R.id.btnAddReview);
+        chatInit = findViewById(R.id.btnChatInit);
 
         back.setOnClickListener(v -> {
             Intent intent = new Intent(TutorDetailActivity.this,TutorList.class);
@@ -59,7 +70,6 @@ public class TutorDetailActivity extends AppCompatActivity {
 
         // Get tutor data from intent
         Intent intent = getIntent();
-        String tutorName = intent.getStringExtra("TUTOR_NAME");
         String firstName = intent.getStringExtra("FIRST_NAME");
         String lastName = intent.getStringExtra("LAST_NAME");
         String phoneNumber = intent.getStringExtra("PHONE_NUMBER");
@@ -78,6 +88,9 @@ public class TutorDetailActivity extends AppCompatActivity {
         // Set click listener for booking button
         btnMakeBooking.setOnClickListener(view -> {
             Intent bookingIntent = new Intent(TutorDetailActivity.this, BookingActivity.class);
+            bookingIntent.putExtra("TUTOR_NAME", tutorName);
+            bookingIntent.putExtra("MODULE_NAME", moduleName);
+            bookingIntent.putExtra("USERNAME", username);
             startActivity(bookingIntent);
         });
 

@@ -26,6 +26,9 @@ public class BookingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking);
+        String tutorName = getIntent().getStringExtra("TUTOR_NAME");
+        String moduleName = getIntent().getStringExtra("MODULE_NAME");
+        String username = getIntent().getStringExtra("USERNAME");
 
         db = new DatabaseHelper(this);
         editTextTime = findViewById(R.id.editTextTime);
@@ -35,6 +38,15 @@ public class BookingActivity extends AppCompatActivity {
         editTextDate = findViewById(R.id.editTextDate);
         editTextDuration = findViewById(R.id.editTextDuration);
         buttonBook = findViewById(R.id.buttonBook);
+
+        editTextTutorName.setText(tutorName);
+        editTextTutorName.setEnabled(false);
+
+        editTextStudentName.setText(username);
+        editTextStudentName.setEnabled(false);
+
+        editTextModuleName.setText(moduleName);
+        editTextModuleName.setEnabled(false);
 
         final Calendar calendar = Calendar.getInstance();
         final int year = calendar.get(Calendar.YEAR);

@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -25,6 +27,9 @@ public class ModuleList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_module_list);
+
+        String username = getIntent().getStringExtra("USERNAME");
+        Toast.makeText(this, "Welcome, " + username, Toast.LENGTH_SHORT).show();
 
         // Initialize the ImageButton (make sure the ID matches your XML layout)
         ImageButton back = findViewById(R.id.back_button);
@@ -48,18 +53,22 @@ public class ModuleList extends AppCompatActivity {
                 // Get the selected module
                 Module selectedModule = modules.get(position);
 
-                // Log the selected module ID
+                // Log the selected module details
                 Log.d("ModuleList", "Selected Module ID: " + selectedModule.getId());
+                Log.d("ModuleList", "Selected Module Name: " + selectedModule.getName());
 
                 // Create an intent to start TutorList activity
                 Intent intent = new Intent(ModuleList.this, TutorList.class);
 
-                // Pass the MODULE_ID to the TutorList activity
+                // Pass MODULE_ID, MODULE_NAME, and USERNAME to the TutorList activity
                 intent.putExtra("MODULE_ID", String.valueOf(selectedModule.getId()));
+                intent.putExtra("MODULE_NAME", selectedModule.getName());
+                intent.putExtra("USERNAME", username);
 
                 // Start the TutorList activity
                 startActivity(intent);
             });
+
         } else {
             Log.e("ModuleList", "Modules list is null");
         }

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 
@@ -20,6 +22,13 @@ public class TutorList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_list);
 
+        String moduleId = getIntent().getStringExtra("MODULE_ID");
+        String moduleName = getIntent().getStringExtra("MODULE_NAME");
+        String username = getIntent().getStringExtra("USERNAME");
+
+        Toast.makeText(this, "Module ID: " + moduleId + ", Module Name: " + moduleName + ", Username: " + username, Toast.LENGTH_SHORT).show();
+
+
         // Initialize the ImageButton (make sure the ID matches your XML layout)
         ImageButton back = findViewById(R.id.back_button);
 
@@ -31,8 +40,6 @@ public class TutorList extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Get the module ID passed from the previous activity
-        String moduleId = getIntent().getStringExtra("MODULE_ID");
 
         // Log the received module ID
         Log.d("TutorList", "Received Module ID: " + moduleId);
@@ -59,7 +66,8 @@ public class TutorList extends AppCompatActivity {
             intent.putExtra("FIRST_NAME", selectedTutor.getFirstName());
             intent.putExtra("LAST_NAME", selectedTutor.getLastName());
             intent.putExtra("PHONE_NUMBER", selectedTutor.getPhoneNumber());
-
+            intent.putExtra("MODULE_NAME", moduleName);
+            intent.putExtra("USERNAME", username);
             // Start TutorDetailActivity
             startActivity(intent);
         });

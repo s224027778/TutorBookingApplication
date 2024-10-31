@@ -1,6 +1,5 @@
 package com.example.cc;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -11,7 +10,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity {
@@ -64,34 +62,32 @@ public class LoginActivity extends AppCompatActivity {
                                 String userType = res.getString(3);
                                 Toast.makeText(LoginActivity.this, "User Type: " + userType, Toast.LENGTH_SHORT).show();
 
-                                // Store username in SharedPreferences
-                                SharedPreferences tutorPrefs = getSharedPreferences("TutorPrefs", MODE_PRIVATE);
-                                SharedPreferences.Editor tutorEditor = tutorPrefs.edit();
-                                tutorEditor.putString("LoggedInTutorUsername", username); // Store the username
-                                tutorEditor.apply(); // Apply changes
-
+                                // Store username in SharedPreferences (Single key for all user types)
                                 SharedPreferences userSession = getSharedPreferences("UserSession", MODE_PRIVATE);
-                                SharedPreferences.Editor userEditor = userSession.edit();
-                                userEditor.putString("LoggedInStudentUsername", username); // Store the username
-                                userEditor.apply(); // Apply changes
+                                SharedPreferences.Editor editor = userSession.edit();
+                                editor.putString("LoggedInUsername", username); // Store the username
+                                editor.apply();
 
                                 // Redirect based on user type
+                                Intent intent;
                                 switch (userType) {
                                     case "Admin":
-                                        startActivity(new Intent(LoginActivity.this, AdminHomeActivity.class));
+                                        intent = new Intent(LoginActivity.this, AdminHomeActivity.class);
                                         break;
                                     case "Student":
-                                        startActivity(new Intent(LoginActivity.this, StudentHomeActivity.class));
+                                        intent = new Intent(LoginActivity.this, StudentHomeActivity.class);
+                                        intent.putExtra("USERNAME", username); // Pass the username to StudentHomeActivity
                                         break;
                                     case "Tutor":
-                                        Intent intent = new Intent(LoginActivity.this, TutorBookingRequests.class);
-                                        intent.putExtra("TUTOR_NAME", db.getLoggedInTutorName(username)); // Pass the tutor's name
-                                        startActivity(intent);
-                                        finish();
+                                        intent = new Intent(LoginActivity.this, TutorBookingRequests.class);
+                                        intent.putExtra("USERNAME", username); // Pass the username to TutorBookingRequests
                                         break;
                                     default:
                                         Toast.makeText(LoginActivity.this, "Error identifying user type", Toast.LENGTH_SHORT).show();
+                                        return;
                                 }
+                                startActivity(intent);
+                                finish();
                             } else {
                                 // Handle login failures
                                 if (!firebaseTask.isSuccessful()) {
