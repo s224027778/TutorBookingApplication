@@ -42,7 +42,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/defaultprofile"
-                    android:id="@+id/specificuserimageinimageview"
+                    android:id="@+id/mimageviewofspecificuser"
                     android:scaleType="centerCrop">
                 </ImageView>
 
@@ -54,7 +54,7 @@
                 android:text="Name of User"
                 android:textSize="20sp"
                 android:layout_toRightOf="@id/cardviewofspeficuser"
-                android:id="@+id/Nameofspecificuser"
+                android:id="@+id/mnameofspecificuser"
                 android:layout_marginLeft="10dp"
                 android:layout_centerVertical="true"
                 android:textStyle="bold"

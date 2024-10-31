@@ -49,7 +49,7 @@
             android:layout_centerVertical="true"
             android:id="@+id/cardviewofuser"
             app:cardCornerRadius="55dp"
-            tools:ignore="UnknownId">
+            tools:ignore="UnknownId,UnknownIdInLayout">
 
             <ImageView
                 android:layout_width="match_parent"

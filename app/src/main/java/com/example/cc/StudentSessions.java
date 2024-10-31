@@ -56,7 +56,8 @@ public class StudentSessions extends AppCompatActivity {
                 intent.putExtra("STUDENT_NAME", studentName);
                 startActivity(intent);
             } else if (itemId == R.id.chat) {
-                // Handle chat navigation
+               Intent intent = new Intent(StudentSessions.this, StudentChatActivity.class);
+               startActivity(intent);
             } else if (itemId == R.id.settings) {
                 Intent intent = new Intent(StudentSessions.this, StudentSettings.class);
                 startActivity(intent);

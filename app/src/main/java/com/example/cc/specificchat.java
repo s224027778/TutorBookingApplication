@@ -30,176 +30,150 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class specificchat extends AppCompatActivity {
 
-    EditText mgetmessage;
-    ImageButton msendmessagebutton;
-
-    CardView msendmessagecardview;
-    androidx.appcompat.widget.Toolbar mtoolbarofspecificchat;
-    ImageView mimageviewofspecificuser;
-    TextView mnameofspecificuser;
-
-    private String enteredmessage;
-    Intent intent;
-    String mrecievername,sendername,mrecieveruid,msenderuid;
+    private EditText mGetMessage;
+    private ImageButton mSendMessageButton;
+    private RecyclerView mMessageRecyclerView;
+    private MessagesAdapter messagesAdapter;
+    private ArrayList<Messages> messagesArrayList;
     private FirebaseAuth firebaseAuth;
-    FirebaseDatabase firebaseDatabase;
-    String senderroom,recieverroom;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference senderRoomRef, receiverRoomRef;
+
+    private String receiverUid, senderUid, receiverName, senderRoom, receiverRoom;
+    private SimpleDateFormat simpleDateFormat;
+
+    private ImageView mImageViewOfSpecificUser;
+    private TextView mNameOfSpecificUser;
+    private ValueEventListener messagesListener;
 
     ImageButton mbackbuttonofspecificchat;
 
-    RecyclerView mmessagerecyclerview;
-
-    String currenttime;
-    Calendar calendar;
-    SimpleDateFormat simpleDateFormat;
-
-    MessagesAdapter messagesAdapter;
-    ArrayList<Messages> messagesArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_specificchat);
 
-        mgetmessage=findViewById(R.id.getmessage);
-        msendmessagecardview=findViewById(R.id.carviewofsendmessage);
-        msendmessagebutton=findViewById(R.id.imageviewsendmessage);
-        mtoolbarofspecificchat=findViewById(R.id.toolbarofspecificchat);
-        mnameofspecificuser=findViewById(R.id.Nameofspecificuser);
-        mimageviewofspecificuser=findViewById(R.id.specificuserimageinimageview);
-        mbackbuttonofspecificchat=findViewById(R.id.backbuttonofspecificchat);
+        initializeUI();
+        setupFirebase();
+        setupRecyclerView();
+        loadMessages();
 
-        messagesArrayList=new ArrayList<>();
-        mmessagerecyclerview=findViewById(R.id.recyclerviewofspecific);
-
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
-        linearLayoutManager.setStackFromEnd(true);
-        mmessagerecyclerview.setLayoutManager(linearLayoutManager);
-        messagesAdapter=new MessagesAdapter(specificchat.this,messagesArrayList);
-        mmessagerecyclerview.setAdapter(messagesAdapter);
-
-        intent=getIntent();
-
-        setSupportActionBar(mtoolbarofspecificchat);
-        mtoolbarofspecificchat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"Toolbar is Clicked",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        firebaseAuth=FirebaseAuth.getInstance();
-        firebaseDatabase=FirebaseDatabase.getInstance();
-        calendar=Calendar.getInstance();
-        simpleDateFormat=new SimpleDateFormat("hh:mm a");
-
-        msenderuid=firebaseAuth.getUid();
-        mrecieveruid=getIntent().getStringExtra("receiveruid");
-        mrecievername=getIntent().getStringExtra("name");
-
-        senderroom=msenderuid+mrecieveruid;
-        recieverroom=mrecieveruid+msenderuid;
-
-        DatabaseReference databaseReference=firebaseDatabase.getReference().child("chats").child(senderroom).child("messages");
-        messagesAdapter=new MessagesAdapter(specificchat.this,messagesArrayList);
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                messagesArrayList.clear();
-                for(DataSnapshot snapshot1:snapshot.getChildren())
-                {
-                    Messages messages=snapshot1.getValue(Messages.class);
-                    messagesArrayList.add(messages);
-                }
-                messagesAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        mSendMessageButton.setOnClickListener(view -> sendMessage());
 
         mbackbuttonofspecificchat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent1 = new Intent(specificchat.this, ChatActivity.class);
-                startActivity(intent1);
+                Intent intent = new Intent(specificchat.this, ChatActivity.class);
+                startActivity(intent);
             }
         });
+    }
+
+    private void initializeUI() {
+        mGetMessage = findViewById(R.id.getmessage);
+        mSendMessageButton = findViewById(R.id.imageviewsendmessage);
+        mMessageRecyclerView = findViewById(R.id.recyclerviewofspecific);
+        mNameOfSpecificUser = findViewById(R.id.mnameofspecificuser);
+        mImageViewOfSpecificUser = findViewById(R.id.mimageviewofspecificuser);
+        mbackbuttonofspecificchat=findViewById(R.id.backbuttonofspecificchat);
 
 
-        mnameofspecificuser.setText(mrecievername);
+        Intent intent = getIntent();
+        receiverUid = intent.getStringExtra("receiverUid");
+        receiverName = intent.getStringExtra("name");
         String uri = intent.getStringExtra("imageuri");
-        if (uri != null && !uri.isEmpty()) {
-            Picasso.get().load(uri).into(mimageviewofspecificuser);
-        } else {
-            Toast.makeText(getApplicationContext(), "No image available", Toast.LENGTH_SHORT).show();
+
+        if (receiverName != null) {
+            mNameOfSpecificUser.setText(receiverName);
         }
 
+        if (uri != null && !uri.isEmpty()) {
+            Picasso.get().load(uri).into(mImageViewOfSpecificUser);
+        } else {
+            Toast.makeText(this, "No profile image found", Toast.LENGTH_SHORT).show();
+        }
+    }
 
-        msendmessagebutton.setOnClickListener(new View.OnClickListener() {
+    private void setupFirebase() {
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        senderUid = firebaseAuth.getUid();
+
+        if (senderUid != null && receiverUid != null) {
+            senderRoom = senderUid + receiverUid;
+            receiverRoom = receiverUid + senderUid;
+            senderRoomRef = firebaseDatabase.getReference("chats").child(senderRoom).child("messages");
+            receiverRoomRef = firebaseDatabase.getReference("chats").child(receiverRoom).child("messages");
+        } else {
+            Toast.makeText(this, "Error: Unable to set up chat rooms", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
+        simpleDateFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+        messagesArrayList = new ArrayList<>();
+    }
+
+    private void setupRecyclerView() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setStackFromEnd(true);
+        mMessageRecyclerView.setLayoutManager(linearLayoutManager);
+        messagesAdapter = new MessagesAdapter(this, messagesArrayList);
+        mMessageRecyclerView.setAdapter(messagesAdapter);
+    }
+
+    private void loadMessages() {
+        messagesListener = senderRoomRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View view) {
-
-                enteredmessage=mgetmessage.getText().toString();
-                if(enteredmessage.isEmpty())
-                {
-                    Toast.makeText(getApplicationContext(),"Enter message first",Toast.LENGTH_SHORT).show();
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                messagesArrayList.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Messages message = dataSnapshot.getValue(Messages.class);
+                    if (message != null) {
+                        messagesArrayList.add(message);
+                    }
                 }
+                messagesAdapter.notifyDataSetChanged();
+                mMessageRecyclerView.smoothScrollToPosition(messagesArrayList.size());
+            }
 
-                else
-
-                {
-                    Date date=new Date();
-                    currenttime=simpleDateFormat.format(calendar.getTime());
-                    Messages messages=new Messages(enteredmessage,firebaseAuth.getUid(),date.getTime(),currenttime);
-                    firebaseDatabase=FirebaseDatabase.getInstance();
-                    firebaseDatabase.getReference().child("chats")
-                            .child(senderroom)
-                            .child("messages")
-                            .push().setValue(messages).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    firebaseDatabase.getReference()
-                                            .child("chats")
-                                            .child(recieverroom)
-                                            .child("messages")
-                                            .push()
-                                            .setValue(messages).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-
-                                                }
-                                            });
-                                }
-                            });
-
-                    mgetmessage.setText(null);
-
-                }
-
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(specificchat.this, "Failed to load messages", Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
+    private void sendMessage() {
+        String enteredMessage = mGetMessage.getText().toString().trim();
+        if (enteredMessage.isEmpty()) {
+            Toast.makeText(this, "Enter a message", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        long timestamp = System.currentTimeMillis();
+        String currentTime = simpleDateFormat.format(new Date());
+        Messages message = new Messages(enteredMessage, senderUid, timestamp, currentTime);
+
+        senderRoomRef.push().setValue(message).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                receiverRoomRef.push().setValue(message);
+                mGetMessage.setText("");
+            } else {
+                Toast.makeText(specificchat.this, "Message not sent. Try again.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        messagesAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onStop() {
+    protected void onStop() {
         super.onStop();
-        if(messagesAdapter!=null)
-        {
-            messagesAdapter.notifyDataSetChanged();
+        if (messagesListener != null) {
+            senderRoomRef.removeEventListener(messagesListener);
         }
     }
-
 }

@@ -44,7 +44,8 @@ public class StudentHomeActivity extends AppCompatActivity {
                 intent.putExtra("STUDENT_NAME", studentName);
                 startActivity(intent);
             } else if (itemId == R.id.chat) {
-                // Handle chat navigation
+               Intent intent = new Intent(StudentHomeActivity.this, StudentChatActivity.class);
+               startActivity(intent);
             } else if (itemId == R.id.settings) {
                 Intent intent = new Intent(StudentHomeActivity.this, StudentSettings.class);
                 startActivity(intent);
