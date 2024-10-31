@@ -8,11 +8,13 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.cc.databinding.ActivityTutorSettingsBinding;
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class TutorSettings extends AppCompatActivity {
 
     private MaterialCardView accountCard, logoutCard, TutorFaqCard, AboutUsCard, locationCard;
     private ActivityTutorSettingsBinding binding;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +72,10 @@ public class TutorSettings extends AppCompatActivity {
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.clear();
                         editor.apply();
-                        Intent intent = new Intent(TutorSettings.this, MainActivity.class);
+
+                        FirebaseAuth.getInstance().signOut();
+
+                        Intent intent = new Intent(TutorSettings.this, MainOTP.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();

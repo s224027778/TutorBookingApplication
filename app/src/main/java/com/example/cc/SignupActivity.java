@@ -76,25 +76,25 @@ public class SignupActivity extends AppCompatActivity {
         buttonSignup = findViewById(R.id.buttonSignup);
         backButton = findViewById(R.id.back);
 
-        firebaseAuth=FirebaseAuth.getInstance();
-        firebaseStorage=FirebaseStorage.getInstance();
-        storageReference=firebaseStorage.getReference();
-        firebaseFirestore=FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference();
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
-        mgetuserimage=findViewById(R.id.getuserimage);
-        mgetuserimageinimageview=findViewById(R.id.getuserimageinimageview);
-        mprogressbarofsetprofile=findViewById(R.id.progressbarofsetProfile);
+        mgetuserimage = findViewById(R.id.getuserimage);
+        mgetuserimageinimageview = findViewById(R.id.getuserimageinimageview);
+        mprogressbarofsetprofile = findViewById(R.id.progressbarofsetProfile);
 
         mgetuserimage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                startActivityForResult(intent,PICK_IMAGE);
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                startActivityForResult(intent, PICK_IMAGE);
             }
         });
 
         backButton.setOnClickListener(v -> {
-            Intent intent = new Intent(SignupActivity.this,MainActivity.class);
+            Intent intent = new Intent(SignupActivity.this, MainActivity.class);
             startActivity(intent);
         });
 
@@ -120,20 +120,9 @@ public class SignupActivity extends AppCompatActivity {
                     return;
                 }
 
-                if(imagepath==null)
-                {
-                    Toast.makeText(getApplicationContext(),"Image is Empty",Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-
-                    mprogressbarofsetprofile.setVisibility(View.VISIBLE);
-                    sendDataForNewUser();
-                    mprogressbarofsetprofile.setVisibility(View.INVISIBLE);
-                    Intent intent=new Intent(SignupActivity.this,LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-
+                if (imagepath == null) {
+                    Toast.makeText(getApplicationContext(), "Image is Empty", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
                 // Check if a user type is selected
@@ -155,9 +144,20 @@ public class SignupActivity extends AppCompatActivity {
                 if (validatePassword(password, confirmPassword)) {
                     boolean isInserted = db.insertData(username, password, userType);
                     if (isInserted) {
-                        Toast.makeText(SignupActivity.this, "Sign Up Successful", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                        startActivity(intent);
+                        // Sign in the user to Firebase
+                        firebaseAuth.createUserWithEmailAndPassword(username, password)
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        mprogressbarofsetprofile.setVisibility(View.VISIBLE);
+                                        sendDataForNewUser();
+                                        mprogressbarofsetprofile.setVisibility(View.INVISIBLE);
+                                        Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    } else {
+                                        Toast.makeText(SignupActivity.this, "Sign Up Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                     } else {
                         Toast.makeText(SignupActivity.this, "Sign Up Failed", Toast.LENGTH_SHORT).show();
                     }
@@ -191,82 +191,65 @@ public class SignupActivity extends AppCompatActivity {
         return true;
     }
 
-    private void sendDataForNewUser()
-    {
-
+    private void sendDataForNewUser() {
         sendDataToRealTimeDatabase();
-
     }
 
-    private void sendDataToRealTimeDatabase()
-    {
-        name=editTextUsername.getText().toString().trim();
-        FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference=firebaseDatabase.getReference(firebaseAuth.getUid());
+    private void sendDataToRealTimeDatabase() {
+        name = editTextUsername.getText().toString().trim();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(firebaseAuth.getUid());
 
-        userprofile muserprofile=new userprofile(name,firebaseAuth.getUid());
+        userprofile muserprofile = new userprofile(name, firebaseAuth.getUid());
         databaseReference.setValue(muserprofile);
-        Toast.makeText(getApplicationContext(),"User Profile Added Sucessfully",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "User Profile Added Successfully", Toast.LENGTH_SHORT).show();
         sendImagetoStorage();
-
     }
 
-    private void sendImagetoStorage()
-    {
+    private void sendImagetoStorage() {
+        StorageReference imageref = storageReference.child("Images").child(firebaseAuth.getUid()).child("Profile Pic");
 
-        StorageReference imageref=storageReference.child("Images").child(firebaseAuth.getUid()).child("Profile Pic");
-
-        //Image compresesion
-
-        Bitmap bitmap=null;
+        // Image compression
+        Bitmap bitmap = null;
         try {
-            bitmap= MediaStore.Images.Media.getBitmap(getContentResolver(),imagepath);
-        }
-        catch (IOException e)
-        {
+            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imagepath);
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
-        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG,25,byteArrayOutputStream);
-        byte[] data=byteArrayOutputStream.toByteArray();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 25, byteArrayOutputStream);
+        byte[] data = byteArrayOutputStream.toByteArray();
 
-        ///putting image to storage
-
-        UploadTask uploadTask=imageref.putBytes(data);
+        // Putting image to storage
+        UploadTask uploadTask = imageref.putBytes(data);
 
         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
                 imageref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        ImageUriAcessToken=uri.toString();
-                        Toast.makeText(getApplicationContext(),"URI get sucess",Toast.LENGTH_SHORT).show();
-                        sendDataTocloudFirestore();
+                        ImageUriAcessToken = uri.toString();
+                        Toast.makeText(getApplicationContext(), "URI get success", Toast.LENGTH_SHORT).show();
+                        sendDataToCloudFirestore();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(),"URI get Failed",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "URI get Failed", Toast.LENGTH_SHORT).show();
                     }
-
-
                 });
-                Toast.makeText(getApplicationContext(),"Image is uploaded",Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(getApplicationContext(), "Image is uploaded", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(),"Image Not UPdloaded",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Image Not Uploaded", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
-    private void sendDataTocloudFirestore() {
+    private void sendDataToCloudFirestore() {
 
 
         DocumentReference documentReference=firebaseFirestore.collection("Users").document(firebaseAuth.getUid());
