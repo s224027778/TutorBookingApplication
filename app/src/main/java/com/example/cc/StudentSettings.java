@@ -96,7 +96,7 @@ public class StudentSettings extends AppCompatActivity {
 
                         FirebaseAuth.getInstance().signOut();
 
-                        Intent intent = new Intent(StudentSettings.this, MainOTP.class);
+                        Intent intent = new Intent(StudentSettings.this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();
