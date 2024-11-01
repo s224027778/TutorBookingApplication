@@ -5,135 +5,107 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import com.example.cc.databinding.ActivityMainOtpBinding;
-import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthOptions;
-import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firestore.v1.TargetOrBuilder;
-import com.hbb20.CountryCodePicker;
-import java.util.concurrent.TimeUnit;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import java.util.regex.Pattern;
 
 public class MainOTP extends AppCompatActivity {
 
-    EditText mgetphonenumber;
-    android.widget.Button msendotp;
-    CountryCodePicker mcountrycodepicker;
-    String countrycode;
-    String phonenumber;
-
-    FirebaseAuth firebaseAuth;
-    ProgressBar mprogressbarofmain;
-
-    PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
-    String codesent;
+    private EditText emailEditText, passwordEditText;
+    private Button registerButton, loginButton;
+    private ProgressBar progressBar;
+    private FirebaseAuth firebaseAuth;
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_otp);
-        mcountrycodepicker=findViewById(R.id.countrycodepicker);
-        msendotp=findViewById(R.id.sendotpbutton);
-        mgetphonenumber=findViewById(R.id.getphonenumber);
-        mprogressbarofmain=findViewById(R.id.progressbarofmain);
 
-        firebaseAuth=FirebaseAuth.getInstance();
+        emailEditText = findViewById(R.id.emailEditText);
+        passwordEditText = findViewById(R.id.passwordEditText);
+        registerButton = findViewById(R.id.registerButton);
+        loginButton = findViewById(R.id.loginButton);
+        progressBar = findViewById(R.id.progressBar);
+        firebaseAuth = FirebaseAuth.getInstance();
 
-        countrycode=mcountrycodepicker.getSelectedCountryCodeWithPlus();
+        // Register new user
+        registerButton.setOnClickListener(view -> {
+            String email = emailEditText.getText().toString().trim();
+            String password = passwordEditText.getText().toString().trim();
 
-        mcountrycodepicker.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
-            @Override
-            public void onCountrySelected() {
-                countrycode=mcountrycodepicker.getSelectedCountryCodeWithPlus();
+            if (!isValidEmail(email)) {
+                Toast.makeText(MainOTP.this, "Please enter a valid email address", Toast.LENGTH_SHORT).show();
+                return;
             }
+            if (password.isEmpty()) {
+                Toast.makeText(MainOTP.this, "Please enter a password", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            progressBar.setVisibility(View.VISIBLE);
+
+            firebaseAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(task -> {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        if (task.isSuccessful()) {
+                            Toast.makeText(MainOTP.this, "Registration successful", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(MainOTP.this, SignupActivity.class));
+                            finish();
+                        } else if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                            Toast.makeText(MainOTP.this, "User with this email already exists", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MainOTP.this, "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
         });
 
-        msendotp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String number;
-                number=mgetphonenumber.getText().toString();
-                if(number.isEmpty())
-                {
-                    Toast.makeText(getApplicationContext(),"Please Enter YOur number",Toast.LENGTH_SHORT).show();
-                }
-                else if(number.length()!=9)
-                {
-                    Toast.makeText(getApplicationContext(),"Please Enter correct number",Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
+        // Log in existing user
+        loginButton.setOnClickListener(view -> {
+            String email = emailEditText.getText().toString().trim();
+            String password = passwordEditText.getText().toString().trim();
 
-                    mprogressbarofmain.setVisibility(View.VISIBLE);
-                    phonenumber=countrycode+number;
-
-                    PhoneAuthOptions options=PhoneAuthOptions.newBuilder(firebaseAuth)
-                            .setPhoneNumber(phonenumber)
-                            .setTimeout(60L, TimeUnit.SECONDS)
-                            .setActivity(MainOTP.this)
-                            .setCallbacks(mCallbacks)
-                            .build();
-
-
-                    PhoneAuthProvider.verifyPhoneNumber(options);
-
-
-
-                }
-
-
+            if (!isValidEmail(email)) {
+                Toast.makeText(MainOTP.this, "Please enter a valid email address", Toast.LENGTH_SHORT).show();
+                return;
             }
+            if (password.isEmpty()) {
+                Toast.makeText(MainOTP.this, "Please enter a password", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            progressBar.setVisibility(View.VISIBLE);
+
+            firebaseAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(task -> {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        if (task.isSuccessful()) {
+                            Toast.makeText(MainOTP.this, "Login successful", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(MainOTP.this, LoginActivity.class));
+                            finish();
+                        } else {
+                            Toast.makeText(MainOTP.this, "Login failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
         });
-
-
-
-        mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-            @Override
-            public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-                //how to automatically fetch code here
-            }
-
-            @Override
-            public void onVerificationFailed(@NonNull FirebaseException e) {
-
-            }
-
-
-            @Override
-            public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                super.onCodeSent(s, forceResendingToken);
-                Toast.makeText(getApplicationContext(),"OTP is Sent",Toast.LENGTH_SHORT).show();
-                mprogressbarofmain.setVisibility(View.INVISIBLE);
-                codesent=s;
-                Intent intent=new Intent(MainOTP.this,otpAuthentication.class);
-                intent.putExtra("otp",codesent);
-                startActivity(intent);
-            }
-        };
-
-
-
     }
-
 
     @Override
     protected void onStart() {
         super.onStart();
-        if(FirebaseAuth.getInstance().getCurrentUser()!=null)
-        {
-            Intent intent=new Intent(MainOTP.this,MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        if (firebaseAuth.getCurrentUser() != null) {
+            Intent intent = new Intent(MainOTP.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }
+    }
 
-
-
-
-
-
+    private boolean isValidEmail(String email) {
+        return EMAIL_PATTERN.matcher(email).matches();
     }
 }

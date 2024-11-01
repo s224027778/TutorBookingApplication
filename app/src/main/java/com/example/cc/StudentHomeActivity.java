@@ -3,18 +3,22 @@ package com.example.cc;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
+import android.util.Log;
 import android.widget.ListView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.cc.databinding.ActivityStudentHomeBinding;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class StudentHomeActivity extends AppCompatActivity {
     private DatabaseHelper dbHelp;
     private ActivityStudentHomeBinding binding;
-    String studentName;
+    private String studentName;
+    private String loggedInUsername;  // Ensure this is defined as an instance variable
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,59 +26,61 @@ public class StudentHomeActivity extends AppCompatActivity {
         binding = ActivityStudentHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.bottomNavigationView.setBackground(null);
-
+        // Retrieve username from Intent and SharedPreferences
+        String username = getIntent().getStringExtra("USERNAME");
         SharedPreferences userSession = getSharedPreferences("UserSession", MODE_PRIVATE);
-        String loggedInUsername = userSession.getString("LoggedInStudentUsername", null);
+        loggedInUsername = userSession.getString("LoggedInStudentUsername", username);
 
-        // Initialize the DatabaseHelper
+        // Initialize DatabaseHelper and retrieve student name
         dbHelp = new DatabaseHelper(this);
-
-        // Retrieve the logged-in student's name from the database using the method
         studentName = dbHelp.getLoggedInStudentName(loggedInUsername);
+
+        // Display a Toast to verify `studentName` retrieval
+        if (studentName != null) {
+            Toast.makeText(this, "Welcome, " + studentName, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Student name not found", Toast.LENGTH_SHORT).show();
+            Log.d("StudentHomeActivity", "studentName is null, using loggedInUsername instead.");
+        }
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
 
             if (itemId == R.id.home) {
-                Intent homeIntent = new Intent(StudentHomeActivity.this, StudentHomeActivity.class);
-                startActivity(homeIntent);
+                startActivity(new Intent(StudentHomeActivity.this, StudentHomeActivity.class));
             } else if (itemId == R.id.bookingRequests) {
                 Intent intent = new Intent(StudentHomeActivity.this, StudentSessions.class);
-                intent.putExtra("STUDENT_NAME", studentName);
+                intent.putExtra("STUDENT_NAME", studentName != null ? studentName : loggedInUsername); // Fall back to `loggedInUsername` if needed
                 startActivity(intent);
             } else if (itemId == R.id.chat) {
-               Intent intent = new Intent(StudentHomeActivity.this, StudentChatActivity.class);
-               startActivity(intent);
+                startActivity(new Intent(StudentHomeActivity.this, StudentChatActivity.class));
             } else if (itemId == R.id.settings) {
-                Intent intent = new Intent(StudentHomeActivity.this, StudentSettings.class);
-                startActivity(intent);
+                startActivity(new Intent(StudentHomeActivity.this, StudentSettings.class));
             }
 
             return true;
         });
 
         ListView listView = findViewById(R.id.listView);
-        dbHelp = new DatabaseHelper(this);
 
-        // Get categories from the database
+        // Get categories from the database and set up the adapter
         List<Category> categories = dbHelp.getAllCategories();
-
-        // Create a custom CategoryAdapter
         CategoryAdapter adapter = new CategoryAdapter(this, categories);
         listView.setAdapter(adapter);
 
-        // Set an item click listener
+        // Set an item click listener for category selection
         listView.setOnItemClickListener((parent, view, position, id) -> {
             Category selectedCategory = categories.get(position);
 
-            // Fetch the modules for the selected category
+            // Fetch modules for the selected category
             List<Module> modules = dbHelp.getModulesByCategory(selectedCategory.getId());
 
-            // Create an intent to start the ModuleListActivity
-            Intent intent = new Intent(StudentHomeActivity.this, ModuleList.class);
-            intent.putExtra("modules", new ArrayList<>(modules)); // Convert List to ArrayList
-            startActivity(intent);
+            // Start ModuleListActivity with modules and student name or loggedInUsername if studentName is null
+            Intent moduleIntent = new Intent(StudentHomeActivity.this, ModuleList.class);
+            moduleIntent.putExtra("modules", new ArrayList<>(modules));
+            moduleIntent.putExtra("STUDENT_NAME", studentName != null ? studentName : loggedInUsername);
+            startActivity(moduleIntent);
         });
     }
 }
+

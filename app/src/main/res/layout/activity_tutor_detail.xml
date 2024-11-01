@@ -153,10 +153,10 @@
 
             <!-- Add a Review Button -->
             <Button
-                android:id="@+id/btnAddReview"
+                android:id="@+id/btnChatInit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Add A Review"
+                android:text="Chat with tutor"
                 android:textAllCaps="false"
                 android:textSize="16sp"
                 android:backgroundTint="@color/blue"
@@ -164,6 +164,19 @@
                 android:layout_marginTop="12dp"
                 android:elevation="4dp"
                 android:padding="12dp" />
+
+        <Button
+            android:id="@+id/btnAddReview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add A Review"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:backgroundTint="@color/blue"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="12dp"
+            android:elevation="4dp"
+            android:padding="12dp" />
 
         </LinearLayout>
     </ScrollView>
