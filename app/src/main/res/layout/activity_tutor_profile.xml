@@ -1,12 +1,15 @@
-<RelativeLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<RelativeLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".TutorProfileActivity"
-    android:padding="16dp">
+    android:layout_height="wrap_content"
+    tools:context=".TutorProfileActivity">
 
     <!-- Top toolbar with back button and centered title -->
     <androidx.appcompat.widget.Toolbar
@@ -211,3 +214,5 @@
         android:text="Edit Profile"/>
 
 </RelativeLayout>
+
+</ScrollView>
