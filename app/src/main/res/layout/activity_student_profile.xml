@@ -1,171 +1,177 @@
-<RelativeLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".StudentProfileActivity"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <!-- Top toolbar with back button and centered title -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/topToolbar"
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/lavender"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+        android:layout_height="match_parent"
+        tools:context=".StudentProfileActivity">
 
-        <!-- Back button on the left -->
-        <ImageButton
-            android:id="@+id/backButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_back"
-            android:background="?attr/selectableItemBackground"
-            android:layout_gravity="start"
-            android:contentDescription="Back" />
-
-        <!-- Title centered -->
-        <TextView
-            android:id="@+id/toolbarTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="CodeCoach"
-            android:textColor="@color/white"
-            android:textSize="22sp"
-            android:layout_centerHorizontal="true" />
-    </androidx.appcompat.widget.Toolbar>
-
-    <!-- Update Profile Title -->
-    <TextView
-        android:id="@+id/updateProfileTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/viewuserimage"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:text="Update Profile"
-        android:textSize="26sp"
-        android:textStyle="bold"/>
-
-    <!-- Edit icon next to the title -->
-    <ImageView
-        android:id="@+id/editIcon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignBottom="@id/updateProfileTitle"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="66dp"
-        android:layout_marginBottom="4dp"
-        android:src="@drawable/edit" />
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:layout_below="@+id/topToolbar"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="80dp"
-        android:id="@+id/viewuserimage"
-        android:layout_centerHorizontal="true"
-        app:cardCornerRadius="130dp">
-
-        <ImageView
+        <!-- Top toolbar with back button and centered title -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/topToolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/defaultprofile"
-            android:id="@+id/viewuserimageinimageview"
-            android:scaleType="centerCrop">
-        </ImageView>
-    </androidx.cardview.widget.CardView>
+            android:background="@color/lavender"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
-    <!-- User Name EditText -->
-    <EditText
-        android:id="@+id/userName"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_below="@id/updateProfileTitle"
-        android:layout_marginTop="20dp"
-        android:hint="Username"
-        android:padding="12dp"
-        android:background="@drawable/edittext_background"
-        android:gravity="center" />
+            <!-- Back button on the left -->
+            <ImageButton
+                android:id="@+id/backButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back"
+                android:background="?attr/selectableItemBackground"
+                android:layout_gravity="start"
+                android:contentDescription="Back" />
 
-    <!-- First Name EditText -->
-    <EditText
-        android:id="@+id/editTextFirstName"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_below="@id/userName"
-        android:layout_marginTop="12dp"
-        android:hint="@string/first_name"
-        android:padding="12dp"
-        android:background="@drawable/edittext_background" />
+            <!-- Title centered -->
+            <TextView
+                android:id="@+id/toolbarTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="CodeCoach"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                android:layout_centerHorizontal="true" />
+        </androidx.appcompat.widget.Toolbar>
 
-    <!-- Last Name EditText -->
-    <EditText
-        android:id="@+id/editTextLastName"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_below="@id/editTextFirstName"
-        android:layout_marginTop="12dp"
-        android:hint="@string/last_name"
-        android:padding="12dp"
-        android:background="@drawable/edittext_background" />
-
-    <!-- Phone Layout with Country Code Picker and Phone Number EditText -->
-    <LinearLayout
-        android:id="@+id/phoneLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/editTextLastName"
-        android:layout_marginTop="12dp"
-        android:orientation="horizontal">
-
-        <!-- Country Code Picker -->
-        <com.hbb20.CountryCodePicker
-            android:id="@+id/studentcountryCode"
+        <!-- Update Profile Title -->
+        <TextView
+            android:id="@+id/updateProfileTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:ccp_showFlag="false"
-            app:ccp_showNameCode="false"/>
+            android:layout_below="@id/viewuserimage"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:text="Update Profile"
+            android:textSize="26sp"
+            android:textStyle="bold"/>
 
-        <!-- Phone Number EditText -->
+        <!-- Edit icon next to the title -->
+        <ImageView
+            android:id="@+id/editIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignBottom="@id/updateProfileTitle"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="66dp"
+            android:layout_marginBottom="4dp"
+            android:src="@drawable/edit" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_below="@+id/topToolbar"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="80dp"
+            android:id="@+id/viewuserimage"
+            android:layout_centerHorizontal="true"
+            app:cardCornerRadius="130dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/defaultprofile"
+                android:id="@+id/viewuserimageinimageview"
+                android:scaleType="centerCrop">
+            </ImageView>
+        </androidx.cardview.widget.CardView>
+
+        <!-- User Name EditText -->
         <EditText
-            android:id="@+id/editTextPhoneNumber"
-            android:layout_width="0dp"
+            android:id="@+id/userName"
+            android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_weight="1"
-            android:hint="@string/phone_number"
+            android:layout_below="@id/updateProfileTitle"
+            android:layout_marginTop="20dp"
+            android:hint="Username"
             android:padding="12dp"
-            android:inputType="phone"
-            android:background="@drawable/edittext_background"/>
-    </LinearLayout>
+            android:background="@drawable/edittext_background"
+            android:gravity="center" />
 
-    <!-- Create Profile Button -->
-    <Button
-        android:id="@+id/createProfile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/phoneLayout"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="@color/lavender"
-        android:padding="12dp"
-        android:text="Create Profile"
-        android:textColor="@android:color/white" />
+        <!-- First Name EditText -->
+        <EditText
+            android:id="@+id/editTextFirstName"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_below="@id/userName"
+            android:layout_marginTop="12dp"
+            android:hint="@string/first_name"
+            android:padding="12dp"
+            android:background="@drawable/edittext_background" />
 
-    <!-- Edit Profile Button -->
-    <Button
-        android:id="@+id/editProfile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/createProfile"
-        android:layout_marginTop="27dp"
-        android:backgroundTint="@color/lavender"
-        android:padding="12dp"
-        android:text="Edit Profile"
-        android:textColor="@android:color/white" />
+        <!-- Last Name EditText -->
+        <EditText
+            android:id="@+id/editTextLastName"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_below="@id/editTextFirstName"
+            android:layout_marginTop="12dp"
+            android:hint="@string/last_name"
+            android:padding="12dp"
+            android:background="@drawable/edittext_background" />
 
-</RelativeLayout>
+        <!-- Phone Layout with Country Code Picker and Phone Number EditText -->
+        <LinearLayout
+            android:id="@+id/phoneLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editTextLastName"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
+
+            <!-- Country Code Picker -->
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/studentcountryCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:ccp_showFlag="false"
+                app:ccp_showNameCode="false"/>
+
+            <!-- Phone Number EditText -->
+            <EditText
+                android:id="@+id/editTextPhoneNumber"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:hint="@string/phone_number"
+                android:padding="12dp"
+                android:inputType="phone"
+                android:background="@drawable/edittext_background"/>
+        </LinearLayout>
+
+        <!-- Create Profile Button -->
+        <Button
+            android:id="@+id/createProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/phoneLayout"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/lavender"
+            android:padding="12dp"
+            android:text="Create Profile"
+            android:textColor="@android:color/white" />
+
+        <!-- Edit Profile Button -->
+        <Button
+            android:id="@+id/editProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/createProfile"
+            android:layout_marginTop="27dp"
+            android:backgroundTint="@color/lavender"
+            android:padding="12dp"
+            android:text="Edit Profile"
+            android:textColor="@android:color/white" />
+
+    </RelativeLayout>
+
+</ScrollView>

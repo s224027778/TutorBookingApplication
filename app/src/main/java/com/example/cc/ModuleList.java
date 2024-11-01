@@ -56,7 +56,7 @@ public class ModuleList extends AppCompatActivity {
 
                 // Pass the MODULE_ID to the TutorList activity
                 intent.putExtra("MODULE_ID", String.valueOf(selectedModule.getId()));
-
+                intent.putExtra("MODULE_NAME", selectedModule.getName());
                 // Start the TutorList activity
                 startActivity(intent);
             });

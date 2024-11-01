@@ -32,6 +32,8 @@ public class TutorDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_detail);
+        String tutorName = getIntent().getStringExtra("TUTOR_NAME");
+        String moduleName = getIntent().getStringExtra("MODULE_NAME");
 
         // Initialize the ImageButton (make sure the ID matches your XML layout)
         ImageButton back = findViewById(R.id.back_button);
@@ -59,7 +61,6 @@ public class TutorDetailActivity extends AppCompatActivity {
 
         // Get tutor data from intent
         Intent intent = getIntent();
-        String tutorName = intent.getStringExtra("TUTOR_NAME");
         String firstName = intent.getStringExtra("FIRST_NAME");
         String lastName = intent.getStringExtra("LAST_NAME");
         String phoneNumber = intent.getStringExtra("PHONE_NUMBER");
@@ -78,6 +79,8 @@ public class TutorDetailActivity extends AppCompatActivity {
         // Set click listener for booking button
         btnMakeBooking.setOnClickListener(view -> {
             Intent bookingIntent = new Intent(TutorDetailActivity.this, BookingActivity.class);
+            bookingIntent.putExtra("TUTOR_NAME", tutorName);
+            bookingIntent.putExtra("MODULE_NAME", moduleName);
             startActivity(bookingIntent);
         });
 

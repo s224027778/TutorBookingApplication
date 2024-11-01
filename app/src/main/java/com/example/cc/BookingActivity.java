@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -26,6 +27,8 @@ public class BookingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking);
+        String tutorName = getIntent().getStringExtra("TUTOR_NAME");
+        String moduleName = getIntent().getStringExtra("MODULE_NAME");
 
         db = new DatabaseHelper(this);
         editTextTime = findViewById(R.id.editTextTime);
@@ -35,6 +38,18 @@ public class BookingActivity extends AppCompatActivity {
         editTextDate = findViewById(R.id.editTextDate);
         editTextDuration = findViewById(R.id.editTextDuration);
         buttonBook = findViewById(R.id.buttonBook);
+
+        // Retrieve username from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+        String username = sharedPreferences.getString("LoggedInStudentUsername", ""); // Default is empty string if not found
+
+        // Set the retrieved username in the student name field
+        editTextStudentName.setText(username);
+        editTextStudentName.setEnabled(false);
+        editTextTutorName.setText(tutorName);
+        editTextTutorName.setEnabled(false);
+        editTextModuleName.setText(moduleName);
+        editTextModuleName.setEnabled(false);
 
         final Calendar calendar = Calendar.getInstance();
         final int year = calendar.get(Calendar.YEAR);
