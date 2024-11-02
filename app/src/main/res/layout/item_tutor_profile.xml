@@ -18,7 +18,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Tutor Name -->
         <TextView
             android:id="@+id/nameTextView"
             android:layout_width="wrap_content"
@@ -28,7 +27,6 @@
             android:textSize="18sp"
             android:textColor="@color/black" />
 
-        <!-- First Name -->
         <TextView
             android:id="@+id/firstNameTextView"
             android:layout_width="wrap_content"
@@ -38,7 +36,6 @@
             android:textColor="@color/grey"
             android:layout_marginTop="4dp" />
 
-        <!-- Last Name -->
         <TextView
             android:id="@+id/lastNameTextView"
             android:layout_width="wrap_content"
@@ -48,7 +45,6 @@
             android:textColor="@color/grey"
             android:layout_marginTop="2dp" />
 
-        <!-- Phone Number -->
         <TextView
             android:id="@+id/phoneNumberTextView"
             android:layout_width="wrap_content"

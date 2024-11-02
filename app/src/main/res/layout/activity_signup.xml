@@ -7,7 +7,6 @@
     android:background="@color/white"
     android:padding="16dp">
 
-    <!-- Back button -->
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/back"
         android:layout_width="24dp"
@@ -18,7 +17,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- User Image -->
     <androidx.cardview.widget.CardView
         android:id="@+id/getuserimage"
         android:layout_width="130dp"
@@ -37,7 +35,6 @@
             android:scaleType="centerCrop" />
     </androidx.cardview.widget.CardView>
 
-    <!-- Username Input -->
     <LinearLayout
         android:id="@+id/username_input"
         android:layout_width="match_parent"
@@ -59,7 +56,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:hint="Enter your username"
+            android:hint="Enter your email"
             android:imeOptions="actionNext"
             android:inputType="textEmailAddress"
             android:textColor="@color/black"
@@ -67,7 +64,6 @@
             android:textSize="16sp" />
     </LinearLayout>
 
-    <!-- Password Input -->
     <LinearLayout
         android:id="@+id/password_input"
         android:layout_width="match_parent"
@@ -96,7 +92,6 @@
             android:textSize="16sp" />
     </LinearLayout>
 
-    <!-- Confirm Password Input -->
     <LinearLayout
         android:id="@+id/password_confirm_input"
         android:layout_width="match_parent"
@@ -125,7 +120,6 @@
             android:textSize="16sp" />
     </LinearLayout>
 
-    <!-- User Type Selection -->
     <RadioGroup
         android:id="@+id/radioGroupUserType"
         android:layout_width="match_parent"
@@ -133,7 +127,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/password_confirm_input"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -162,7 +156,6 @@
             android:textColor="@color/black" />
     </RadioGroup>
 
-    <!-- Progress Bar -->
     <ProgressBar
         android:id="@+id/progressbarofsetProfile"
         android:layout_width="wrap_content"
@@ -173,7 +166,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Sign Up Button -->
     <Button
         android:id="@+id/buttonSignup"
         android:layout_width="wrap_content"

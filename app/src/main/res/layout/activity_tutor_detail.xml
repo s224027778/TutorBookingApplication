@@ -7,7 +7,6 @@
     android:background="@color/white"
     tools:context=".TutorDetailActivity">
 
-    <!-- Top Bar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
@@ -36,7 +35,6 @@
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- ScrollView wrapping content -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,7 +46,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Tutor Details Section -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -116,7 +113,6 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Reviews Section Heading -->
             <TextView
                 android:id="@+id/reviews_heading"
                 android:layout_width="wrap_content"
@@ -128,7 +124,6 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="8dp" />
 
-            <!-- RecyclerView for Reviews -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewReviews"
                 android:layout_width="match_parent"
@@ -137,7 +132,6 @@
                 android:layout_marginTop="8dp"
                 tools:listitem="@layout/item_review" />
 
-            <!-- Make a Booking Button -->
             <Button
                 android:id="@+id/btnMakeBooking"
                 android:layout_width="match_parent"
@@ -151,7 +145,6 @@
                 android:elevation="4dp"
                 android:padding="12dp" />
 
-            <!-- Add a Review Button -->
             <Button
                 android:id="@+id/btnAddReview"
                 android:layout_width="match_parent"

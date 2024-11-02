@@ -18,7 +18,6 @@ tools:context=".MainActivity">
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -61,7 +60,7 @@ tools:context=".MainActivity">
             android:id="@+id/editTextUsername"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:hint="Enter your username"
+            android:hint="Enter your email"
             android:imeOptions="actionNext"
             android:inputType="textEmailAddress"
             android:textColor="@color/black"

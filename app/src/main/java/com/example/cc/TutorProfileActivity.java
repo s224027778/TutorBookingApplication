@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -60,7 +61,7 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
         setContentView(R.layout.activity_tutor_profile);
 
         db = new DatabaseHelper(this);
-        db.insertPrices(); // This populates the database
+        db.insertPrices();
 
         editTextUsername = findViewById(R.id.userName);
         editTextFirstName = findViewById(R.id.editTextFirstName);
@@ -91,11 +92,12 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 userprofile muserprofile=snapshot.getValue(userprofile.class);
                 editTextUsername.setText(muserprofile.getUsername());
+                editTextUsername.setEnabled(false);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getApplicationContext(),"Failed To Fetch",Toast.LENGTH_SHORT).show();
+                Log.e("TutorProfileActivity","Failed To Fetch");
             }
         });
 
@@ -122,7 +124,7 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // Another interface callback
+
             }
         });
 
@@ -137,27 +139,53 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
                 String lastName = editTextLastName.getText().toString().trim();
                 String phoneNumber = editTextPhoneNumber.getText().toString().trim();
 
+                if (firstName.isEmpty())
+                {
+                    Toast.makeText(TutorProfileActivity.this, "First name is required", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (firstName.matches(".[0-9]."))
+                {
+                    Toast.makeText(TutorProfileActivity.this, "Password be contain atleast one number", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (lastName.isEmpty())
+                {
+                    Toast.makeText(TutorProfileActivity.this, "First name cannot contain numbers", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (lastName.matches(".[0-9]."))
+                {
+                    Toast.makeText(TutorProfileActivity.this, "Last name cannot contain numbers", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (phoneNumber.isEmpty())
+                {
+                    Toast.makeText(TutorProfileActivity.this, "Phone number is required", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 if(!validatePhoneNumber()){
                     return;
                 }
 
                 Cursor res = db.getUserProfile(username);
                 if (res == null || res.getCount() == 0) {
-                    Toast.makeText(TutorProfileActivity.this, "User profile not found", Toast.LENGTH_SHORT).show();
+                    Log.e("TutorProfileActivity", "User profile not found");
                     res.close();
                     return;
                 }
 
                 Cursor res1 = db.getTutorProfile(username);
                 if (res1 != null && res1.getCount() > 0) {
-                    Toast.makeText(TutorProfileActivity.this, "Tutor profile already exists", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TutorProfileActivity.this, "Tutor profile already exists", Toast.LENGTH_LONG).show();
                     res1.close();
                     return;
                 }
 
                 boolean isInserted = db.insertProfile(username, firstName, lastName, phoneNumber);
                 if (isInserted) {
-                    Toast.makeText(TutorProfileActivity.this, "Profile Created", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TutorProfileActivity.this, "Profile Created", Toast.LENGTH_LONG).show();
 
                     // Get tutor ID by username
                     int tutorId = db.getTutorIdByUsername(username);
@@ -169,8 +197,6 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
 
                     db.assignTutorToModule(tutorId, moduleId);
 
-                    // Hide the create profile button
-                    v.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(TutorProfileActivity.this, "Profile Not Created", Toast.LENGTH_SHORT).show();
                 }
@@ -192,26 +218,24 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
 
                 Cursor res = db.getUserProfile(username);
                 if (res == null || res.getCount() == 0) {
-                    Toast.makeText(TutorProfileActivity.this, "User profile not found", Toast.LENGTH_SHORT).show();
+                    Log.e("TutorBookingActivity", "User profile not found");
                     return;
                 }
                 validatePhoneNumber();
-                // Call the updateProfile method
+
                 boolean isUpdated = db.updateProfile(username, firstName, lastName, phoneNumber);
                 if (isUpdated) {
-                    Toast.makeText(TutorProfileActivity.this, "Profile Updated", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TutorProfileActivity.this, "Profile Updated", Toast.LENGTH_LONG).show();
 
-                    // Get tutor ID by username
                     int tutorId = db.getTutorIdByUsername(username);
 
-                    // Assign modules to the tutor
                     Spinner moduleSpinner = findViewById(R.id.moduleSpinner);
                     String selectedModule = moduleSpinner.getSelectedItem().toString();
                     int moduleId = db.getModuleIdByName(selectedModule);
-
                     db.assignTutorToModule(tutorId, moduleId);
+
                 } else {
-                    Toast.makeText(TutorProfileActivity.this, "Profile Update Failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TutorProfileActivity.this, "Profile Update Failed", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -227,12 +251,12 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
         String phoneNumber = editTextPhoneNumber.getText().toString();
 
         if (countryCode.equals("+27")) {
-            if (phoneNumber.length() != 9) {
-                editTextPhoneNumber.setError("Mobile number should be 9 digits after +27.");
+            if (phoneNumber.length() != 10) {
+                Toast.makeText(TutorProfileActivity.this,"Mobile number should contain 10 digits", Toast.LENGTH_LONG).show();
                 return false;
             }
         } else{
-            editTextPhoneNumber.setError("South African numbers should have +27");
+            Toast.makeText(TutorProfileActivity.this, "South African numbers should have +27", Toast.LENGTH_LONG).show();
             return false;
         }
         return true;
@@ -242,7 +266,7 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String moduleText = parent.getItemAtPosition(position).toString();
-        // toast msg
+
     }
 
     @Override

@@ -8,7 +8,6 @@
     android:background="@color/white"
     tools:context=".StudentHomeActivity">
 
-    <!-- Top Bar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
@@ -27,20 +26,21 @@
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
 
-    <TextView
-        android:id="@+id/subTitleTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:text="Select A Language"
-        android:layout_gravity="center_horizontal"
-        android:textColor="@color/grey"
-        android:textSize="24sp"/>
-
     <FrameLayout
         android:id="@+id/frame_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/subTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            android:text="Select A Language To View Modules"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/grey"
+            app:layout_anchor="@id/frame_layout"
+            android:textSize="20sp"/>
 
         <ListView
             android:id="@+id/listView"

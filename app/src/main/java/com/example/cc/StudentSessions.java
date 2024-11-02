@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,16 +33,14 @@ public class StudentSessions extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewBookings);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Initialize DatabaseHelper
         databaseHelper = new DatabaseHelper(this);
 
-        // Retrieve the student's name from the intent
         studentName = getIntent().getStringExtra("STUDENT_NAME");
 
         if (studentName != null && !studentName.isEmpty()) {
-            loadBookings();  // Load bookings for this student
+            loadBookings();
         } else {
-            Toast.makeText(this, "Student name is missing!", Toast.LENGTH_SHORT).show();
+            Log.d("StudentSessions", "Student name is missing");
             finish();
         }
 
@@ -85,12 +84,10 @@ public class StudentSessions extends AppCompatActivity {
                 @SuppressLint("Range") String duration = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_BOOKING_DURATION));
                 @SuppressLint("Range") int status = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COL_BOOKING_STATUS));
 
-                // Create a Booking object and add it to the list
                 Booking booking = new Booking(bookingId, status, duration, time, date, moduleName, studentName, tutorName);
                 bookingList.add(booking);
             }
 
-            // Initialize the adapter and set it to the RecyclerView
             bookingsAdapter = new BookingsAdapter(bookingList);
             recyclerView.setAdapter(bookingsAdapter);
         }

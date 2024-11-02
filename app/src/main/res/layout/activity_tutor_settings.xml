@@ -10,7 +10,6 @@
     tools:context=".TutorSettings"
     tools:ignore="NewApi">
 
-    <!-- Top Bar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
@@ -30,7 +29,6 @@
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- Scrollable Content -->
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="0dp"
@@ -46,7 +44,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Account Setting -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/accountCard"
                 android:layout_width="match_parent"
@@ -79,7 +76,6 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Location Setting -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -112,7 +108,6 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- About Us Setting -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -145,7 +140,6 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- FAQs Setting -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -178,7 +172,6 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Log Out Setting -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -213,7 +206,6 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- Fragment container for ChatFragment -->
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"

@@ -1,213 +1,201 @@
-<RelativeLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".TutorProfileActivity"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <!-- Top toolbar with back button and centered title -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/topToolbar"
+    <RelativeLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/lavender"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+        tools:context=".TutorProfileActivity">
 
-        <!-- Back button on the left -->
-        <ImageButton
-            android:id="@+id/backButton"
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/topToolbar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_back"
-            android:background="?attr/selectableItemBackground"
-            android:layout_gravity="start"
-            android:contentDescription="Back" />
+            android:background="@color/lavender"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
-        <!-- Title centered -->
+            <ImageButton
+                android:id="@+id/backButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back"
+                android:background="?attr/selectableItemBackground"
+                android:layout_gravity="start"
+                android:contentDescription="Back" />
+
+            <TextView
+                android:id="@+id/toolbarTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="CodeCoach"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                android:layout_centerHorizontal="true" />
+        </androidx.appcompat.widget.Toolbar>
+
         <TextView
-            android:id="@+id/toolbarTitle"
+            android:id="@+id/updateProfileTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="CodeCoach"
-            android:textColor="@color/white"
-            android:textSize="22sp"
-            android:layout_centerHorizontal="true" />
-    </androidx.appcompat.widget.Toolbar>
-
-    <!-- Update Profile Title -->
-    <TextView
-        android:id="@+id/updateProfileTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/viewuserimage"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:text="Update Profile"
-        android:textSize="26sp"
-        android:textStyle="bold"/>
-
-    <!-- Edit icon next to the title -->
-    <ImageView
-        android:id="@+id/editIcon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignBottom="@id/updateProfileTitle"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="66dp"
-        android:layout_marginBottom="4dp"
-        android:src="@drawable/edit" />
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:layout_below="@+id/topToolbar"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="80dp"
-        android:id="@+id/viewuserimage"
-        android:layout_centerHorizontal="true"
-        app:cardCornerRadius="130dp">
+            android:layout_below="@id/viewuserimage"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:text="Update Profile"
+            android:textSize="26sp"
+            android:textStyle="bold"/>
 
         <ImageView
+            android:id="@+id/editIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignBottom="@id/updateProfileTitle"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="66dp"
+            android:layout_marginBottom="4dp"
+            android:src="@drawable/edit" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_below="@+id/topToolbar"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="80dp"
+            android:id="@+id/viewuserimage"
+            android:layout_centerHorizontal="true"
+            app:cardCornerRadius="130dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/defaultprofile"
+                android:id="@+id/viewuserimageinimageview"
+                android:scaleType="centerCrop">
+            </ImageView>
+        </androidx.cardview.widget.CardView>
+
+        <EditText
+            android:id="@+id/userName"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/defaultprofile"
-            android:id="@+id/viewuserimageinimageview"
-            android:scaleType="centerCrop">
-        </ImageView>
-    </androidx.cardview.widget.CardView>
+            android:layout_height="48dp"
+            android:layout_below="@id/updateProfileTitle"
+            android:layout_marginTop="20dp"
+            android:hint="Username"
+            android:padding="12dp"
+            android:background="@drawable/edittext_background"
+            android:gravity="center" />
 
-    <!-- Username EditText -->
-    <EditText
-        android:id="@+id/userName"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_below="@id/updateProfileTitle"
-        android:layout_marginTop="20dp"
-        android:hint="Username"
-        android:padding="12dp"
-        android:background="@drawable/edittext_background"
-        android:gravity="center" />
+        <EditText
+            android:id="@+id/editTextFirstName"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_below="@id/userName"
+            android:layout_marginTop="12dp"
+            android:hint="@string/first_name"
+            android:padding="12dp"
+            android:background="@drawable/edittext_background" />
 
-    <!-- First Name EditText -->
-    <EditText
-        android:id="@+id/editTextFirstName"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_below="@id/userName"
-        android:layout_marginTop="12dp"
-        android:hint="@string/first_name"
-        android:padding="12dp"
-        android:background="@drawable/edittext_background" />
+        <EditText
+            android:id="@+id/editTextLastName"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_below="@id/editTextFirstName"
+            android:layout_marginTop="12dp"
+            android:hint="@string/last_name"
+            android:padding="12dp"
+            android:background="@drawable/edittext_background" />
 
-    <!-- Last Name EditText -->
-    <EditText
-        android:id="@+id/editTextLastName"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_below="@id/editTextFirstName"
-        android:layout_marginTop="12dp"
-        android:hint="@string/last_name"
-        android:padding="12dp"
-        android:background="@drawable/edittext_background" />
+        <LinearLayout
+            android:id="@+id/phoneLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editTextLastName"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
 
-    <!-- Phone Number with Country Code Picker -->
-    <LinearLayout
-        android:id="@+id/phoneLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/editTextLastName"
-        android:layout_marginTop="12dp"
-        android:orientation="horizontal">
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/tutorcountryCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:ccp_showFlag="false"
+                app:ccp_showNameCode="false"/>
 
-        <!-- Country Code Picker -->
-        <com.hbb20.CountryCodePicker
-            android:id="@+id/tutorcountryCode"
+            <EditText
+                android:id="@+id/editTextPhoneNumber"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:hint="@string/phone_number"
+                android:padding="12dp"
+                android:inputType="phone"
+                android:background="@drawable/edittext_background"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/modulesText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:ccp_showFlag="false"
-            app:ccp_showNameCode="false"/>
+            android:layout_below="@id/phoneLayout"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="16dp"
+            android:text="@string/modules_to_tutor"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
 
-        <!-- Phone Number EditText -->
-        <EditText
-            android:id="@+id/editTextPhoneNumber"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:hint="@string/phone_number"
+        <Spinner
+            android:id="@+id/moduleSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/modulesText"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/spinner_background"/>
+
+        <TextView
+            android:id="@+id/pricesText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/moduleSpinner"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="16dp"
+            android:text="Price for selected module"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <Spinner
+            android:id="@+id/priceSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pricesText"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/spinner_background"/>
+
+        <Button
+            android:id="@+id/createProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/priceSpinner"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/lavender"
+            android:textColor="@android:color/white"
             android:padding="12dp"
-            android:inputType="phone"
-            android:background="@drawable/edittext_background"/>
-    </LinearLayout>
+            android:text="Create Profile"/>
 
-    <!-- Modules label -->
-    <TextView
-        android:id="@+id/modulesText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/phoneLayout"
-        android:layout_marginTop="24dp"
-        android:layout_marginStart="16dp"
-        android:text="@string/modules_to_tutor"
-        android:textSize="16sp"
-        android:textStyle="bold"/>
+        <Button
+            android:id="@+id/editProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/createProfile"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/lavender"
+            android:textColor="@android:color/white"
+            android:padding="12dp"
+            android:text="Edit Profile"/>
 
-    <!-- Modules Spinner -->
-    <Spinner
-        android:id="@+id/moduleSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/modulesText"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/spinner_background"/>
+    </RelativeLayout>
 
-    <!-- Price label -->
-    <TextView
-        android:id="@+id/pricesText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/moduleSpinner"
-        android:layout_marginTop="24dp"
-        android:layout_marginStart="16dp"
-        android:text="Price for selected module"
-        android:textSize="16sp"
-        android:textStyle="bold"/>
-
-    <!-- Price Spinner -->
-    <Spinner
-        android:id="@+id/priceSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/pricesText"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/spinner_background"/>
-
-    <!-- Create Profile Button -->
-    <Button
-        android:id="@+id/createProfile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/priceSpinner"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="@color/lavender"
-        android:textColor="@android:color/white"
-        android:padding="12dp"
-        android:text="Create Profile"/>
-
-    <!-- Edit Profile Button -->
-    <Button
-        android:id="@+id/editProfile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/createProfile"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@color/lavender"
-        android:textColor="@android:color/white"
-        android:padding="12dp"
-        android:text="Edit Profile"/>
-
-</RelativeLayout>
+</ScrollView>

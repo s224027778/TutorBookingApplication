@@ -18,11 +18,9 @@ public class TutorSettings extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Initialize binding first
         binding = ActivityTutorSettingsBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());  // Set the correct root view with binding
+        setContentView(binding.getRoot());
 
-        // Initialize the cards
         accountCard = findViewById(R.id.accountCard);
         logoutCard = findViewById(R.id.logoutCard);
         TutorFaqCard = findViewById(R.id.TutorFaqCard);
@@ -79,7 +77,6 @@ public class TutorSettings extends AppCompatActivity {
                     .show();
         });
 
-        // Set up the bottom navigation and handle intents or fragment replacements
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
 

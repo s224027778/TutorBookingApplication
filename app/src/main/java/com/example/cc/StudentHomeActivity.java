@@ -27,10 +27,8 @@ public class StudentHomeActivity extends AppCompatActivity {
         SharedPreferences userSession = getSharedPreferences("UserSession", MODE_PRIVATE);
         String loggedInUsername = userSession.getString("LoggedInStudentUsername", null);
 
-        // Initialize the DatabaseHelper
         dbHelp = new DatabaseHelper(this);
 
-        // Retrieve the logged-in student's name from the database using the method
         studentName = dbHelp.getLoggedInStudentName(loggedInUsername);
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -57,23 +55,18 @@ public class StudentHomeActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.listView);
         dbHelp = new DatabaseHelper(this);
 
-        // Get categories from the database
         List<Category> categories = dbHelp.getAllCategories();
 
-        // Create a custom CategoryAdapter
         CategoryAdapter adapter = new CategoryAdapter(this, categories);
         listView.setAdapter(adapter);
 
-        // Set an item click listener
         listView.setOnItemClickListener((parent, view, position, id) -> {
             Category selectedCategory = categories.get(position);
 
-            // Fetch the modules for the selected category
             List<Module> modules = dbHelp.getModulesByCategory(selectedCategory.getId());
 
-            // Create an intent to start the ModuleListActivity
             Intent intent = new Intent(StudentHomeActivity.this, ModuleList.class);
-            intent.putExtra("modules", new ArrayList<>(modules)); // Convert List to ArrayList
+            intent.putExtra("modules", new ArrayList<>(modules));
             startActivity(intent);
         });
     }

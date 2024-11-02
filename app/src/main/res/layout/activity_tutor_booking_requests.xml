@@ -8,7 +8,6 @@
     android:background="@color/white"
     tools:context=".TutorBookingRequests">
 
-    <!-- Top Bar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
@@ -27,7 +26,6 @@
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- Main Content -->
     <LinearLayout
         android:id="@+id/main_content"
         android:layout_width="match_parent"
@@ -36,7 +34,6 @@
         android:padding="16dp"
         android:gravity="center">
 
-        <!-- Heading: Requested Bookings -->
         <TextView
             android:id="@+id/headingText"
             android:layout_width="wrap_content"
@@ -48,7 +45,6 @@
             android:gravity="center"
             android:layout_marginBottom="16dp"/>
 
-        <!-- Message when there are no bookings -->
         <TextView
             android:id="@+id/noBookingsMessage"
             android:layout_width="wrap_content"
@@ -61,7 +57,6 @@
             android:layout_marginTop="8dp"
             android:gravity="center"/>
 
-        <!-- ListView for booking requests -->
         <ListView
             android:id="@+id/listViewBookingRequests"
             android:layout_width="match_parent"
@@ -74,7 +69,6 @@
 
     </LinearLayout>
 
-    <!-- Fragment container for ChatFragment -->
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
@@ -82,7 +76,6 @@
         android:layout_above="@id/bottomNavigationView"
         android:visibility="gone"/>
 
-    <!-- Bottom App Bar -->
     <com.google.android.material.bottomappbar.BottomAppBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

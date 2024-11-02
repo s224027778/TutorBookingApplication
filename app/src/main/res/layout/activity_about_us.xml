@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Top Bar -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/top_bar"
             android:layout_width="match_parent"
@@ -38,7 +36,6 @@
                 android:textStyle="bold" />
         </androidx.appcompat.widget.Toolbar>
 
-        <!-- App Logo -->
         <ImageView
             android:id="@+id/appLogo"
             android:layout_width="150dp"
@@ -47,7 +44,6 @@
             android:src="@drawable/logo"
             android:contentDescription="App Logo" />
 
-        <!-- About Us Title -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,16 +54,14 @@
             android:paddingTop="20dp"
             android:paddingBottom="10dp" />
 
-        <!-- Description -->
         <TextView
             android:id="@+id/aboutDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Our app helps students find tutors quickly and efficiently. We aim to make learning accessible and convenient for everyone."
+            android:text="Code coach helps Nelson Mandela University IT students find tutors quickly and efficiently. Our aim is to make learning accessible and convenient for each student."
             android:textSize="16sp"
             android:paddingBottom="10dp" />
 
-        <!-- Contact Information -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

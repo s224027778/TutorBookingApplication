@@ -22,14 +22,11 @@ public class SplashScreen extends AppCompatActivity {
         ImageView logo = findViewById(R.id.logoImageView);
         TextView appName = findViewById(R.id.appNameTextView);
 
-        // Load the animation
         Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
 
-        // Apply the animation
         logo.startAnimation(fadeIn);
         appName.startAnimation(fadeIn);
 
-        // Delay to move to MainActivity
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -37,6 +34,6 @@ public class SplashScreen extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        }, 3000); // 3 seconds delay
+        }, 3000);
     }
 }

@@ -69,7 +69,6 @@
             android:layout_height="wrap_content"
             android:text="Delete User" />
 
-        <!-- TextViews for displaying records -->
         <TextView
             android:id="@+id/textViewUsers"
             android:layout_width="match_parent"

@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -35,7 +36,7 @@ public class LocationActivity extends AppCompatActivity {
     private double currentLongitude;
     private String currentAddress;
     private String tutorName;
-    private DatabaseHelper db;  // Assuming you have a DatabaseHelper class for database operations
+    private DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,23 +49,20 @@ public class LocationActivity extends AppCompatActivity {
         back = findViewById(R.id.back_button);
         addLocation = findViewById(R.id.addLocationButton);
 
-        db = new DatabaseHelper(this);  // Initialize the database helper
+        db = new DatabaseHelper(this);
 
-        // Retrieve the tutor's name from SharedPreferences
         SharedPreferences tutorPrefs = getSharedPreferences("TutorPrefs", MODE_PRIVATE);
-        tutorName = tutorPrefs.getString("LoggedInTutorUsername", null); // Default value is null if not found
+        tutorName = tutorPrefs.getString("LoggedInTutorUsername", null);
 
-        // Initialize Fused Location Provider Client
+        // Initialize fused location provider client
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         getLocationButton.setOnClickListener(v -> {
-            // Show progress bar while retrieving location
             locationProgressBar.setVisibility(View.VISIBLE);
             getLocation();
         });
 
         addLocation.setOnClickListener(v -> {
-            // Insert location into the database
             insertLocation(tutorName, currentLatitude, currentLongitude, currentAddress);
         });
 
@@ -75,22 +73,21 @@ public class LocationActivity extends AppCompatActivity {
     }
 
     private void getLocation() {
-        // Check if location permissions are granted
+        // Check location permissions
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
             return;
         }
 
-        // Get last known location
+        // Get location
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, location -> {
-                    locationProgressBar.setVisibility(View.GONE);  // Hide progress bar
+                    locationProgressBar.setVisibility(View.GONE);
 
                     if (location != null) {
                         currentLatitude = location.getLatitude();
                         currentLongitude = location.getLongitude();
 
-                        // Update the TextView with latitude and longitude
                         locationTextView.setText("Lat: " + currentLatitude + ", Long: " + currentLongitude);
 
                         // Convert latitude and longitude into an address using Geocoder
@@ -105,32 +102,31 @@ public class LocationActivity extends AppCompatActivity {
                                 // Display the address details
                                 locationTextView.append("\nFull Address: " + currentAddress);
                             } else {
-                                locationTextView.append("\nUnable to get address.");
+                                Log.e("LoginActivity","Unable to get address.");
                             }
                         } catch (IOException e) {
                             locationTextView.append("\nFailed to get address. " + e.getMessage());
                         }
                     } else {
-                        locationTextView.setText("Unable to retrieve location.");
+                        Toast.makeText(LocationActivity.this, "Unable to retrieve location", Toast.LENGTH_LONG).show();
                     }
                 })
                 .addOnFailureListener(e -> {
-                    locationProgressBar.setVisibility(View.GONE);  // Hide progress bar
-                    locationTextView.setText("Failed to retrieve location: " + e.getMessage());
+                    locationProgressBar.setVisibility(View.GONE);
+                    Toast.makeText(LocationActivity.this, "Failed to retrieve location", Toast.LENGTH_LONG).show();
                 });
     }
 
-    // Method to insert location data into the database
     private void insertLocation(String tutorName, double latitude, double longitude, String address) {
         if (latitude != 0 && longitude != 0 && address != null) {
             boolean insertSuccess = db.insertLocationData(tutorName, latitude, longitude, address);
             if (insertSuccess) {
-                Toast.makeText(this, "Location added to database.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Location added to profile.", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, "Failed to add location to database.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Failed to add location to profile.", Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(this, "Location data is incomplete", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Location data is incomplete", Toast.LENGTH_LONG).show();
         }
     }
 }

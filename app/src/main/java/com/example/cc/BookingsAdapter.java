@@ -40,7 +40,6 @@ public class BookingsAdapter extends RecyclerView.Adapter<BookingsAdapter.Bookin
         holder.time.setText(booking.getTime());
         holder.duration.setText(booking.getDuration());
 
-        // Set the status text based on the status value
         String statusText;
         switch (booking.getStatus()) {
             case 0:

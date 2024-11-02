@@ -8,7 +8,6 @@
     android:background="@color/white"
     tools:context=".CategoryList">
 
-    <!-- Top App Bar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
@@ -27,7 +26,6 @@
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- List of Categories -->
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
@@ -41,7 +39,6 @@
         android:elevation="8dp"
         android:layout_gravity="center" />
 
-    <!-- Bottom AppBar with Navigation -->
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"

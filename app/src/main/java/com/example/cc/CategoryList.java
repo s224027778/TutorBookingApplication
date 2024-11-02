@@ -22,23 +22,18 @@ public class CategoryList extends AppCompatActivity {
         ListView listView = findViewById(R.id.listView);
         dbHelp = new DatabaseHelper(this);
 
-        // Get categories from the database
         List<Category> categories = dbHelp.getAllCategories();
 
-        // Create and set the custom adapter
         CategoryAdapter adapter = new CategoryAdapter(this, categories);
         listView.setAdapter(adapter);
 
-        // Set an item click listener
         listView.setOnItemClickListener((parent, view, position, id) -> {
             Category selectedCategory = categories.get(position);
 
-            // Fetch the modules for the selected category
             List<Module> modules = dbHelp.getModulesByCategory(selectedCategory.getId());
 
-            // Create an intent to start the ModuleListActivity
             Intent intent = new Intent(CategoryList.this, ModuleList.class);
-            intent.putExtra("modules", new ArrayList<>(modules)); // Convert List to ArrayList
+            intent.putExtra("modules", new ArrayList<>(modules));
             startActivity(intent);
         });
     }

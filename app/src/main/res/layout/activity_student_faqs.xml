@@ -4,7 +4,6 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-    <!-- Top Bar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
@@ -33,7 +32,6 @@
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- ListView for FAQs -->
     <ListView
         android:id="@+id/faqListView"
         android:layout_width="match_parent"

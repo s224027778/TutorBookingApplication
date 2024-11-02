@@ -43,28 +43,27 @@ public class LoginActivity extends AppCompatActivity {
                 String password = editTextPassword.getText().toString().trim();
 
                 if (username.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Please enter both username and password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Please enter both email and password", Toast.LENGTH_LONG).show();
                     return;
                 }
 
                 Cursor res = db.getUser(username, password);
                 if (res == null || res.getCount() == 0) {
-                    Toast.makeText(LoginActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Invalid Credentials", Toast.LENGTH_LONG).show();
                     return;
                 }
 
                 res.moveToFirst();
                 String userType = res.getString(3);
-                Toast.makeText(LoginActivity.this, "User Type: " + userType, Toast.LENGTH_SHORT).show();
                 SharedPreferences tutorPrefs = getSharedPreferences("TutorPrefs", MODE_PRIVATE);
                 SharedPreferences.Editor tutorEditor = tutorPrefs.edit();
-                tutorEditor.putString("LoggedInTutorUsername", username); // Store the username
-                tutorEditor.apply(); // Apply changes
+                tutorEditor.putString("LoggedInTutorUsername", username);
+                tutorEditor.apply();
 
                 SharedPreferences userSession = getSharedPreferences("UserSession", MODE_PRIVATE);
                 SharedPreferences.Editor userEditor = userSession.edit();
-                userEditor.putString("LoggedInStudentUsername", username); // Store the username
-                userEditor.apply(); // Apply changes
+                userEditor.putString("LoggedInStudentUsername", username);
+                userEditor.apply();
 
 
                 switch (userType) {
@@ -76,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                         break;
                     case "Tutor":
                         Intent intent = new Intent(LoginActivity.this, TutorBookingRequests.class);
-                        intent.putExtra("TUTOR_NAME", db.getLoggedInTutorName(username)); // Pass the tutor's name
+                        intent.putExtra("TUTOR_NAME", db.getLoggedInTutorName(username));
                         startActivity(intent);
                         finish();
                         break;
@@ -84,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, "Error identifying user type", Toast.LENGTH_SHORT).show();
                 }
                 finish();
-                // res.close(); // Close the cursor to avoid memory leaks
+
             }
         });
     }

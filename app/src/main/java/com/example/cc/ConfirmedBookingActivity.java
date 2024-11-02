@@ -24,18 +24,14 @@ public class ConfirmedBookingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Initialize binding first
         binding = ActivityConfirmedBookingBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());  // Set the correct root view with binding
+        setContentView(binding.getRoot());
 
-        // Initialize list and database helper
         dbHelper = new DatabaseHelper(this);
         confirmedBookings = new ArrayList<>();
 
-        // Load confirmed bookings
         loadConfirmedBookings();
 
-        // Set up the bottom navigation and handle intents or fragment replacements
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
 
@@ -59,16 +55,13 @@ public class ConfirmedBookingActivity extends AppCompatActivity {
 
     private void loadConfirmedBookings() {
 
-        // Retrieve the logged-in tutor's username from shared preferences
         SharedPreferences tutorPrefs = getSharedPreferences("TutorPrefs", MODE_PRIVATE);
         String loggedInUsername = tutorPrefs.getString("LoggedInTutorUsername", null);
 
-        // Retrieve confirmed bookings for the tutor
         String tutorName = dbHelper.getLoggedInTutorName(loggedInUsername);
         Cursor cursor = dbHelper.getConfirmedBooking(tutorName);
 
         if (cursor == null || cursor.getCount() == 0) {
-            // Display a message if no bookings are found
             Toast.makeText(this, "No confirmed bookings found for tutor: " + tutorName, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -84,7 +77,6 @@ public class ConfirmedBookingActivity extends AppCompatActivity {
                 @SuppressLint("Range") String duration = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_BOOKING_DURATION));
                 @SuppressLint("Range") int status = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COL_BOOKING_STATUS));
 
-                // Create a new Booking object and add it to the list
                 Booking booking = new Booking(id, status, duration, time, date, moduleName, studentName, tutor);
                 confirmedBookings.add(booking);
 
@@ -92,12 +84,8 @@ public class ConfirmedBookingActivity extends AppCompatActivity {
         }
         cursor.close();
 
-        // Log or Toast the size of the confirmedBookings list
-        Toast.makeText(this, "Total confirmed bookings: " + confirmedBookings.size(), Toast.LENGTH_SHORT).show();
-
-        // Initialize adapter and set it to the ListView using binding
         adapter = new ConfirmedBookingAdapter(this, confirmedBookings);
-        binding.listViewConfirmedBookings.setAdapter(adapter);  // Use binding to access the ListView
+        binding.listViewConfirmedBookings.setAdapter(adapter);
     }
 }
 

@@ -216,9 +216,9 @@ public class AdminHomeActivity extends AppCompatActivity {
 
                 Integer deletedRows = db.deleteUser(userId);
                 if (deletedRows > 0) {
-                    Toast.makeText(AdminHomeActivity.this, "User Deleted Successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AdminHomeActivity.this, "User Deleted Successfully", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(AdminHomeActivity.this, "Delete Failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AdminHomeActivity.this, "Delete Failed", Toast.LENGTH_LONG).show();
                 }
             }
         });

@@ -22,7 +22,6 @@ import com.squareup.picasso.Picasso;
 import android.widget.Toast;
 import android.util.Log;
 
-
 public class ChatFragment extends Fragment {
 
     private FirebaseFirestore firebaseFirestore;
@@ -45,10 +44,10 @@ public class ChatFragment extends Fragment {
 
         // Error handling for Firestore query
         query.get().addOnSuccessListener(queryDocumentSnapshots -> {
-            // If the query succeeds, do nothing here or log success if needed
+
         }).addOnFailureListener(e -> {
             Log.e("FirestoreError", "Error retrieving data: " + e.getMessage());
-            Toast.makeText(getActivity(), "Permission error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.e("FirestorePermissionError", "Permission error: " + e.getMessage());
         });
 
         FirestoreRecyclerOptions<firebasemodel> allusername = new FirestoreRecyclerOptions.Builder<firebasemodel>()
@@ -61,7 +60,7 @@ public class ChatFragment extends Fragment {
                 noteViewHolder.particularusername.setText(firebasemodel.getName());
                 String uri = firebasemodel.getImage();
 
-                Picasso.get().load(uri).into(noteViewHolder.mimageviewofuser);  // Use viewHolder's imageView
+                Picasso.get().load(uri).into(noteViewHolder.mimageviewofuser);
                 if ("Online".equals(firebasemodel.getStatus())) {
                     noteViewHolder.statusofuser.setText(firebasemodel.getStatus());
                     noteViewHolder.statusofuser.setTextColor(Color.GREEN);
@@ -98,7 +97,7 @@ public class ChatFragment extends Fragment {
     public class NoteViewHolder extends RecyclerView.ViewHolder {
         private TextView particularusername;
         private TextView statusofuser;
-        private ImageView mimageviewofuser;  // Move to the ViewHolder
+        private ImageView mimageviewofuser;
 
         public NoteViewHolder(@NonNull View itemView) {
             super(itemView);

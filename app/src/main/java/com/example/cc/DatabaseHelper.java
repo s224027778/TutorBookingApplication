@@ -100,7 +100,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_CONFIRMEDBOOKING_DURATION = "DURATION";
     public static final String COL_CONFIRMEDBOOKING_STATUS = "STATUS";
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -458,7 +458,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getBookingsByTutorName(String tutorName) {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_NAME_BOOKING + " WHERE " + COL_BOOKING_TUTORNAME + " = ?", new String[]{tutorName});
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME_BOOKING + " WHERE " + COL_BOOKING_TUTORNAME + " = ? AND " + COL_BOOKING_STATUS + " = 0",
+                new String[]{tutorName});
     }
 
     public Cursor getConfirmedBooking(String tutorName) {

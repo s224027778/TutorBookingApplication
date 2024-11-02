@@ -48,18 +48,16 @@ public class BookingAdapter extends BaseAdapter {
         String bookingDetails = bookings.get(position);
         bookingInfo.setText(bookingDetails);
 
-        // Handle the confirm button click
         confirmButton.setOnClickListener(v -> {
-            activity.confirmBooking(bookingDetails);  // Call the method in the activity
-            bookings.remove(position);  // Remove the confirmed booking from the list
-            notifyDataSetChanged();  // Notify the adapter that data has changed
+            activity.confirmBooking(bookingDetails);
+            bookings.remove(position);
+            notifyDataSetChanged();
         });
 
-        // Handle the decline button click
         declineButton.setOnClickListener(v -> {
-            activity.declineBooking(bookingDetails);  // Call the method in the activity
-            bookings.remove(position);  // Remove the declined booking from the list
-            notifyDataSetChanged();  // Notify the adapter that data has changed
+            activity.declineBooking(bookingDetails);
+            bookings.remove(position);
+            notifyDataSetChanged();
         });
 
         return convertView;

@@ -40,7 +40,7 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = FragmentChatBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());  // Set the correct root view with binding
+        setContentView(binding.getRoot());
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -49,7 +49,6 @@ public class ChatActivity extends AppCompatActivity {
 
         String currentUserUid = firebaseAuth.getUid();
 
-        // Query to exclude the current user from the chat list
         Query query = firebaseFirestore.collection("Users")
                 .whereNotEqualTo("uid", currentUserUid);
 
@@ -57,13 +56,11 @@ public class ChatActivity extends AppCompatActivity {
                 .setQuery(query, firebasemodel.class)
                 .build();
 
-        // Firestore adapter setup
         chatAdapter = new FirestoreRecyclerAdapter<firebasemodel, NoteViewHolder>(allUsernames) {
             @Override
             protected void onBindViewHolder(@NonNull NoteViewHolder noteViewHolder, int position, @NonNull firebasemodel userModel) {
                 noteViewHolder.particularUsername.setText(userModel.getName());
 
-                // Load user profile image or set default
                 String uri = userModel.getImage();
                 if (uri != null && !uri.isEmpty()) {
                     Picasso.get().load(uri).into(noteViewHolder.imageViewOfUser);
@@ -71,7 +68,6 @@ public class ChatActivity extends AppCompatActivity {
                     noteViewHolder.imageViewOfUser.setImageResource(R.drawable.defaultprofile);
                 }
 
-                // Set user status color
                 String status = userModel.getStatus();
                 noteViewHolder.statusOfUser.setText(status);
                 noteViewHolder.statusOfUser.setTextColor("Online".equals(status) ? Color.GREEN : Color.BLACK);
@@ -94,13 +90,11 @@ public class ChatActivity extends AppCompatActivity {
             }
         };
 
-        // Set RecyclerView properties
         mrecyclerview.setHasFixedSize(true);
         linearLayoutManager = new LinearLayoutManager(this);
         mrecyclerview.setLayoutManager(linearLayoutManager);
         mrecyclerview.setAdapter(chatAdapter);
 
-        // Bottom Navigation functionality
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
 
@@ -129,7 +123,6 @@ public class ChatActivity extends AppCompatActivity {
         chatAdapter.stopListening();
     }
 
-    // ViewHolder class
     public static class NoteViewHolder extends RecyclerView.ViewHolder {
         private final TextView particularUsername;
         private final TextView statusOfUser;

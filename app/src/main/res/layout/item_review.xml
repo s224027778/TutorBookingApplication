@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Review Text -->
         <TextView
             android:id="@+id/tvReviewText"
             android:layout_width="wrap_content"
@@ -24,7 +23,6 @@
             android:textColor="@android:color/black"
             android:layout_marginBottom="8dp" />
 
-        <!-- Rating Section with Stars -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,7 +37,6 @@
                 android:textColor="@android:color/darker_gray"
                 android:layout_marginRight="8dp" />
 
-            <!-- Icons for star rating (you can use vector drawables or images) -->
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

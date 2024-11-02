@@ -19,17 +19,13 @@ public class FAQs extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_faqs);
 
-        // Initialize the ListView
         faqListView = findViewById(R.id.faqListView);
         back = findViewById(R.id.back_button);
 
-        // Initialize the database helper
         dbHelper = new DatabaseHelper(this);
 
-        // Insert FAQs (Optional: Do this only once or conditionally, e.g., during app setup)
         insertDefaultFAQs();
 
-        // Load FAQ data from the database
         loadFAQData();
 
         back.setOnClickListener(v -> {
@@ -51,14 +47,12 @@ public class FAQs extends AppCompatActivity {
     }
 
     private void loadFAQData() {
-        // Fetch the FAQ data from the database
         List<FAQ> faqList = dbHelper.getAllFAQs();
 
-        // If there are no FAQs, display a message
         if (faqList.isEmpty()) {
             Toast.makeText(this, "No FAQs available at the moment.", Toast.LENGTH_LONG).show();
         } else {
-            // Set up the adapter to display FAQs in the ListView
+
             FAQAdapter faqAdapter = new FAQAdapter(this, faqList);
             faqListView.setAdapter(faqAdapter);
         }

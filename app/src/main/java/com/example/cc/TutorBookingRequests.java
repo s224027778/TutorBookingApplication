@@ -44,7 +44,7 @@ public class TutorBookingRequests extends AppCompatActivity {
         TutorName = tutorPrefs.getString("LoggedInTutorUsername", null);
         if (TutorName == null) {
             // Handle the error, e.g., show a message or redirect to login
-            Toast.makeText(this, "User not logged in. Please log in again.", Toast.LENGTH_SHORT).show();
+            Log.e("TutorBookingRequests", "User not logged in. Please log in again.");
             Intent intent = new Intent(TutorBookingRequests.this, LoginActivity.class);
             startActivity(intent);
             finish(); // Close the activity
@@ -91,7 +91,7 @@ public class TutorBookingRequests extends AppCompatActivity {
         documentReference.update("status","Offline").addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(getApplicationContext(),"Now User is Offline",Toast.LENGTH_SHORT).show();
+                Log.d("TutorBookingRequests", "Now User is Offline");
             }
         });
 
@@ -104,7 +104,7 @@ public class TutorBookingRequests extends AppCompatActivity {
         documentReference.update("status","Online").addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(getApplicationContext(),"Now User is Online",Toast.LENGTH_SHORT).show();
+                Log.d("TutorBookingRequests", "Now User is Online");
             }
         });
 
@@ -144,13 +144,13 @@ public class TutorBookingRequests extends AppCompatActivity {
     public void confirmBooking(String bookingDetails) {
         int bookingId = getBookingIdFromDetails(bookingDetails);
         dbHelper.updateBookingStatusInDatabase(bookingId, 1);
-        Toast.makeText(this, "Booking confirmed.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Booking confirmed.", Toast.LENGTH_LONG).show();
     }
 
     public void declineBooking(String bookingDetails) {
         int bookingId = getBookingIdFromDetails(bookingDetails);
         dbHelper.updateBookingStatusInDatabase(bookingId, 2);
-        Toast.makeText(this, "Booking declined.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Booking declined.", Toast.LENGTH_LONG).show();
     }
 
     @SuppressLint("Range")

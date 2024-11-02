@@ -26,7 +26,6 @@ public class ModuleList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_module_list);
 
-        // Initialize the ImageButton (make sure the ID matches your XML layout)
         ImageButton back = findViewById(R.id.back_button);
 
         back.setOnClickListener(v -> {
@@ -36,28 +35,22 @@ public class ModuleList extends AppCompatActivity {
 
         GridView gridView = findViewById(R.id.moduleGridView);
 
-        // Get the module list from the intent
         ArrayList<Module> modules = (ArrayList<Module>) getIntent().getSerializableExtra("modules");
 
         if (modules != null) {
             ModuleGridAdapter adapter = new ModuleGridAdapter(this, modules);
             gridView.setAdapter(adapter);
 
-            // Set an item click listener
             gridView.setOnItemClickListener((parent, view, position, id) -> {
-                // Get the selected module
+
                 Module selectedModule = modules.get(position);
 
-                // Log the selected module ID
                 Log.d("ModuleList", "Selected Module ID: " + selectedModule.getId());
 
-                // Create an intent to start TutorList activity
                 Intent intent = new Intent(ModuleList.this, TutorList.class);
 
-                // Pass the MODULE_ID to the TutorList activity
                 intent.putExtra("MODULE_ID", String.valueOf(selectedModule.getId()));
-
-                // Start the TutorList activity
+                intent.putExtra("MODULE_NAME", selectedModule.getName());
                 startActivity(intent);
             });
         } else {
