@@ -8,6 +8,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.cc.databinding.ActivityStudentSettingsBinding;
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class StudentSettings extends AppCompatActivity {
 
@@ -92,6 +93,9 @@ public class StudentSettings extends AppCompatActivity {
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.clear();
                         editor.apply();
+
+                        FirebaseAuth.getInstance().signOut();
+
                         Intent intent = new Intent(StudentSettings.this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
