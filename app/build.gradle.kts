@@ -49,6 +49,7 @@ dependencies {
     implementation ("com.google.firebase:firebase-firestore:24.8.1")
     implementation ("com.google.firebase:firebase-storage:21.0.1")
     implementation ("com.google.android.gms:play-services-auth:20.6.0")
+    implementation ("com.google.android.material:material:1.9.0")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

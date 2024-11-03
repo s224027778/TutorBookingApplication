@@ -46,13 +46,14 @@
 
     <ListView
         android:id="@+id/faqListView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@drawable/listview_background"
+        android:layout_width="wrap_content"
+        android:layout_height="670dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:padding="8dp"
+        android:elevation="8dp"
         android:divider="@android:color/transparent"
-        android:dividerHeight="8dp"
+        android:dividerHeight="12dp"
         android:clipToPadding="false" />
 
 </LinearLayout>

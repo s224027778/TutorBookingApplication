@@ -2,6 +2,7 @@ package com.example.cc;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -28,12 +29,14 @@ import com.squareup.picasso.Picasso;
 
 public class StudentChatActivity extends AppCompatActivity {
 
+    private DatabaseHelper dbHelp;
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
     private FirestoreRecyclerAdapter<firebasemodel, NoteViewHolder> chatAdapter;
     private RecyclerView mrecyclerview;
     private LinearLayoutManager linearLayoutManager;
     private FragmentStudentChatBinding binding;
+    String studentName;;
 
     private TextView loggedInUsername;
     private TextView loggedInStatus;
@@ -44,13 +47,20 @@ public class StudentChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = FragmentStudentChatBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());  // Set the correct root view with binding
+        setContentView(binding.getRoot());
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
         mrecyclerview = findViewById(R.id.recyclerview);
 
         String currentUserUid = firebaseAuth.getUid();
+
+        SharedPreferences studentPrefs = getSharedPreferences("StudentPrefs", MODE_PRIVATE);
+        String loggedInUsername = studentPrefs.getString("LoggedInStudentUsername", null);
+
+        dbHelp = new DatabaseHelper(this);
+
+        studentName = dbHelp.getLoggedInStudentName(loggedInUsername);
 
         // Query to exclude the current user from the chat list
         Query query = firebaseFirestore.collection("Users")
@@ -74,12 +84,11 @@ public class StudentChatActivity extends AppCompatActivity {
                     noteViewHolder.imageViewOfUser.setImageResource(R.drawable.defaultprofile);
                 }
 
-                // Set user status color
                 String status = userModel.getStatus();
                 noteViewHolder.statusOfUser.setText(status);
-                noteViewHolder.statusOfUser.setTextColor("Online".equals(status) ? Color.GREEN : Color.BLACK);
+                noteViewHolder.statusOfUser.setTextColor("Online".equals(status) ? Color.BLUE : Color.BLACK);
 
-                // Intent to open chat with specific user
+
                 noteViewHolder.itemView.setOnClickListener(view -> {
                     Intent intent = new Intent(StudentChatActivity.this, studentspecificchat.class);
                     intent.putExtra("name", userModel.getName());
@@ -97,22 +106,21 @@ public class StudentChatActivity extends AppCompatActivity {
             }
         };
 
-        // Set RecyclerView properties
         mrecyclerview.setHasFixedSize(true);
         linearLayoutManager = new LinearLayoutManager(this);
         mrecyclerview.setLayoutManager(linearLayoutManager);
         mrecyclerview.setAdapter(chatAdapter);
 
-        // Bottom Navigation functionality
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
 
             if (itemId == R.id.home) {
                 startActivity(new Intent(StudentChatActivity.this, StudentHomeActivity.class));
                 finish();
-            } else if (itemId == R.id.bookingRequests) {
-                startActivity(new Intent(StudentChatActivity.this, StudentSessions.class));
-                finish();
+            } else if (itemId == R.id.bookingRequests) {;
+                Intent intent = new Intent(StudentChatActivity.this, StudentSessions.class);
+                intent.putExtra("STUDENT_NAME", studentName);
+                startActivity(intent);
             } else if (itemId == R.id.chat) {
                 startActivity(new Intent(StudentChatActivity.this, StudentChatActivity.class));
             } else if (itemId == R.id.settings) {
@@ -123,7 +131,6 @@ public class StudentChatActivity extends AppCompatActivity {
         });
         Cursor cursor = null;
         try {
-            // query database
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -144,7 +151,7 @@ public class StudentChatActivity extends AppCompatActivity {
         chatAdapter.stopListening();
     }
 
-    // ViewHolder class
+
     public static class NoteViewHolder extends RecyclerView.ViewHolder {
         private final TextView particularUsername;
         private final TextView statusOfUser;

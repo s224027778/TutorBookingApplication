@@ -4,8 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_gravity="center"
-    android:padding="20dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="6dp"
     android:layout_margin="8dp">
@@ -14,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center">
+        android:background="@drawable/gradient"
+        android:padding="16dp">
 
         <ImageView
             android:id="@+id/moduleIcon"
@@ -22,7 +21,7 @@
             android:layout_height="80dp"
             android:src="@drawable/baseline_code_24"
             android:contentDescription="Module Icon"
-            android:tint="?attr/colorPrimary"
+            android:tint="@color/white"
             android:layout_marginBottom="8dp"
             tools:ignore="UseAppTint" />
 

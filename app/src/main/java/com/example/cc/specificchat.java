@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -52,7 +53,6 @@ public class specificchat extends AppCompatActivity {
 
     ImageButton mbackbuttonofspecificchat;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,13 +80,12 @@ public class specificchat extends AppCompatActivity {
         mMessageRecyclerView = findViewById(R.id.recyclerviewofspecific);
         mNameOfSpecificUser = findViewById(R.id.mnameofspecificuser);
         mImageViewOfSpecificUser = findViewById(R.id.mimageviewofspecificuser);
-        mbackbuttonofspecificchat=findViewById(R.id.backbuttonofspecificchat);
-
+        mbackbuttonofspecificchat = findViewById(R.id.backbuttonofspecificchat);
 
         Intent intent = getIntent();
         receiverUid = intent.getStringExtra("receiverUid");
         receiverName = intent.getStringExtra("name");
-        String uri = intent.getStringExtra("imageuri");
+        String uri = intent.getStringExtra("imageUri");
 
         if (receiverName != null) {
             mNameOfSpecificUser.setText(receiverName);
@@ -95,6 +94,7 @@ public class specificchat extends AppCompatActivity {
         if (uri != null && !uri.isEmpty()) {
             Picasso.get().load(uri).into(mImageViewOfSpecificUser);
         } else {
+            Log.e("specificchat", "No profile image found for URI: " + uri);
             Toast.makeText(this, "No profile image found", Toast.LENGTH_SHORT).show();
         }
     }
@@ -102,7 +102,15 @@ public class specificchat extends AppCompatActivity {
     private void setupFirebase() {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
+
+        if (firebaseAuth.getCurrentUser() == null) {
+            Toast.makeText(this, "User not authenticated. Please log in.", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
         senderUid = firebaseAuth.getUid();
+        Log.d("specificchat", "Receiver UID: " + receiverUid);
+        Log.d("specificchat", "Sender UID: " + senderUid);
 
         if (senderUid != null && receiverUid != null) {
             senderRoom = senderUid + receiverUid;
@@ -110,6 +118,7 @@ public class specificchat extends AppCompatActivity {
             senderRoomRef = firebaseDatabase.getReference("chats").child(senderRoom).child("messages");
             receiverRoomRef = firebaseDatabase.getReference("chats").child(receiverRoom).child("messages");
         } else {
+            Log.e("specificchat", "Sender or Receiver UID is null.");
             Toast.makeText(this, "Error: Unable to set up chat rooms", Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -127,6 +136,11 @@ public class specificchat extends AppCompatActivity {
     }
 
     private void loadMessages() {
+        if (senderRoomRef == null || receiverRoomRef == null) {
+            Log.e("specificchat", "One or both room references are null. Check Firebase initialization.");
+            return;
+        }
+
         messagesListener = senderRoomRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -135,6 +149,8 @@ public class specificchat extends AppCompatActivity {
                     Messages message = dataSnapshot.getValue(Messages.class);
                     if (message != null) {
                         messagesArrayList.add(message);
+                    } else {
+                        Log.e("specificchat", "Message is null for snapshot: " + dataSnapshot);
                     }
                 }
                 messagesAdapter.notifyDataSetChanged();
@@ -144,6 +160,7 @@ public class specificchat extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(specificchat.this, "Failed to load messages", Toast.LENGTH_SHORT).show();
+                Log.e("specificchat", "Error loading messages: " + error.getMessage());
             }
         });
     }

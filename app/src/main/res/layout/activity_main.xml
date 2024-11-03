@@ -5,12 +5,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@color/white">
+    android:background="@drawable/gradient">
 
     <ImageView
         android:id="@+id/mainImageView"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_marginTop="100dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_gravity="center"
         android:src="@drawable/welcome"
         android:contentDescription="@string/app_name"
@@ -23,9 +24,21 @@
         android:layout_gravity="center"
         android:text="Welcome to CodeCoach"
         android:textSize="24sp"
-        android:textColor="@color/grey"
+        android:textColor="@color/white"
         android:textStyle="bold"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+        android:backgroundTint="@color/white"
+        android:padding="12dp"
+        android:text="Login"
+        android:textColor="@color/black"
         tools:ignore="HardcodedText" />
 
     <TextView
@@ -34,35 +47,22 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
-        android:text="Get started."
-        android:textColor="@color/grey"
-        android:textSize="15sp"
-        tools:ignore="HardcodedText" />
-
-    <Button
-        android:id="@+id/loginButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="40dp"
-        android:backgroundTint="@color/transparent"
-        android:padding="12dp"
-        android:text="Login"
-        android:background="@drawable/input_bg"
+        android:text="Or"
+        android:textStyle="italic"
         android:textColor="@color/white"
+        android:textSize="20sp"
         tools:ignore="HardcodedText" />
 
     <Button
         android:id="@+id/signupButton"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/input_bg"
         android:layout_marginTop="20dp"
-        android:backgroundTint="@color/lavender"
+        android:backgroundTint="@color/white"
         android:padding="12dp"
         android:text="Sign Up"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         tools:ignore="HardcodedText" />
 
 </LinearLayout>

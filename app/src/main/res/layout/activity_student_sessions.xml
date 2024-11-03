@@ -32,6 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Your Bookings"
+        android:textColor="@android:color/holo_blue_dark"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
@@ -44,25 +45,13 @@
         android:layout_weight="1"
         android:layout_marginTop="16dp"/>
 
-    <com.google.android.material.bottomappbar.BottomAppBar
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/bottomAppBar"
         android:layout_gravity="bottom"
         android:background="@color/white"
-        app:fabCradleMargin="10dp"
-        app:fabCradleRoundedCornerRadius="50dp"
-        tools:ignore="BottomAppBar">
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/bottomNavigationView"
-            android:layout_marginEnd="20dp"
-            app:labelVisibilityMode="labeled"
-            android:background="@android:color/transparent"
-            app:menu="@menu/bottom_menu"/>
-
-    </com.google.android.material.bottomappbar.BottomAppBar>
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_menu" />
 
 </LinearLayout>

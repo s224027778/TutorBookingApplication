@@ -26,10 +26,6 @@
             android:textStyle="bold" />
     </androidx.appcompat.widget.Toolbar>
 
-    <FrameLayout
-        android:id="@+id/frame_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/subTitleTextView"
@@ -37,44 +33,33 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="80dp"
             android:text="Select A Language To View Modules"
+            android:background="@drawable/gradient"
             android:layout_gravity="center_horizontal"
-            android:textColor="@color/grey"
-            app:layout_anchor="@id/frame_layout"
+            android:textColor="@color/white"
             android:textSize="20sp"/>
 
-        <ListView
-            android:id="@+id/listView"
-            android:layout_width="wrap_content"
-            android:layout_height="640dp"
-            android:layout_gravity="bottom"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:clipToPadding="false"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="16dp"
-            android:elevation="8dp"
-            android:padding="8dp"
-            app:layout_anchor="@id/frame_layout"
-            app:layout_anchorGravity="center" />
-    </FrameLayout>
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="wrap_content"
+        android:layout_height="550dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="120dp"
+        android:clipToPadding="false"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="16dp"
+        android:elevation="8dp"
+        android:foregroundTint="@color/blue"
+        android:padding="20dp"
+        app:layout_anchorGravity="center" />
 
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottomAppBar"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@color/white"
-        app:fabCradleMargin="10dp"
-        app:fabCradleRoundedCornerRadius="50dp">
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavigationView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:background="@android:color/transparent"
-            app:labelVisibilityMode="labeled"
-            app:menu="@menu/bottom_menu" />
-    </com.google.android.material.bottomappbar.BottomAppBar>
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_menu" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

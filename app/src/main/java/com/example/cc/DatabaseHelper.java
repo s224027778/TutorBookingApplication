@@ -100,7 +100,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_CONFIRMEDBOOKING_DURATION = "DURATION";
     public static final String COL_CONFIRMEDBOOKING_STATUS = "STATUS";
 
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 6;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -135,7 +135,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_TUTOR_PHONENUMBER + " TEXT, " +
                 "FOREIGN KEY (" + COL_TUTOR_NAME + ") REFERENCES " + TABLE_NAME_USERS + "(" + COL_USERNAME + "))");
 
-        // Create Tutor_Modules Table (Junction Table)
+        // Create Tutor_Modules Table
         db.execSQL("CREATE TABLE " + TABLE_NAME_TUTORMODULES + " (" +
                 COL_TUTORMODULE_TUTORID + " TEXT, " +
                 COL_TUTORMODULE_MODULEID + " TEXT, " +
@@ -241,9 +241,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (cursor != null) {
             cursor.moveToFirst();
-            int count = cursor.getInt(0); // Get the count of rows
+            int count = cursor.getInt(0);
 
-            // If there are no rows, populate the table
             if (count == 0) {
                 ContentValues values = new ContentValues();
                 String[] prices = {"Free", "R100", "R150", "R200"};
@@ -355,7 +354,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
-    // Insert location into the Location table
     public boolean insertLocationData(String tutorName, double latitude, double longitude, String address) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -365,10 +363,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COL_LOCATION_ADDRESS, address);
 
         long result = db.insert(TABLE_NAME_LOCATION, null, values);
-        return result != -1;  // If result is -1, insertion failed
+        return result != -1;
     }
 
-    // Update TutorModule Table
     public boolean updateProfile(String username, String firstName, String lastName, String phoneNumber) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -376,10 +373,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_TUTOR_LASTNAME, lastName);
         contentValues.put(COL_TUTOR_PHONENUMBER, phoneNumber);
 
-        // Update the tutor's profile where the username matches
         int result = db.update(TABLE_NAME_TUTORPROFILE, contentValues, COL_TUTOR_NAME + " = ?", new String[]{username});
 
-        // Check if the update was successful (result > 0 means the update was successful)
         return result > 0;
     }
 
@@ -390,10 +385,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_STUDENT_LASTNAME, lastName);
         contentValues.put(COL_STUDENT_PHONENUMBER, phoneNumber);
 
-        // Update the student's profile where the username matches
         int result = db.update(TABLE_NAME_STUDENTPROFILE, contentValues, COL_STUDENT_NAME + " = ?", new String[]{username});
 
-        // Check if the update was successful (result > 0 means the update was successful)
         return result > 0;
     }
 
@@ -411,14 +404,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<String> prices = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        // Corrected the table name and column name in the query
-        Cursor cursor = db.query(TABLE_NAME_PRICE, // Use the correct table name
-                new String[]{COL_PRICE_LABEL}, // Use the correct column name
+        Cursor cursor = db.query(TABLE_NAME_PRICE,
+                new String[]{COL_PRICE_LABEL},
                 null, null, null, null, null);
 
         if (cursor != null) {
             try {
-                // Use getColumnIndexOrThrow to avoid issues with missing columns
                 int labelIndex = cursor.getColumnIndexOrThrow(COL_PRICE_LABEL);
                 while (cursor.moveToNext()) {
                     prices.add(cursor.getString(labelIndex));
@@ -431,10 +422,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return prices;
     }
 
-    public Cursor getFAQ() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_NAME_FAQ, null);
-    }
     public Cursor getUserProfile(String username) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_NAME_USERS + " WHERE USERNAME=?", new String[]{username});
@@ -513,23 +500,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT * FROM " + TABLE_NAME_LOCATION, null);
     }
 
-    // Method to delete all modules from the modules table
     public void deleteAllModules() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_NAME_MODULES, null, null);
     }
 
-    // Retrieve all FAQs from the database
     public List<FAQ> getAllFAQs() {
         List<FAQ> faqList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        // Adjust the table name and column names according to your database structure
         Cursor cursor = db.rawQuery("SELECT " + COL_FAQ_QUESTION + ", " + COL_FAQ_ANSWER + " FROM " + TABLE_NAME_FAQ, null);
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                // Ensure correct column names and indices
                 int questionIndex = cursor.getColumnIndex(COL_FAQ_QUESTION);
                 int answerIndex = cursor.getColumnIndex(COL_FAQ_ANSWER);
 
@@ -552,7 +535,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return faqList;
     }
 
-    // Method to get all categories
     public List<Category> getAllCategories() {
         List<Category> categories = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -567,14 +549,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return categories;
     }
 
-    // Method to get modules by category ID
     public List<Module> getModulesByCategory(int categoryId) {
         List<Module> modules = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME_MODULES + " WHERE " + COL_CATEGORY_ID_FK + " = ?", new String[]{String.valueOf(categoryId)});
         if (cursor.moveToFirst()) {
             do {
-                // Ensure the column indices are correct
                 @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex(COL_MODULE_ID));
                 @SuppressLint("Range") int categoryIdFromDb = cursor.getInt(cursor.getColumnIndex(COL_CATEGORY_ID_FK));
                 @SuppressLint("Range") String name = cursor.getString(cursor.getColumnIndex(COL_MODULE_NAME));
@@ -586,7 +566,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return modules;
     }
 
-    // Method to get tutor ID by username
     public int getTutorIdByUsername(String username) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT " + COL_USER_ID + " FROM " + TABLE_NAME_USERS + " WHERE " + COL_USERNAME + " = ?", new String[]{username});
@@ -596,10 +575,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return tutorId;
         }
         cursor.close();
-        return -1; // Return -1 if not found
+        return -1;
     }
 
-    // Method to get student ID by username
     public int getStudentIdByUsername(String username) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT " + COL_USER_ID + " FROM " + TABLE_NAME_USERS + " WHERE " + COL_USERNAME + " = ?", new String[]{username});
@@ -609,7 +587,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return studentId;
         }
         cursor.close();
-        return -1; // Return -1 if not found
+        return -1;
     }
 
     public boolean assignTutorToModule(int tutorId, int moduleId) {
@@ -643,7 +621,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return moduleId;
         }
         cursor.close();
-        return -1;  // Return -1 if not found
+        return -1;
     }
 
     public ArrayList<TutorProfile> getTutorsByModule(String moduleId) {
@@ -657,7 +635,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " INNER JOIN " + TABLE_NAME_TUTORMODULES + " tm ON u." + COL_USER_ID + " = tm." + COL_TUTORMODULE_TUTORID +
                 " WHERE tm." + COL_TUTORMODULE_MODULEID + " = ?";
 
-        // Log the query being executed
         Log.d("DatabaseHelper", "Executing query: " + query + " with moduleId: " + moduleId);
 
         Cursor cursor = db.rawQuery(query, new String[]{moduleId});
@@ -669,7 +646,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 String lastName = cursor.getString(cursor.getColumnIndexOrThrow(COL_TUTOR_LASTNAME));
                 String phoneNumber = cursor.getString(cursor.getColumnIndexOrThrow(COL_TUTOR_PHONENUMBER));
 
-                // Log the tutor details
                 Log.d("DatabaseHelper", "Tutor Found: " + tutorName + ", " + firstName + " " + lastName);
 
                 tutorProfiles.add(new TutorProfile(tutorName, firstName, lastName, phoneNumber));
@@ -681,42 +657,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return tutorProfiles;
     }
 
-    public boolean confirmBooking(String tutorName, String studentName, String moduleName) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_BOOKING_STATUS, 1);
-
-        // Update the booking status where tutor name, student name, and module name match
-        int result = db.update(TABLE_NAME_BOOKING, contentValues,
-                COL_BOOKING_TUTORNAME + " = ? AND " + COL_BOOKING_STUDENTNAME + " = ? AND " + COL_BOOKING_MODULENAME + " = ?",
-                new String[]{tutorName, studentName, moduleName});
-        return result > 0;
-    }
-
-    public boolean declineBooking(String tutorName, String studentName, String moduleName) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_BOOKING_STATUS, 2);
-
-        // Update the booking status where tutor name, student name, and module name match
-        int result = db.update(TABLE_NAME_BOOKING, contentValues,
-                COL_BOOKING_TUTORNAME + " = ? AND " + COL_BOOKING_STUDENTNAME + " = ? AND " + COL_BOOKING_MODULENAME + " = ?",
-                new String[]{tutorName, studentName, moduleName});
-        return result > 0;
-    }
-
-    // Method to update booking status based on booking ID
     public void updateBookingStatusInDatabase(int bookingId, int status) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(COL_BOOKING_STATUS, status); // Set new status (0 = pending, 1 = confirmed, 2 = declined)
+        values.put(COL_BOOKING_STATUS, status); // 0 = pending, 1 = confirmed, 2 = declined
 
-        // Update the booking status where the booking ID matches
         int rowsAffected = db.update(TABLE_NAME_BOOKING, values, COL_BOOKING_ID + " = ?", new String[]{String.valueOf(bookingId)});
         db.close();
 
-        // Optional: Log or handle if no rows were affected
         if (rowsAffected == 0) {
             Log.d("DatabaseHelper", "No booking found with ID: " + bookingId);
         }
@@ -752,7 +701,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return studentName;
     }
 
-    // Method to get all bookings made by the logged-in student
     public Cursor getStudentBookings(String studentName) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_NAME_BOOKING +

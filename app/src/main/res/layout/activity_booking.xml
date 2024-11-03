@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@drawable/gradient"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
@@ -51,6 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:background="@color/white"
                 android:padding="16dp">
 
                 <TextView
@@ -58,11 +59,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="60dp"
-                    android:padding="20dp"
+                    android:layout_marginBottom="40dp"
+                    android:padding="10dp"
                     android:text="Make Booking"
-                    android:textColor="@color/grey"
-                    android:textSize="44sp"
+                    android:textColor="@android:color/holo_blue_dark"
+                    android:textSize="40sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
 
@@ -74,7 +75,7 @@
                     android:backgroundTint="@color/lavender"
                     android:hint="Enter tutor username"
                     android:padding="12dp"
-                    android:textColor="@color/grey"
+                    android:textColor="@color/black"
                     android:textColorHint="@color/grey"
                     tools:ignore="HardcodedText" />
 
@@ -86,7 +87,7 @@
                     android:backgroundTint="@color/lavender"
                     android:hint="Enter your username"
                     android:padding="12dp"
-                    android:textColor="@color/grey"
+                    android:textColor="@color/black"
                     android:textColorHint="@color/grey"
                     tools:ignore="HardcodedText" />
 
@@ -98,7 +99,7 @@
                     android:backgroundTint="@color/lavender"
                     android:hint="Enter module name"
                     android:padding="12dp"
-                    android:textColor="@color/grey"
+                    android:textColor="@color/black"
                     android:textColorHint="@color/grey"
                     tools:ignore="HardcodedText" />
 
@@ -113,7 +114,7 @@
                     android:focusable="false"
                     android:clickable="true"
                     android:padding="12dp"
-                    android:textColor="@color/grey"
+                    android:textColor="@color/black"
                     android:textColorHint="@color/grey" />
 
                 <EditText
@@ -127,7 +128,7 @@
                     android:focusable="false"
                     android:clickable="true"
                     android:padding="12dp"
-                    android:textColor="@color/grey"
+                    android:textColor="@color/black"
                     android:textColorHint="@color/grey" />
 
                 <EditText
@@ -141,16 +142,17 @@
                     android:focusable="false"
                     android:clickable="true"
                     android:padding="12dp"
-                    android:textColor="@color/grey"
+                    android:textColor="@color/black"
                     android:textColorHint="@color/grey" />
 
 
                 <Button
                     android:id="@+id/buttonBook"
-                    android:layout_width="match_parent"
+                    android:layout_width="200dp"
+                    android:layout_gravity="center"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/lavender"
                     android:padding="12dp"
+                    android:backgroundTint="@color/purple_200"
                     android:text="Book"
                     android:textColor="@color/white"
                     android:textStyle="bold"

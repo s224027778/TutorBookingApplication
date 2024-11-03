@@ -66,7 +66,7 @@ public class StudentChatFragment extends Fragment {
                 Picasso.get().load(uri).into(noteViewHolder.mimageviewofuser);  // Use viewHolder's imageView
                 if ("Online".equals(firebasemodel.getStatus())) {
                     noteViewHolder.statusofuser.setText(firebasemodel.getStatus());
-                    noteViewHolder.statusofuser.setTextColor(Color.GREEN);
+                    noteViewHolder.statusofuser.setTextColor(Color.BLUE);
                 } else {
                     noteViewHolder.statusofuser.setText(firebasemodel.getStatus());
                 }

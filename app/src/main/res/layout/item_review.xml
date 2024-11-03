@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="8dp"
     android:padding="12dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#F6CBAF"
         android:orientation="vertical">
 
         <TextView
@@ -20,6 +21,8 @@
             android:layout_height="wrap_content"
             android:text="Review Text"
             android:textSize="16sp"
+            android:paddingTop="8dp"
+            android:paddingLeft="8dp"
             android:textColor="@android:color/black"
             android:layout_marginBottom="8dp" />
 
@@ -33,38 +36,44 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rating: "
-                android:textSize="14sp"
-                android:textColor="@android:color/darker_gray"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:paddingLeft="10dp"
+                android:textColor="@android:color/black"
+                android:paddingBottom="8dp"
                 android:layout_marginRight="8dp" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_star"
+                app:tint="@android:color/holo_orange_dark"
+                android:paddingBottom="8dp"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_star"
+                android:paddingBottom="8dp"
                 app:tint="@android:color/holo_orange_dark" />
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_star"
-                android:tint="@android:color/holo_orange_dark"
-                tools:ignore="UseAppTint" />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_star"
-                android:tint="@android:color/holo_orange_dark"
-                tools:ignore="UseAppTint" />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_star"
+                android:paddingBottom="8dp"
                 app:tint="@android:color/holo_orange_dark" />
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_star"
-                android:tint="@android:color/holo_orange_dark"
-                tools:ignore="UseAppTint" />
+                android:paddingBottom="8dp"
+                app:tint="@android:color/holo_orange_dark" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_star"
+                android:paddingBottom="8dp"
+                app:tint="@android:color/holo_orange_dark" />
+
         </LinearLayout>
 
     </LinearLayout>

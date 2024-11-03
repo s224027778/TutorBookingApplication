@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CC</string>
+    <string name="app_name">CodeCoach</string>
     <string name="com_airbnb_android_lottie">com.airbnb.android:lottie:%1$s</string>
     <string name="login">Login</string>
     <string name="signup">Signup</string>

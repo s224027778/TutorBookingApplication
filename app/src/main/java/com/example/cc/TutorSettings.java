@@ -71,6 +71,11 @@ public class TutorSettings extends AppCompatActivity {
                         editor.clear();
                         editor.apply();
 
+                        SharedPreferences tutorPrefs = getSharedPreferences("TutorPrefs", MODE_PRIVATE);
+                        SharedPreferences.Editor tutorEditor = tutorPrefs.edit();
+                        tutorEditor.clear();
+                        tutorEditor.apply();
+
                         FirebaseAuth.getInstance().signOut();
 
                         Intent intent = new Intent(TutorSettings.this, MainActivity.class);
@@ -81,6 +86,7 @@ public class TutorSettings extends AppCompatActivity {
                     .setNegativeButton("No", null)
                     .show();
         });
+
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();

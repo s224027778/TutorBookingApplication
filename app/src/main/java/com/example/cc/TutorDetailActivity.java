@@ -80,6 +80,7 @@ public class TutorDetailActivity extends AppCompatActivity {
 
         btnAddReview.setOnClickListener(view -> {
             Intent reviewIntent = new Intent(TutorDetailActivity.this, ReviewActivity.class);
+            reviewIntent.putExtra("TUTOR_NAME", tutorName);
             startActivity(reviewIntent);
         });
 
@@ -104,7 +105,6 @@ public class TutorDetailActivity extends AppCompatActivity {
         cursor.close();
     }
 
-    // Method to fetch reviews and display them in RecyclerView
     private void displayReviews(String tutorName) {
         reviewList = new ArrayList<>();
         Cursor cursor = db.getReviewsForTutor(tutorName);

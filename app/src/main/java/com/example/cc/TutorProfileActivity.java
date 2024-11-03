@@ -146,7 +146,7 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
                 }
                 if (firstName.matches(".[0-9]."))
                 {
-                    Toast.makeText(TutorProfileActivity.this, "Password be contain atleast one number", Toast.LENGTH_LONG).show();
+                    Toast.makeText(TutorProfileActivity.this, "First name cannot contain numbers", Toast.LENGTH_LONG).show();
                     return;
                 }
                 if (lastName.isEmpty())
@@ -187,10 +187,8 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
                 if (isInserted) {
                     Toast.makeText(TutorProfileActivity.this, "Profile Created", Toast.LENGTH_LONG).show();
 
-                    // Get tutor ID by username
                     int tutorId = db.getTutorIdByUsername(username);
 
-                    // Assign modules to the tutor
                     Spinner moduleSpinner = findViewById(R.id.moduleSpinner);
                     String selectedModule = moduleSpinner.getSelectedItem().toString();
                     int moduleId = db.getModuleIdByName(selectedModule);
@@ -212,16 +210,35 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
                 String lastName = editTextLastName.getText().toString().trim();
                 String phoneNumber = editTextPhoneNumber.getText().toString().trim();
 
-                if(!validatePhoneNumber()){
+                if (firstName.isEmpty())
+                {
+                    Toast.makeText(TutorProfileActivity.this, "First name is required", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (firstName.matches(".[0-9]."))
+                {
+                    Toast.makeText(TutorProfileActivity.this, "First name cannot contain numbers", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (lastName.isEmpty())
+                {
+                    Toast.makeText(TutorProfileActivity.this, "First name cannot contain numbers", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (lastName.matches(".[0-9]."))
+                {
+                    Toast.makeText(TutorProfileActivity.this, "Last name cannot contain numbers", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (phoneNumber.isEmpty())
+                {
+                    Toast.makeText(TutorProfileActivity.this, "Phone number is required", Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                Cursor res = db.getUserProfile(username);
-                if (res == null || res.getCount() == 0) {
-                    Log.e("TutorBookingActivity", "User profile not found");
+                if(!validatePhoneNumber()){
                     return;
                 }
-                validatePhoneNumber();
 
                 boolean isUpdated = db.updateProfile(username, firstName, lastName, phoneNumber);
                 if (isUpdated) {

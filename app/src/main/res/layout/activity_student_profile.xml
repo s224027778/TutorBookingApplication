@@ -139,24 +139,26 @@
 
         <Button
             android:id="@+id/createProfile"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/phoneLayout"
             android:layout_marginTop="20dp"
             android:backgroundTint="@color/lavender"
             android:padding="12dp"
             android:text="Create Profile"
+            android:layout_centerHorizontal="true"
             android:textColor="@android:color/white" />
 
         <Button
             android:id="@+id/editProfile"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/createProfile"
             android:layout_marginTop="27dp"
             android:backgroundTint="@color/lavender"
             android:padding="12dp"
             android:text="Edit Profile"
+            android:layout_centerHorizontal="true"
             android:textColor="@android:color/white" />
 
     </RelativeLayout>

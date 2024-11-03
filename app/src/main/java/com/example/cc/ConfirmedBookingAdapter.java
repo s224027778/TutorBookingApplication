@@ -18,19 +18,16 @@ public class ConfirmedBookingAdapter extends ArrayAdapter<Booking> {
     public View getView(int position, View convertView, ViewGroup parent) {
         Booking booking = getItem(position);
 
-        // Inflate the view if not already done
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.confirmed_booking_item, parent, false);
         }
 
-        // Reference the TextViews from the layout
         TextView tvStudentName = convertView.findViewById(R.id.tv_student_name);
         TextView tvModuleName = convertView.findViewById(R.id.tv_module_name);
         TextView tvBookingDate = convertView.findViewById(R.id.tv_booking_date);
         TextView tvBookingTime = convertView.findViewById(R.id.tv_booking_time);
         TextView tvBookingDuration = convertView.findViewById(R.id.tv_booking_duration);
 
-        // Set the data in the views
         if (booking != null) {
             tvStudentName.setText(booking.getStudentName());
             tvModuleName.setText(booking.getModuleName());

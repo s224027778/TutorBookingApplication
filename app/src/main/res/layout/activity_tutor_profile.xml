@@ -176,10 +176,11 @@
 
         <Button
             android:id="@+id/createProfile"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/priceSpinner"
             android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
             android:backgroundTint="@color/lavender"
             android:textColor="@android:color/white"
             android:padding="12dp"
@@ -187,10 +188,11 @@
 
         <Button
             android:id="@+id/editProfile"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/createProfile"
             android:layout_marginTop="16dp"
+            android:layout_centerHorizontal="true"
             android:backgroundTint="@color/lavender"
             android:textColor="@android:color/white"
             android:padding="12dp"

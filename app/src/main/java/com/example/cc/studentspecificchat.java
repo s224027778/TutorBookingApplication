@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -127,6 +128,11 @@ public class studentspecificchat extends AppCompatActivity {
     }
 
     private void loadMessages() {
+        if (senderRoomRef == null) {
+            Log.e("studentspecificchat", "senderRoomRef is null. Check Firebase initialization.");
+            return;
+        }
+
         messagesListener = senderRoomRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -135,6 +141,8 @@ public class studentspecificchat extends AppCompatActivity {
                     Messages message = dataSnapshot.getValue(Messages.class);
                     if (message != null) {
                         messagesArrayList.add(message);
+                    } else {
+                        Log.e("studentspecificchat", "Message is null for snapshot: " + dataSnapshot);
                     }
                 }
                 messagesAdapter.notifyDataSetChanged();
@@ -144,6 +152,7 @@ public class studentspecificchat extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(studentspecificchat.this, "Failed to load messages", Toast.LENGTH_SHORT).show();
+                Log.e("specificchat", "Error loading messages: " + error.getMessage());
             }
         });
     }

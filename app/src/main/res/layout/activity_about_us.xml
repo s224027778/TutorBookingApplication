@@ -40,6 +40,7 @@
             android:id="@+id/appLogo"
             android:layout_width="150dp"
             android:layout_height="150dp"
+            android:paddingTop="100dp"
             android:layout_gravity="center"
             android:src="@drawable/logo"
             android:contentDescription="App Logo" />
@@ -51,13 +52,15 @@
             android:textSize="24sp"
             android:layout_gravity="center"
             android:textStyle="bold"
-            android:paddingTop="20dp"
+            android:paddingTop="60dp"
             android:paddingBottom="10dp" />
 
         <TextView
             android:id="@+id/aboutDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
             android:text="Code coach helps Nelson Mandela University IT students find tutors quickly and efficiently. Our aim is to make learning accessible and convenient for each student."
             android:textSize="16sp"
             android:paddingBottom="10dp" />
@@ -67,13 +70,16 @@
             android:layout_height="wrap_content"
             android:text="Contact Us"
             android:textSize="18sp"
-            android:layout_gravity="start"
             android:textStyle="bold"
+            android:paddingLeft="30dp"
+            android:gravity="center_horizontal"
             android:paddingTop="10dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="30dp"
+            android:paddingTop="10dp"
             android:text="Email: codecoach@gmail.com\nPhone: +27 710 072 727\nWebsite: www.codecoach.com"
             android:textSize="16sp"
             android:paddingBottom="10dp" />

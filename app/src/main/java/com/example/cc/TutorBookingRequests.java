@@ -25,9 +25,9 @@ public class TutorBookingRequests extends AppCompatActivity {
 
     private DatabaseHelper dbHelper;
     private ListView bookingsListView;
-    private String TutorName;  // Tutor name retrieved from shared preferences
+    private String TutorName;
     private ActivityTutorBookingRequestsBinding binding;
-    private TextView noBookingsMessage;  // Reference to the "no bookings" message TextView
+    private TextView noBookingsMessage;
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -36,34 +36,29 @@ public class TutorBookingRequests extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityTutorBookingRequestsBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot()); // Set the correct root view
+        setContentView(binding.getRoot());
         dbHelper = new DatabaseHelper(this);
 
-        // Retrieve the logged-in tutor's name from shared preferences
         SharedPreferences tutorPrefs = getSharedPreferences("TutorPrefs", MODE_PRIVATE);
         TutorName = tutorPrefs.getString("LoggedInTutorUsername", null);
         if (TutorName == null) {
-            // Handle the error, e.g., show a message or redirect to login
             Log.e("TutorBookingRequests", "User not logged in. Please log in again.");
             Intent intent = new Intent(TutorBookingRequests.this, LoginActivity.class);
             startActivity(intent);
-            finish(); // Close the activity
-            return; // Exit onCreate
+            finish();
+            return;
         }
 
-        // Log the retrieved tutor name for debugging purposes
         Log.d("TutorBookingRequests", "TutorName from SharedPreferences: " + TutorName);
 
         bookingsListView = findViewById(R.id.listViewBookingRequests);
-        noBookingsMessage = findViewById(R.id.noBookingsMessage);  // Initialize the message TextView
+        noBookingsMessage = findViewById(R.id.noBookingsMessage);
 
         firebaseFirestore=FirebaseFirestore.getInstance();
         firebaseAuth=FirebaseAuth.getInstance();
 
-        // Load bookings for the tutor retrieved from SharedPreferences
         loadBookingsForTutor(TutorName);
 
-        // Set up the bottom navigation and handle intents or fragment replacements
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.home) {
@@ -85,30 +80,39 @@ public class TutorBookingRequests extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        DocumentReference documentReference=firebaseFirestore.collection("Users").document(firebaseAuth.getUid());
-        documentReference.update("status","Offline").addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d("TutorBookingRequests", "Now User is Offline");
-            }
-        });
+    protected void onStart() {
+        super.onStart();
 
+        if (firebaseAuth.getCurrentUser() != null) {  // Check if user is authenticated
+            DocumentReference documentReference = firebaseFirestore.collection("Users").document(firebaseAuth.getUid());
+            documentReference.update("status", "Online").addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d("TutorBookingRequests", "Now User is Online");
+                }
+            });
+        } else {
+            Log.d("TutorBookingRequests", "No authenticated user found");
+        }
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        DocumentReference documentReference=firebaseFirestore.collection("Users").document(firebaseAuth.getUid());
-        documentReference.update("status","Online").addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d("TutorBookingRequests", "Now User is Online");
-            }
-        });
+    protected void onStop() {
+        super.onStop();
 
+        if (firebaseAuth.getCurrentUser() != null) {  // Check if user is authenticated
+            DocumentReference documentReference = firebaseFirestore.collection("Users").document(firebaseAuth.getUid());
+            documentReference.update("status", "Offline").addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d("TutorBookingRequests", "Now User is Offline");
+                }
+            });
+        } else {
+            Log.d("TutorBookingRequests", "No authenticated user found");
+        }
     }
+
 
     private void loadBookingsForTutor(String tutorName) {
         Cursor cursor = dbHelper.getBookingsByTutorName(tutorName);
@@ -133,13 +137,10 @@ public class TutorBookingRequests extends AppCompatActivity {
             noBookingsMessage.setVisibility(View.GONE);
             bookingsListView.setVisibility(View.VISIBLE);
 
-            // Use the custom adapter
             BookingAdapter adapter = new BookingAdapter(this, bookings);
             bookingsListView.setAdapter(adapter);
         }
     }
-
-    // Inside TutorBookingRequests
 
     public void confirmBooking(String bookingDetails) {
         int bookingId = getBookingIdFromDetails(bookingDetails);
@@ -155,15 +156,12 @@ public class TutorBookingRequests extends AppCompatActivity {
 
     @SuppressLint("Range")
     private int getBookingIdFromDetails(String bookingDetails) {
-        // Assuming bookingDetails has lines structured as:
-        // "Student: <studentName>\nModule: <moduleName>\nDate: <date>\nTime: <time>"
         String[] details = bookingDetails.split("\n");
         String studentName = details[0].split(": ")[1];
         String moduleName = details[1].split(": ")[1];
         String date = details[2].split(": ")[1];
         String time = details[3].split(": ")[1];
 
-        // Query the database to find the matching bookingId
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = "SELECT " + DatabaseHelper.COL_BOOKING_ID + " FROM " + DatabaseHelper.TABLE_NAME_BOOKING +
                 " WHERE " + DatabaseHelper.COL_BOOKING_STUDENTNAME + " = ? AND " +

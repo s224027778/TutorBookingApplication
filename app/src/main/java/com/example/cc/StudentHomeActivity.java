@@ -3,10 +3,13 @@ package com.example.cc;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import com.example.cc.databinding.ActivityStudentHomeBinding;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +25,20 @@ public class StudentHomeActivity extends AppCompatActivity {
         binding = ActivityStudentHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.bottomNavigationView.setBackground(null);
-
-        SharedPreferences userSession = getSharedPreferences("UserSession", MODE_PRIVATE);
-        String loggedInUsername = userSession.getString("LoggedInStudentUsername", null);
+        SharedPreferences studentPrefs = getSharedPreferences("StudentPrefs", MODE_PRIVATE);
+        String loggedInUsername = studentPrefs.getString("LoggedInStudentUsername", null);
 
         dbHelp = new DatabaseHelper(this);
 
-        studentName = dbHelp.getLoggedInStudentName(loggedInUsername);
+        if (loggedInUsername != null) {
+            studentName = dbHelp.getLoggedInStudentName(loggedInUsername);
+        } else {
+            Log.e("StudentHomeActivity", "Logged-in username is null");
+            Intent loginIntent = new Intent(StudentHomeActivity.this, LoginActivity.class);
+            startActivity(loginIntent);
+            finish();
+            return;
+        }
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
@@ -42,8 +51,8 @@ public class StudentHomeActivity extends AppCompatActivity {
                 intent.putExtra("STUDENT_NAME", studentName);
                 startActivity(intent);
             } else if (itemId == R.id.chat) {
-               Intent intent = new Intent(StudentHomeActivity.this, StudentChatActivity.class);
-               startActivity(intent);
+                Intent intent = new Intent(StudentHomeActivity.this, StudentChatActivity.class);
+                startActivity(intent);
             } else if (itemId == R.id.settings) {
                 Intent intent = new Intent(StudentHomeActivity.this, StudentSettings.class);
                 startActivity(intent);
@@ -53,10 +62,8 @@ public class StudentHomeActivity extends AppCompatActivity {
         });
 
         ListView listView = findViewById(R.id.listView);
-        dbHelp = new DatabaseHelper(this);
 
         List<Category> categories = dbHelp.getAllCategories();
-
         CategoryAdapter adapter = new CategoryAdapter(this, categories);
         listView.setAdapter(adapter);
 
@@ -71,3 +78,4 @@ public class StudentHomeActivity extends AppCompatActivity {
         });
     }
 }
+

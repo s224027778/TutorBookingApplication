@@ -28,13 +28,11 @@ public class StudentSettings extends AppCompatActivity {
         StudentFaqCard = findViewById(R.id.StudentFaqCard);
         StudentAboutUsCard = findViewById(R.id.StudentAboutUs);
 
-        SharedPreferences userSession = getSharedPreferences("UserSession", MODE_PRIVATE);
-        String loggedInUsername = userSession.getString("LoggedInStudentUsername", null);
+        SharedPreferences studentPrefs = getSharedPreferences("StudentPrefs", MODE_PRIVATE);
+        String loggedInUsername = studentPrefs.getString("LoggedInStudentUsername", null);
 
-        // Initialize the DatabaseHelper
         dbHelp = new DatabaseHelper(this);
 
-        // Retrieve the logged-in student's name from the database using the method
         studentName = dbHelp.getLoggedInStudentName(loggedInUsername);
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -45,7 +43,7 @@ public class StudentSettings extends AppCompatActivity {
                 startActivity(homeIntent);
             } else if (itemId == R.id.bookingRequests) {
                 Intent intent = new Intent(StudentSettings.this, StudentSessions.class);
-               // intent.putExtra("STUDENT_NAME", studentName);
+                intent.putExtra("STUDENT_NAME", studentName);
                 startActivity(intent);
             } else if (itemId == R.id.chat) {
                 Intent intent = new Intent(StudentSettings.this, StudentChatActivity.class);
@@ -88,8 +86,7 @@ public class StudentSettings extends AppCompatActivity {
                     .setTitle("Logout")
                     .setMessage("Are you sure you want to log out?")
                     .setPositiveButton("Yes", (dialog, which) -> {
-                        // Clear session data and redirect
-                        SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                        SharedPreferences preferences = getSharedPreferences("StudentPrefs", MODE_PRIVATE);
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.clear();
                         editor.apply();
@@ -104,6 +101,7 @@ public class StudentSettings extends AppCompatActivity {
                     .setNegativeButton("No", null)
                     .show();
         });
+
 
     }
 }

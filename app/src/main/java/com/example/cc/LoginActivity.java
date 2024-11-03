@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,11 +20,13 @@ public class LoginActivity extends AppCompatActivity {
     EditText editTextUsername, editTextPassword;
     Button buttonLogin;
     ImageView back;
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        firebaseAuth = FirebaseAuth.getInstance();
 
         db = new DatabaseHelper(this);
         editTextUsername = findViewById(R.id.editTextUsername);
@@ -32,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         back = findViewById(R.id.back);
 
         back.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
         });
 
@@ -47,44 +50,60 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
+
                 Cursor res = db.getUser(username, password);
                 if (res == null || res.getCount() == 0) {
                     Toast.makeText(LoginActivity.this, "Invalid Credentials", Toast.LENGTH_LONG).show();
                     return;
                 }
 
+
                 res.moveToFirst();
                 String userType = res.getString(3);
+
+
                 SharedPreferences tutorPrefs = getSharedPreferences("TutorPrefs", MODE_PRIVATE);
                 SharedPreferences.Editor tutorEditor = tutorPrefs.edit();
-                tutorEditor.putString("LoggedInTutorUsername", username);
-                tutorEditor.apply();
+                tutorEditor.clear();
 
-                SharedPreferences userSession = getSharedPreferences("UserSession", MODE_PRIVATE);
-                SharedPreferences.Editor userEditor = userSession.edit();
-                userEditor.putString("LoggedInStudentUsername", username);
-                userEditor.apply();
+                SharedPreferences studentPrefs = getSharedPreferences("StudentPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor studentEditor = studentPrefs.edit();
+                studentEditor.clear();
 
 
-                switch (userType) {
-                    case "Admin":
-                        startActivity(new Intent(LoginActivity.this, AdminHomeActivity.class));
-                        break;
-                    case "Student":
-                        startActivity(new Intent(LoginActivity.this, StudentHomeActivity.class));
-                        break;
-                    case "Tutor":
-                        Intent intent = new Intent(LoginActivity.this, TutorBookingRequests.class);
-                        intent.putExtra("TUTOR_NAME", db.getLoggedInTutorName(username));
-                        startActivity(intent);
-                        finish();
-                        break;
-                    default:
-                        Toast.makeText(LoginActivity.this, "Error identifying user type", Toast.LENGTH_SHORT).show();
-                }
-                finish();
+                firebaseAuth.signInWithEmailAndPassword(username, password)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                switch (userType) {
+                                    case "Admin":
+                                        startActivity(new Intent(LoginActivity.this, AdminHomeActivity.class));
+                                        break;
 
+                                    case "Student":
+                                        studentEditor.putString("LoggedInStudentUsername", username);
+                                        studentEditor.apply();
+                                        startActivity(new Intent(LoginActivity.this, StudentHomeActivity.class));
+                                        break;
+
+                                    case "Tutor":
+                                        tutorEditor.putString("LoggedInTutorUsername", username);
+                                        tutorEditor.apply();
+                                        Intent intent = new Intent(LoginActivity.this, TutorBookingRequests.class);
+                                        intent.putExtra("TUTOR_NAME", db.getLoggedInTutorName(username)); // Adjust if needed
+                                        startActivity(intent);
+                                        break;
+
+                                    default:
+                                        Toast.makeText(LoginActivity.this, "Error identifying user type", Toast.LENGTH_SHORT).show();
+                                        return;
+                                }
+                                finish();
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Firebase login failed. " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
+
     }
 }

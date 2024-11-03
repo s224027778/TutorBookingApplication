@@ -75,6 +75,7 @@ public class StudentProfileActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 userprofile muserprofile=snapshot.getValue(userprofile.class);
                 editTextUsername.setText(muserprofile.getUsername());
+                editTextUsername.setEnabled(false);
             }
 
             @Override
@@ -102,20 +103,33 @@ public class StudentProfileActivity extends AppCompatActivity {
                 String lastName = editTextLastName.getText().toString().trim();
                 String phoneNumber = editTextPhoneNumber.getText().toString().trim();
 
-                if(!validatePhoneNumber()){
+                if (firstName.isEmpty())
+                {
+                    Toast.makeText(StudentProfileActivity.this, "First name is required", Toast.LENGTH_LONG).show();
                     return;
                 }
-                Cursor res = db.getUserProfile(username);
-                if (res == null || res.getCount() == 0) {
-                    Toast.makeText(StudentProfileActivity.this, "User profile not found", Toast.LENGTH_SHORT).show();
-                    res.close();
+                if (firstName.matches(".[0-9]."))
+                {
+                    Toast.makeText(StudentProfileActivity.this, "First name cannot contain numbers", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (lastName.isEmpty())
+                {
+                    Toast.makeText(StudentProfileActivity.this, "First name cannot contain numbers", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (lastName.matches(".[0-9]."))
+                {
+                    Toast.makeText(StudentProfileActivity.this, "Last name cannot contain numbers", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (phoneNumber.isEmpty())
+                {
+                    Toast.makeText(StudentProfileActivity.this, "Phone number is required", Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                Cursor res1 = db.getStudentProfile(username);
-                if (res1 != null && res1.getCount() > 0) {
-                    Toast.makeText(StudentProfileActivity.this, "Student profile already exists", Toast.LENGTH_SHORT).show();
-                    res1.close();
+                if(!validatePhoneNumber()){
                     return;
                 }
 
@@ -123,7 +137,6 @@ public class StudentProfileActivity extends AppCompatActivity {
                 if (isInserted) {
                     Toast.makeText(StudentProfileActivity.this, "Profile Created", Toast.LENGTH_SHORT).show();
 
-                    // Get student ID by username
                     int studentId = db.getStudentIdByUsername(username);
                 } else {
                     Toast.makeText(StudentProfileActivity.this, "Profile not created", Toast.LENGTH_SHORT).show();
@@ -138,22 +151,41 @@ public class StudentProfileActivity extends AppCompatActivity {
                 String lastName = editTextLastName.getText().toString().trim();
                 String phoneNumber = editTextPhoneNumber.getText().toString().trim();
 
+                if (firstName.isEmpty())
+                {
+                    Toast.makeText(StudentProfileActivity.this, "First name is required", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (firstName.matches(".[0-9]."))
+                {
+                    Toast.makeText(StudentProfileActivity.this, "First name cannot contain numbers", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (lastName.isEmpty())
+                {
+                    Toast.makeText(StudentProfileActivity.this, "First name cannot contain numbers", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (lastName.matches(".[0-9]."))
+                {
+                    Toast.makeText(StudentProfileActivity.this, "Last name cannot contain numbers", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (phoneNumber.isEmpty())
+                {
+                    Toast.makeText(StudentProfileActivity.this, "Phone number is required", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 if(!validatePhoneNumber()){
                     return;
                 }
 
-                Cursor res = db.getUserProfile(username);
-                if (res == null || res.getCount() == 0) {
-                    Toast.makeText(StudentProfileActivity.this, "User profile not found", Toast.LENGTH_SHORT).show();
-                    return;
-                }
 
-                // Call the updateStudentProfile method
                 boolean isUpdated = db.updateStudentProfile(username, firstName, lastName, phoneNumber);
                 if (isUpdated) {
                     Toast.makeText(StudentProfileActivity.this, "Profile Updated", Toast.LENGTH_SHORT).show();
 
-                    // Get tutor ID by username
                     int studentId = db.getStudentIdByUsername(username);
                 } else {
                     Toast.makeText(StudentProfileActivity.this, "Profile Update Failed", Toast.LENGTH_SHORT).show();
@@ -166,12 +198,12 @@ public class StudentProfileActivity extends AppCompatActivity {
         String phoneNumber = editTextPhoneNumber.getText().toString();
 
         if (countryCode.equals("+27")) {
-            if (phoneNumber.length() != 9) {
-                editTextPhoneNumber.setError("Mobile number should be 9 digits after +27.");
+            if (phoneNumber.length() != 10) {
+                Toast.makeText(StudentProfileActivity.this,"Mobile number should contain 10 digits", Toast.LENGTH_LONG).show();
                 return false;
             }
         } else{
-            editTextPhoneNumber.setError("South African numbers should have +27");
+            Toast.makeText(StudentProfileActivity.this, "South African numbers should have +27", Toast.LENGTH_LONG).show();
             return false;
         }
         return true;

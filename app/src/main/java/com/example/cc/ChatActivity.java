@@ -70,9 +70,8 @@ public class ChatActivity extends AppCompatActivity {
 
                 String status = userModel.getStatus();
                 noteViewHolder.statusOfUser.setText(status);
-                noteViewHolder.statusOfUser.setTextColor("Online".equals(status) ? Color.GREEN : Color.BLACK);
+                noteViewHolder.statusOfUser.setTextColor("Online".equals(status) ? Color.BLUE : Color.BLACK);
 
-                // Intent to open chat with specific user
                 noteViewHolder.itemView.setOnClickListener(view -> {
                     Intent intent = new Intent(ChatActivity.this, specificchat.class);
                     intent.putExtra("name", userModel.getName());

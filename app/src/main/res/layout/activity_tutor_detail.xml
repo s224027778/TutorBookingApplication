@@ -50,13 +50,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            app:cardElevation="4dp"
-            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp"
+            android:backgroundTint="#AEE6FF"
+            app:cardCornerRadius="15dp"
             android:padding="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -64,9 +67,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Tutor Name"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
-                    android:textColor="@android:color/black"
+                    android:textColor="@android:color/holo_blue_dark"
                     android:layout_marginBottom="8dp" />
 
                     <TextView
@@ -74,6 +77,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="First Name"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:paddingBottom="4dp"
                         android:layout_marginBottom="4dp" />
 
                     <TextView
@@ -81,6 +87,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Last Name"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:paddingBottom="4dp"
                         android:layout_marginBottom="4dp" />
 
                     <TextView
@@ -88,6 +97,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Phone Number"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:paddingBottom="4dp"
                         android:layout_marginBottom="4dp" />
 
                     <TextView
@@ -95,6 +107,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Latitude"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:paddingBottom="4dp"
                         android:layout_marginBottom="4dp" />
 
                     <TextView
@@ -102,6 +117,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Longitude"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:paddingBottom="4dp"
                         android:layout_marginBottom="4dp" />
 
                     <TextView
@@ -109,6 +127,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Address"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:paddingBottom="8dp"
                         android:layout_marginBottom="4dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -120,7 +141,8 @@
                 android:text="User Reviews"
                 android:textStyle="bold"
                 android:textSize="18sp"
-                android:textColor="@android:color/black"
+                android:layout_gravity="center"
+                android:textColor="@android:color/holo_blue_dark"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="8dp" />
 
@@ -134,10 +156,11 @@
 
             <Button
                 android:id="@+id/btnMakeBooking"
-                android:layout_width="match_parent"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:text="Make a Booking"
-                android:textAllCaps="false"
+                android:textAllCaps="true"
+                android:layout_gravity="center"
                 android:textSize="16sp"
                 android:backgroundTint="@color/purple_200"
                 android:textColor="@android:color/white"
@@ -145,27 +168,16 @@
                 android:elevation="4dp"
                 android:padding="12dp" />
 
-            <Button
-                android:id="@+id/btnChatInit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Chat with tutor"
-                android:textAllCaps="false"
-                android:textSize="16sp"
-                android:backgroundTint="@color/blue"
-                android:textColor="@android:color/white"
-                android:layout_marginTop="12dp"
-                android:elevation="4dp"
-                android:padding="12dp" />
 
         <Button
             android:id="@+id/btnAddReview"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="Add A Review"
-            android:textAllCaps="false"
+            android:textAllCaps="true"
+            android:layout_gravity="center"
             android:textSize="16sp"
-            android:backgroundTint="@color/blue"
+            android:backgroundTint="@color/purple_700"
             android:textColor="@android:color/white"
             android:layout_marginTop="12dp"
             android:elevation="4dp"

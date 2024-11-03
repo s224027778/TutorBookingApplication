@@ -8,8 +8,8 @@
     android:layout_marginBottom="12dp"
     android:backgroundTint="@color/white"
     app:cardCornerRadius="12dp"
-    app:cardElevation="6dp"
-    app:strokeColor="@color/grey"
+    app:cardElevation="8dp"
+    app:strokeColor="@color/lavender"
     app:strokeWidth="1dp">
 
     <LinearLayout
@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="First Name"
-            android:textSize="14sp"
+            android:textSize="20sp"
             android:textColor="@color/grey"
             android:layout_marginTop="4dp" />
 
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Last Name"
-            android:textSize="14sp"
+            android:textSize="20sp"
             android:textColor="@color/grey"
             android:layout_marginTop="2dp" />
 
@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Phone Number"
-            android:textSize="14sp"
+            android:textSize="20sp"
             android:textColor="@color/grey"
             android:layout_marginTop="2dp" />
 

@@ -127,6 +127,13 @@ public class SignupActivity extends AppCompatActivity {
             return false;
         }
 
+        if (username.matches("^[a-zA-Z0-9._%+-]+@mandela\\.ac\\.za$")) {
+            Log.d("Signup", "Username format is correct.");
+        } else {
+            Toast.makeText(this, "Username must be in the format @mandela.ac.za.", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
         if (!password.equals(confirmPassword)) {
             Toast.makeText(this, "Passwords do not match", Toast.LENGTH_LONG).show();
             return false;

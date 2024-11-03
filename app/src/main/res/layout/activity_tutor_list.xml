@@ -50,7 +50,7 @@
             android:text="Available Tutors"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:textColor="?attr/colorPrimary"
+            android:textColor="@android:color/holo_blue_dark"
             android:layout_gravity="center"
             android:layout_marginBottom="16dp" />
 
@@ -58,8 +58,9 @@
             android:id="@+id/tutorListView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="@color/white"
-            android:dividerHeight="1dp"
+            android:divider="@color/transparent"
+            android:dividerHeight="10dp"
+            android:elevation="8dp"
             android:padding="8dp"
             android:background="@android:color/white"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
