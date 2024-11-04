@@ -3,19 +3,26 @@ package com.example.cc;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.cc.databinding.ActivityStudentSettingsBinding;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class StudentSettings extends AppCompatActivity {
 
-    private MaterialCardView accountCard, logoutCard, StudentFaqCard, StudentAboutUsCard;
+    private MaterialCardView accountCard, logoutCard, StudentFaqCard, StudentAboutUsCard, DeleteCard;
     private ActivityStudentSettingsBinding binding;
     String studentName;
     private DatabaseHelper dbHelp;
+    private FirebaseFirestore firebaseFirestore;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +34,7 @@ public class StudentSettings extends AppCompatActivity {
         logoutCard = findViewById(R.id.studentLogoutCard);
         StudentFaqCard = findViewById(R.id.StudentFaqCard);
         StudentAboutUsCard = findViewById(R.id.StudentAboutUs);
+        DeleteCard = findViewById(R.id.DeleteCard);
 
         SharedPreferences studentPrefs = getSharedPreferences("StudentPrefs", MODE_PRIVATE);
         String loggedInUsername = studentPrefs.getString("LoggedInStudentUsername", null);
@@ -72,7 +80,6 @@ public class StudentSettings extends AppCompatActivity {
             }
         });
 
-        // Set OnClickListener to navigate to AccountActivity
         accountCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,7 +108,57 @@ public class StudentSettings extends AppCompatActivity {
                     .setNegativeButton("No", null)
                     .show();
         });
+        DeleteCard.setOnClickListener(v -> {
+            new AlertDialog.Builder(this)
+                    .setTitle("Delete Account")
+                    .setMessage("Are you sure you want to delete your account? This action cannot be undone.")
+                    .setPositiveButton("Yes", (dialog, which) -> deleteAccount())
+                    .setNegativeButton("No", null)
+                    .show();
+        });
+    }
+    private void deleteAccount() {
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.getCurrentUser().delete().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
 
+                String tutorName = getSharedPreferences("TutorPrefs", MODE_PRIVATE).getString("LoggedInTutorUsername", null);
+                if (tutorName != null) {
+                    deleteAccountFromSQLite(tutorName);
+                }
 
+                SharedPreferences.Editor editor = getSharedPreferences("TutorPrefs", MODE_PRIVATE).edit();
+                editor.clear();
+                editor.apply();
+
+                Intent intent = new Intent(StudentSettings.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+
+                Toast.makeText(StudentSettings.this, "Account deleted successfully.", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(StudentSettings.this, "Failed to delete account. Try again later.", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+    private void deleteAccountFromSQLite(String tutorName) {
+        SQLiteDatabase db = dbHelp.getWritableDatabase();
+        try {
+            int deletedRows = db.delete(DatabaseHelper.TABLE_NAME_USERS, "USERNAME=?", new String[]{tutorName});
+            int deletedRowsTutor = db.delete(DatabaseHelper.TABLE_NAME_STUDENTPROFILE, "FIRSTNAME=?", new String[]{tutorName});
+
+            if (deletedRows > 0) {
+                Log.d("StudentSettings", "Account deleted from SQLite UserTable.");
+            } else {
+                Log.d("StudentSettings", "Account deletion from SQLite UserTable failed.");
+            }
+            if (deletedRowsTutor > 0) {
+                Log.d("StudentSettings", "Account deleted from SQLite TutorTable.");
+            } else {
+                Log.d("StudentSettings", "Account deletion from SQLite TutorTable failed.");
+            }
+        } finally {
+            db.close();
+        }
     }
 }
