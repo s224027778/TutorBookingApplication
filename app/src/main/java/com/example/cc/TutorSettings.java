@@ -12,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class TutorSettings extends AppCompatActivity {
 
-    private MaterialCardView accountCard, logoutCard, TutorFaqCard, AboutUsCard, locationCard;
+    private MaterialCardView accountCard, logoutCard, TutorFaqCard, AboutUsCard, locationCard, reviewCard;
     private ActivityTutorSettingsBinding binding;
 
 
@@ -28,6 +28,7 @@ public class TutorSettings extends AppCompatActivity {
         TutorFaqCard = findViewById(R.id.TutorFaqCard);
         AboutUsCard = findViewById(R.id.TutorAboutUs);
         locationCard = findViewById(R.id.locationCard);
+        reviewCard = findViewById(R.id.reviewsCard);
 
         AboutUsCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,6 +58,14 @@ public class TutorSettings extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(TutorSettings.this, LocationActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        reviewCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(TutorSettings.this, ViewReviewActivity.class);
                 startActivity(intent);
             }
         });

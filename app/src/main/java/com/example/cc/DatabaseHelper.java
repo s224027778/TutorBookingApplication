@@ -26,12 +26,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_NAME_PRICE = "price";
     public static final String TABLE_NAME_LOCATION = "location";
     public static final String TABLE_NAME_REVIEW = "review";
+    public static final String TABLE_NAME_REPORT = "report";
 
     // Review Table Columns
     private static final String COL_REVIEW_ID = "ID";
     private static final String COL_REVIEW_TUTOR_NAME = "TUTOR_NAME";
     private static final String COL_REVIEW_TEXT = "REVIEW_TEXT";
     private static final String COL_REVIEW_RATING = "RATING";
+
+    // REPORT Table Columns
+    private static final String COL_REPORT_ID = "ID";
+    private static final String COL_REPORT_USERNAME = "USERNAME";
+    private static final String COL_REPORT_TEXT = "REPORT_TEXT";
 
     // Location Table Columns
     private static final String COL_LOCATION_TUTOR_NAME = "TUTOR_NAME";
@@ -206,6 +212,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_REVIEW_RATING + " INTEGER, " +
                 "FOREIGN KEY (" + COL_REVIEW_TUTOR_NAME + ") REFERENCES " + TABLE_NAME_TUTORPROFILE + "(" + COL_TUTOR_NAME + "))");
 
+        // Create Review Table
+        db.execSQL("CREATE TABLE " + TABLE_NAME_REPORT + " (" +
+                COL_REPORT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_REPORT_USERNAME + " TEXT, " +
+                COL_REPORT_TEXT + " TEXT, " +
+                "FOREIGN KEY (" + COL_REPORT_USERNAME + ") REFERENCES " + TABLE_NAME_USERS + "(" + COL_USERNAME + "))");
+
         // Insert initial data into Categories and Modules tables
         insertInitialData(db);
     }
@@ -224,6 +237,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_PRICE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_LOCATION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_REVIEW);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_REPORT);
         onCreate(db);
     }
 
@@ -312,6 +326,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
+    public boolean insertReport(String username, String text) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_REPORT_USERNAME, username);
+        contentValues.put(COL_REPORT_TEXT, text);
+        long result = db.insert(TABLE_NAME_REPORT, null, contentValues);
+        return result != -1;
+    }
+
     public boolean insertProfile(String username, String firstName, String lastName, String phoneNumber) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -393,6 +416,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Integer deleteUser(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete("users", "ID = ?", new String[]{id});
+    }
+
+    public Integer deleteUserAccount(String username) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete("users", "USERNAME = ?", new String[]{username});
     }
 
     public Cursor getUser(String username, String password) {
@@ -493,6 +521,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getAllReviews() {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_NAME_REVIEW, null);
+    }
+
+    public Cursor getAllReports() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME_REPORT, null);
     }
 
     public Cursor getAllLocations() {
@@ -713,6 +746,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + TABLE_NAME_REVIEW +
                 " WHERE " + COL_REVIEW_TUTOR_NAME + " = ?";
         return db.rawQuery(query, new String[] { tutorName });
+    }
+
+    public void clearAllFAQs() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("faq", null, null);
+        db.close();
     }
 
 }

@@ -101,7 +101,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/baseline_aboutus_24"
+                        android:src="@drawable/baseline_faqs_24"
                         android:contentDescription="@string/next" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -135,7 +135,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/baseline_faqs_24"
+                        android:src="@drawable/baseline_aboutus_24"
                         android:contentDescription="@string/next" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

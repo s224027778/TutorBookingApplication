@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:text="CodeCoach"
         android:textSize="22sp"
-        android:textColor="@drawable/gradient"
+        android:textColor="@color/grey"
         android:layout_below="@id/logoImageView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="200dp"

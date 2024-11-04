@@ -24,26 +24,30 @@ public class FAQs extends AppCompatActivity {
 
         dbHelper = new DatabaseHelper(this);
 
+        // Insert default FAQs, clearing any previous entries to avoid duplication
         insertDefaultFAQs();
 
+        // Load FAQs from database to display in ListView
         loadFAQData();
 
         back.setOnClickListener(v -> {
-            Intent intent = new Intent(FAQs.this,TutorSettings.class);
+            Intent intent = new Intent(FAQs.this, TutorSettings.class);
             startActivity(intent);
         });
     }
 
     private void insertDefaultFAQs() {
-        // Example: Insert default FAQs only if none exist (prevents duplication)
-        if (dbHelper.getAllFAQs().isEmpty()) {
-            dbHelper.insertFAQ("Is there a fee for using the app?", "The app is free to download and use. However, individual tutors may set their own rates for tutoring sessions.");
-            dbHelper.insertFAQ("How do I book a tutoring session?", "Once logged in as a student, browse through the list of available tutors, view their profiles, and select the one that matches your needs. You can book a session by clicking the \"Book a Tutor\" button on their profile.");
-            dbHelper.insertFAQ("Can I view my booking history?", "Yes, students can view all their previous and upcoming bookings in the \"My Bookings\" section, accessible from the app menu.");
-            dbHelper.insertFAQ("Can I reschedule or cancel a session?", "No, you can not reschedule or cancel a booked session");
-            dbHelper.insertFAQ("How do I report a problem with a tutor or a session?", "If you encounter any issues, you can report them by sending an email to our support team. Our team will investigate and assist you accordingly.");
-            dbHelper.insertFAQ("What happens if a tutor does not show up for a session?", "If a tutor fails to show up, you can report the issue, and we will follow up with the tutor. Depending on the situation, you may be entitled to a refund or rescheduling.");
-        }
+        // Clear existing FAQs to prevent duplication
+        dbHelper.clearAllFAQs();
+
+        // Insert default FAQs
+        dbHelper.insertFAQ("Is there a fee for using the app?", "The app is free to download and use. However, individual tutors may set their own rates for tutoring sessions.");
+        dbHelper.insertFAQ("How are payments made to the tutor?", "Users can discuss payment methods using the chat before their session, could be cash or a bank transfer.");
+        dbHelper.insertFAQ("How do I book a tutoring session?", "Once logged in as a student, browse through the list of available tutors, view their profiles, and select the one that matches your needs. You can book a session by clicking the \"Book a Tutor\" button on their profile.");
+        dbHelper.insertFAQ("Can I view my booking history?", "Yes, students can view all their previous and upcoming bookings in the \"My Bookings\" section, accessible from the app menu.");
+        dbHelper.insertFAQ("Can I reschedule or cancel a session?", "No, you can not reschedule or cancel a booked session.");
+        dbHelper.insertFAQ("How do I report a problem with a tutor or a session?", "If you encounter any issues, you can report them by sending an email to our support team. Our team will investigate and assist you accordingly.");
+        dbHelper.insertFAQ("What happens if a tutor does not show up for a session?", "If a tutor fails to show up, you can report the issue, and we will follow up with the tutor. Depending on the situation, you may be entitled to a refund or rescheduling.");
     }
 
     private void loadFAQData() {
@@ -52,7 +56,6 @@ public class FAQs extends AppCompatActivity {
         if (faqList.isEmpty()) {
             Toast.makeText(this, "No FAQs available at the moment.", Toast.LENGTH_LONG).show();
         } else {
-
             FAQAdapter faqAdapter = new FAQAdapter(this, faqList);
             faqListView.setAdapter(faqAdapter);
         }
