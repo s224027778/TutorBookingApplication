@@ -3,32 +3,35 @@ package com.example.cc;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 import android.widget.Button;
-import android.widget.DatePicker;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class BookingActivity extends AppCompatActivity {
     DatabaseHelper db;
     EditText editTextTutorName, editTextStudentName, editTextModuleName, editTextDuration, editTextDate, editTextTime;
     Button buttonBook;
+    private ListView availabilityListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking);
+
         String tutorName = getIntent().getStringExtra("TUTOR_NAME");
         String moduleName = getIntent().getStringExtra("MODULE_NAME");
 
@@ -41,9 +44,9 @@ public class BookingActivity extends AppCompatActivity {
         editTextDuration = findViewById(R.id.editTextDuration);
         buttonBook = findViewById(R.id.buttonBook);
         ImageButton back = findViewById(R.id.back_button);
+        availabilityListView = findViewById(R.id.availability_list_view);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
-        String username = sharedPreferences.getString("LoggedInStudentUsername", "");
+        showTutorAvailability();
 
         SharedPreferences studentPrefs = getSharedPreferences("StudentPrefs", MODE_PRIVATE);
         String loggedInUsername = studentPrefs.getString("LoggedInStudentUsername", null);
@@ -84,7 +87,6 @@ public class BookingActivity extends AppCompatActivity {
             datePickerDialog.show();
         });
 
-
         editTextTime.setOnClickListener(v -> {
             Calendar calendar = Calendar.getInstance();
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -109,45 +111,67 @@ public class BookingActivity extends AppCompatActivity {
         });
 
         back.setOnClickListener(v -> {
-            Intent intent = new Intent(BookingActivity.this,StudentHomeActivity.class);
+            Intent intent = new Intent(BookingActivity.this, StudentHomeActivity.class);
             startActivity(intent);
         });
 
-        buttonBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String tutorName = editTextTutorName.getText().toString();
-                String studentName = editTextStudentName.getText().toString();
-                String moduleName = editTextModuleName.getText().toString();
-                String date = editTextDate.getText().toString();
-                String time = editTextTime.getText().toString();
-                String duration = editTextDuration.getText().toString();
+        buttonBook.setOnClickListener(v -> {
+            String tutorNameText = editTextTutorName.getText().toString();
+            String studentName = editTextStudentName.getText().toString();
+            String moduleNameText = editTextModuleName.getText().toString();
+            String date = editTextDate.getText().toString();
+            String time = editTextTime.getText().toString();
+            String duration = editTextDuration.getText().toString();
 
-                if (date.isEmpty())
-                {
-                    Toast.makeText(BookingActivity.this, "Date field cannot be empty", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                if (time.isEmpty())
-                {
-                    Toast.makeText(BookingActivity.this, "Time field cannot be empty", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                if (duration.isEmpty())
-                {
-                    Toast.makeText(BookingActivity.this, "Duration field cannot be empty", Toast.LENGTH_LONG).show();
-                    return;
-                }
+            if (date.isEmpty()) {
+                Toast.makeText(BookingActivity.this, "Date field cannot be empty", Toast.LENGTH_LONG).show();
+                return;
+            }
+            if (time.isEmpty()) {
+                Toast.makeText(BookingActivity.this, "Time field cannot be empty", Toast.LENGTH_LONG).show();
+                return;
+            }
+            if (duration.isEmpty()) {
+                Toast.makeText(BookingActivity.this, "Duration field cannot be empty", Toast.LENGTH_LONG).show();
+                return;
+            }
 
-                boolean isInserted = db.insertBooking(tutorName, studentName, moduleName, date, time, duration);
-                if (isInserted) {
-                    Toast.makeText(BookingActivity.this, "Booking requested, sending you to home page", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(BookingActivity.this,StudentHomeActivity.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(BookingActivity.this, "Booking request failed", Toast.LENGTH_LONG).show();
-                }
+            boolean isInserted = db.insertBooking(tutorNameText, studentName, moduleNameText, date, time, duration);
+            if (isInserted) {
+                Toast.makeText(BookingActivity.this, "Booking requested, sending you to home page", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(BookingActivity.this, StudentHomeActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(BookingActivity.this, "Booking request failed", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void showTutorAvailability() {
+        String tutorName = getIntent().getStringExtra("TUTOR_NAME");
+
+        if (tutorName == null) {
+            Toast.makeText(this, "Tutor information not available. Please log in again.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ArrayList<HashMap<String, String>> availabilityList = db.getTutorAvailability(tutorName);
+
+        if (availabilityList.isEmpty()) {
+            Log.d("DatabaseHelper", "No availability data found for tutor: " + tutorName);
+            Toast.makeText(this, "No availability found for this tutor", Toast.LENGTH_SHORT).show();
+        } else {
+            Log.d("DatabaseHelper", "Availability data found: " + availabilityList.toString());
+
+            SimpleAdapter adapter = new SimpleAdapter(
+                    this,
+                    availabilityList,
+                    R.layout.availability_list_item,
+                    new String[]{"dayOfWeek", "startTime", "endTime"},
+                    new int[]{R.id.day_of_week, R.id.start_time, R.id.end_time}
+            );
+
+            availabilityListView.setAdapter(adapter);
+        }
     }
 }

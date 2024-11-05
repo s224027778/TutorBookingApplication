@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.cc.databinding.ActivityStudentSettingsBinding;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class StudentSettings extends AppCompatActivity {
@@ -129,27 +131,49 @@ public class StudentSettings extends AppCompatActivity {
 
     private void deleteAccount() {
         firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.getCurrentUser().delete().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
+        String userId = firebaseAuth.getCurrentUser().getUid();
 
-                String tutorName = getSharedPreferences("TutorPrefs", MODE_PRIVATE).getString("LoggedInTutorUsername", null);
-                if (tutorName != null) {
-                    deleteAccountFromSQLite(tutorName);
-                }
 
-                SharedPreferences.Editor editor = getSharedPreferences("TutorPrefs", MODE_PRIVATE).edit();
-                editor.clear();
-                editor.apply();
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseFirestore.collection("Users")
+                .document(userId)
+                .delete()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
 
-                Intent intent = new Intent(StudentSettings.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
+                        databaseReference.child(userId).removeValue().addOnCompleteListener(task2 -> {
+                            if (task2.isSuccessful()) {
 
-                Toast.makeText(StudentSettings.this, "Account deleted successfully.", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(StudentSettings.this, "Failed to delete account. Try again later.", Toast.LENGTH_LONG).show();
-            }
-        });
+                                firebaseAuth.getCurrentUser().delete().addOnCompleteListener(task3 -> {
+                                    if (task3.isSuccessful()) {
+
+                                        String tutorName = getSharedPreferences("StudentPrefs", MODE_PRIVATE).getString("LoggedInStudentUsername", null);
+                                        if (studentName != null) {
+                                            deleteAccountFromSQLite(studentName);
+                                        }
+
+                                        SharedPreferences.Editor editor = getSharedPreferences("StudentPrefs", MODE_PRIVATE).edit();
+                                        editor.clear();
+                                        editor.apply();
+
+                                        Intent intent = new Intent(StudentSettings.this, MainActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+
+                                        Toast.makeText(StudentSettings.this, "Account deleted successfully.", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(StudentSettings.this, "Failed to delete account from Firebase Auth. Try again later.", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            } else {
+                                Toast.makeText(StudentSettings.this, "Failed to delete account from Realtime Database. Try again later.", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    } else {
+                        Toast.makeText(StudentSettings.this, "Failed to delete account from Firestore. Try again later.", Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     private void deleteAccountFromSQLite(String tutorName) {

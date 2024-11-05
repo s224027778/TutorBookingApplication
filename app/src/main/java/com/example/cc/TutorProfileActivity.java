@@ -195,6 +195,9 @@ public class TutorProfileActivity extends AppCompatActivity implements AdapterVi
 
                     db.assignTutorToModule(tutorId, moduleId);
 
+                    Intent intent = new Intent(TutorProfileActivity.this, TutorAvailability.class);
+                    startActivity(intent);
+
                 } else {
                     Toast.makeText(TutorProfileActivity.this, "Profile Not Created", Toast.LENGTH_SHORT).show();
                 }

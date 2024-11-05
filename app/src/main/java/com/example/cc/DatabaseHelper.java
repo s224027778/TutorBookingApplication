@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -27,6 +28,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_NAME_LOCATION = "location";
     public static final String TABLE_NAME_REVIEW = "review";
     public static final String TABLE_NAME_REPORT = "report";
+    public static final String TABLE_NAME_AVAILABILITY = "availability";
+
+    //Availability Table Column
+    private static final String COL_AVAILABILITY_ID = "availability_id";
+    private static final String COL_AVAIL_TUTORNAME = "tutor_name";
+    private static final String COL_AVAIL_DAYOFWEEK = "day_of_week";
+    private static final String COL_AVAIL_STARTTIME = "start_time";
+    private static final String COL_AVAIL_ENDTIME = "end_time";
 
     // Review Table Columns
     private static final String COL_REVIEW_ID = "ID";
@@ -120,6 +129,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_USERNAME + " TEXT UNIQUE NOT NULL, " +
                 COL_PASSWORD + " TEXT, " +
                 COL_USERTYPE + " TEXT)");
+
+        db.execSQL("CREATE TABLE " + TABLE_NAME_AVAILABILITY + " (" +
+                COL_AVAILABILITY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_AVAIL_TUTORNAME + " TEXT NOT NULL, " +
+                COL_AVAIL_DAYOFWEEK + " TEXT NOT NULL, " +
+                COL_AVAIL_STARTTIME + " TEXT NOT NULL, " +
+                COL_AVAIL_ENDTIME + " TEXT NOT NULL, " +
+                "FOREIGN KEY (" + COL_AVAIL_TUTORNAME + ") REFERENCES " + TABLE_NAME_TUTORPROFILE + "(" + COL_TUTOR_NAME + "))");
 
         // Create Categories Table
         db.execSQL("CREATE TABLE " + TABLE_NAME_CATEGORIES + " (" +
@@ -238,6 +255,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_LOCATION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_REVIEW);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_REPORT);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_AVAILABILITY);
         onCreate(db);
     }
 
@@ -314,6 +332,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_USERTYPE, userType);
         long result = db.insert(TABLE_NAME_USERS, null, contentValues);
         return result != -1;
+    }
+
+    public void addTutorAvailability(String tutorName, String dayOfWeek, int startHour, int startMinute, int endHour, int endMinute) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(COL_AVAIL_TUTORNAME, tutorName);
+        values.put(COL_AVAIL_DAYOFWEEK, dayOfWeek);
+        values.put(COL_AVAIL_STARTTIME, String.format("%02d:%02d", startHour, startMinute));
+        values.put(COL_AVAIL_ENDTIME, String.format("%02d:%02d", endHour, endMinute));
+
+        db.insert(TABLE_NAME_AVAILABILITY, null, values);
+        db.close();
     }
 
     public boolean insertReview(String tutorname, String text, String rating) {
@@ -762,6 +793,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("faq", null, null);
         db.close();
+    }
+
+    @SuppressLint("Range")
+    public ArrayList<HashMap<String, String>> getTutorAvailability(String tutorName) {
+        ArrayList<HashMap<String, String>> availabilityList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + COL_AVAIL_DAYOFWEEK + ", " + COL_AVAIL_STARTTIME + ", " + COL_AVAIL_ENDTIME +
+                " FROM " + TABLE_NAME_AVAILABILITY + " WHERE " + COL_AVAIL_TUTORNAME + " = ?", new String[]{tutorName});
+
+        if (cursor.moveToFirst()) {
+            do {
+                HashMap<String, String> availability = new HashMap<>();
+                // Use your constant variables for column names
+                availability.put("dayOfWeek", cursor.getString(cursor.getColumnIndex(COL_AVAIL_DAYOFWEEK)));
+                availability.put("startTime", cursor.getString(cursor.getColumnIndex(COL_AVAIL_STARTTIME)));
+                availability.put("endTime", cursor.getString(cursor.getColumnIndex(COL_AVAIL_ENDTIME)));
+                availabilityList.add(availability);
+            } while (cursor.moveToNext());
+        } else {
+            Log.d("DatabaseHelper", "No data found for tutor: " + tutorName);
+        }
+        cursor.close(); // Close cursor here outside of the if block
+        db.close();
+        return availabilityList;
     }
 
 }

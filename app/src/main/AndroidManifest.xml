@@ -20,6 +20,9 @@
         android:theme="@style/Theme.CC"
         tools:targetApi="31">
         <activity
+            android:name=".TutorAvailability"
+            android:exported="false" />
+        <activity
             android:name=".TutorReportActivity"
             android:exported="false" />
         <activity
