@@ -16,6 +16,24 @@
             android:text="View Users" />
 
         <Button
+            android:id="@+id/buttonViewCategories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View Categories" />
+
+        <Button
+            android:id="@+id/buttonViewFAQs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View FAQs" />
+
+        <Button
+            android:id="@+id/buttonViewReports"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View Reports" />
+
+        <Button
             android:id="@+id/buttonViewBooking"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -74,6 +92,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="User Records"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/textViewFAQs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="FAQs Records"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/textViewReports"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reports Records"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/textViewCategories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Category Records"
             android:visibility="gone" />
 
         <TextView

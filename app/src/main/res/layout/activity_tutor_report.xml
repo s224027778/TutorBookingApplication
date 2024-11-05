@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp">
+
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Back"
+            android:layout_gravity="start"
+            android:padding="12dp" />
+
+        <TextView
+            android:id="@+id/top_bar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="CodeCoach"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add a Report"
+        android:textSize="24sp"
+        android:textColor="@android:color/holo_blue_dark"
+        android:layout_gravity="center"
+        android:fontFamily="sans-serif-medium"
+        android:paddingBottom="16dp"
+        android:paddingTop="20dp"/>
+
+    <TextView
+        android:id="@+id/tvusername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Username"
+        android:textStyle="bold"
+        android:paddingLeft="20dp"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/et_username"
+        android:layout_width="300dp"
+        android:layout_marginLeft="15dp"
+        android:layout_height="50dp"
+        android:hint="enter your username"
+        android:textColorHint="@color/grey"
+        android:textColor="@color/black"
+        android:inputType="textMultiLine"
+        android:backgroundTint="@color/grey"
+        android:background="@drawable/edittext_border"
+        android:padding="12dp"
+        android:minHeight="120dp"
+        android:gravity="top"/>
+
+    <TextView
+        android:id="@+id/tv_review_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Report"
+        android:textStyle="bold"
+        android:paddingLeft="20dp"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:id="@+id/et_review_text"
+        android:layout_width="300dp"
+        android:layout_marginLeft="15dp"
+        android:layout_height="wrap_content"
+        android:hint="describe your report here"
+        android:textColorHint="@color/grey"
+        android:textColor="@color/black"
+        android:inputType="textMultiLine"
+        android:backgroundTint="@color/grey"
+        android:background="@drawable/edittext_border"
+        android:padding="12dp"
+        android:minHeight="120dp"
+        android:gravity="top"/>
+
+    <Button
+        android:id="@+id/btn_submit_review"
+        android:layout_width="200dp"
+        android:layout_gravity="center"
+        android:layout_height="60dp"
+        android:text="Submit Report"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/blue"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="16sp"
+        android:elevation="8dp"
+        android:layout_marginTop="24dp"/>
+
+</LinearLayout>

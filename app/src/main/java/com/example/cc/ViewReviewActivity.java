@@ -32,6 +32,7 @@ public class ViewReviewActivity extends AppCompatActivity {
         ImageButton back = findViewById(R.id.back_button);
 
         db = new DatabaseHelper(this);
+
         SharedPreferences tutorPrefs = getSharedPreferences("TutorPrefs", MODE_PRIVATE);
         String tutorName = tutorPrefs.getString("LoggedInTutorUsername", null);
 

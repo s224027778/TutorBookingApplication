@@ -17,8 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 public class AdminHomeActivity extends AppCompatActivity {
 
     DatabaseHelper db;
-    TextView textViewUsers, textViewBooking, textViewModules, textViewTutorProfile, textViewStudentProfile, textViewTutorModule, textViewLocation, textViewReviews, textViewPrice;
-    Button buttonViewUsers, buttonViewBooking, buttonDeleteUser, buttonViewTutorProfile, buttonViewStudentProfile, buttonViewTutorModule, buttonViewModules, buttonViewLocation, buttonViewReviews, buttonViewPrices;
+    TextView textViewUsers, textViewReport, textViewCategory, textViewFAQ, textViewBooking, textViewModules, textViewTutorProfile, textViewStudentProfile, textViewTutorModule, textViewLocation, textViewReviews, textViewPrice;
+    Button buttonViewUsers, buttonViewFAQ, buttonViewCategory, buttonViewReport, buttonViewBooking, buttonDeleteUser, buttonViewTutorProfile, buttonViewStudentProfile, buttonViewTutorModule, buttonViewModules, buttonViewLocation, buttonViewReviews, buttonViewPrices;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -28,6 +28,9 @@ public class AdminHomeActivity extends AppCompatActivity {
 
         db = new DatabaseHelper(this);
         textViewUsers = findViewById(R.id.textViewUsers);
+        textViewCategory = findViewById(R.id.textViewCategories);
+        textViewFAQ = findViewById(R.id.textViewFAQs);
+        textViewReport = findViewById(R.id.textViewReports);
         textViewBooking = findViewById(R.id.textViewBooking);
         textViewModules = findViewById(R.id.textViewModules);
         textViewTutorModule = findViewById(R.id.textViewTutorModule);
@@ -46,6 +49,9 @@ public class AdminHomeActivity extends AppCompatActivity {
         buttonViewLocation = findViewById(R.id.buttonViewLocation);
         buttonViewPrices = findViewById(R.id.buttonViewPrices);
         buttonViewReviews = findViewById(R.id.buttonViewReviews);
+        buttonViewReport = findViewById(R.id.buttonViewReports);
+        buttonViewFAQ = findViewById(R.id.buttonViewFAQs);
+        buttonViewCategory = findViewById(R.id.buttonViewCategories);
 
         buttonViewUsers.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +122,27 @@ public class AdminHomeActivity extends AppCompatActivity {
                 viewReviews();
             }
         });
+
+        buttonViewCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewCategories();
+            }
+        });
+
+        buttonViewFAQ.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewFAQs();
+            }
+        });
+
+        buttonViewReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewReports();
+            }
+        });
     }
 
     private void viewBooking() {
@@ -173,8 +200,8 @@ public class AdminHomeActivity extends AppCompatActivity {
         Cursor res = db.getAllTutorModules();
         StringBuilder sb = new StringBuilder();
         while (res.moveToNext()) {
-            sb.append("TutorId: ").append(res.getString(0))
-                    .append(", ModuleId: ").append(res.getString(1)).append("\n");
+            sb.append("TUTOR_ID: ").append(res.getString(0))
+                    .append(", MODULE_ID: ").append(res.getString(1)).append("\n");
         }
         textViewTutorModule.setText(sb.toString());
         textViewTutorModule.setVisibility(View.VISIBLE);
@@ -188,6 +215,44 @@ public class AdminHomeActivity extends AppCompatActivity {
         }
         textViewReviews.setText(sb.toString());
         textViewReviews.setVisibility(View.VISIBLE);
+    }
+
+    private void viewReports() {
+        Cursor res = db.getAllReports();
+        StringBuilder sb = new StringBuilder();
+        while (res.moveToNext()) {
+            sb.append("ID: ").append(res.getString(0))
+                    .append(", USERNAME: ").append(res.getString(1))
+                    .append(", REPORT_TEXT: ").append(res.getString(2))
+                    .append(res.getString(3)).append("\n");
+        }
+        textViewReport.setText(sb.toString());
+        textViewReport.setVisibility(View.VISIBLE);
+    }
+
+    private void viewFAQs() {
+        Cursor res = db.getAllFAQSs();
+        StringBuilder sb = new StringBuilder();
+        while (res.moveToNext()) {
+            sb.append("ID: ").append(res.getString(0))
+                    .append(", QUESTION: ").append(res.getString(1))
+                    .append(", ANSWER: ").append(res.getString(2))
+                    .append(res.getString(3)).append("\n");
+        }
+        textViewFAQ.setText(sb.toString());
+        textViewFAQ.setVisibility(View.VISIBLE);
+    }
+
+    private void viewCategories() {
+        Cursor res = db.getAllCats();
+        StringBuilder sb = new StringBuilder();
+        while (res.moveToNext()) {
+            sb.append("ID: ").append(res.getString(0))
+                    .append(", NAME: ").append(res.getString(1))
+                    .append(res.getString(3)).append("\n");
+        }
+        textViewCategory.setText(sb.toString());
+        textViewCategory.setVisibility(View.VISIBLE);
     }
 
     private void viewLocation() {

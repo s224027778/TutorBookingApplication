@@ -61,15 +61,14 @@ public class LoginActivity extends AppCompatActivity {
                 res.moveToFirst();
                 String userType = res.getString(3);
 
-
                 SharedPreferences tutorPrefs = getSharedPreferences("TutorPrefs", MODE_PRIVATE);
                 SharedPreferences.Editor tutorEditor = tutorPrefs.edit();
-                tutorEditor.clear();
+                tutorEditor.putString("LoggedInTutorUsername", username);
+                tutorEditor.apply();
 
                 SharedPreferences studentPrefs = getSharedPreferences("StudentPrefs", MODE_PRIVATE);
                 SharedPreferences.Editor studentEditor = studentPrefs.edit();
                 studentEditor.clear();
-
 
                 firebaseAuth.signInWithEmailAndPassword(username, password)
                         .addOnCompleteListener(task -> {

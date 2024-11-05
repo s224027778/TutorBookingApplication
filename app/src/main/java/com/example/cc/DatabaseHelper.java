@@ -538,6 +538,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(TABLE_NAME_MODULES, null, null);
     }
 
+    public Cursor getAllFAQSs() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME_FAQ, null);
+    }
+
+    public Cursor getAllCats() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME_CATEGORIES, null);
+    }
+
     public List<FAQ> getAllFAQs() {
         List<FAQ> faqList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
