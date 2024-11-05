@@ -16,24 +16,6 @@
             android:text="View Users" />
 
         <Button
-            android:id="@+id/buttonViewCategories"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="View Categories" />
-
-        <Button
-            android:id="@+id/buttonViewFAQs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="View FAQs" />
-
-        <Button
-            android:id="@+id/buttonViewReports"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="View Reports" />
-
-        <Button
             android:id="@+id/buttonViewBooking"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -76,43 +58,34 @@
             android:text="View Price" />
 
         <Button
+            android:id="@+id/buttonViewTutorAvailability"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View Tutor Availability" />
+
+        <Button
+            android:id="@+id/buttonViewFAQ"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View Frequently Asked Questions" />
+
+        <Button
             android:id="@+id/buttonViewReviews"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="View Reviews" />
 
         <Button
-            android:id="@+id/buttonDeleteUser"
+            android:id="@+id/buttonAdminLogout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Delete User" />
+            android:text="Logout" />
 
         <TextView
             android:id="@+id/textViewUsers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="User Records"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/textViewFAQs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="FAQs Records"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/textViewReports"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Reports Records"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/textViewCategories"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Category Records"
             android:visibility="gone" />
 
         <TextView
@@ -162,6 +135,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Price Records"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/textViewFrequentlyAskedQuestions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Frequently Asked Questions"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/textViewTutorAvailability"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tutor Availability Records"
             android:visibility="gone" />
 
         <TextView

@@ -817,6 +817,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close(); // Close cursor here outside of the if block
         db.close();
         return availabilityList;
+
+    }
+
+    public Cursor getAllAvailabilities() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT " + COL_AVAIL_TUTORNAME + ", " + COL_AVAIL_DAYOFWEEK + ", " + COL_AVAIL_STARTTIME + ", " + COL_AVAIL_ENDTIME +
+                " FROM " + TABLE_NAME_AVAILABILITY, null);
     }
 
 }

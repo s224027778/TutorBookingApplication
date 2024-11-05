@@ -20,6 +20,9 @@
         android:theme="@style/Theme.CC"
         tools:targetApi="31">
         <activity
+            android:name=".AdminFAQs"
+            android:exported="false" />
+        <activity
             android:name=".TutorAvailability"
             android:exported="false" />
         <activity
@@ -46,12 +49,6 @@
             android:exported="false" />
         <activity
             android:name=".specificchat"
-            android:exported="false" />
-        <activity
-            android:name=".MainOTP"
-            android:exported="false" />
-        <activity
-            android:name=".otpAuthentication"
             android:exported="false" />
         <activity
             android:name=".StudentFAQs"

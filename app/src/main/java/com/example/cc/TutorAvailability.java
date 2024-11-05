@@ -1,10 +1,12 @@
 package com.example.cc;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -36,6 +38,13 @@ public class TutorAvailability extends AppCompatActivity {
         checkboxThursday = findViewById(R.id.checkbox_thursday);
         checkboxFriday = findViewById(R.id.checkbox_friday);
 
+        ImageView back = findViewById(R.id.back_button);
+
+        back.setOnClickListener(v -> {
+            Intent intent = new Intent(TutorAvailability.this,TutorSettings.class);
+            startActivity(intent);
+        });
+
         addAvailabilityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,8 +63,10 @@ public class TutorAvailability extends AppCompatActivity {
         }
 
         int startHour = startTimePicker.getCurrentHour();
+        startTimePicker.setIs24HourView(true);
         int startMinute = startTimePicker.getCurrentMinute();
         int endHour = endTimePicker.getCurrentHour();
+        endTimePicker.setIs24HourView(true);
         int endMinute = endTimePicker.getCurrentMinute();
 
         if (startHour > endHour || (startHour == endHour && startMinute >= endMinute)) {

@@ -87,7 +87,7 @@ public class studentspecificchat extends AppCompatActivity {
         Intent intent = getIntent();
         receiverUid = intent.getStringExtra("receiverUid");
         receiverName = intent.getStringExtra("name");
-        String uri = intent.getStringExtra("imageuri");
+        String uri = intent.getStringExtra("imageUri");
 
         if (receiverName != null) {
             mNameOfSpecificUser.setText(receiverName);

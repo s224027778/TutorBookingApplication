@@ -2,23 +2,32 @@ package com.example.cc;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 public class AdminHomeActivity extends AppCompatActivity {
 
     DatabaseHelper db;
-    TextView textViewUsers, textViewReport, textViewCategory, textViewFAQ, textViewBooking, textViewModules, textViewTutorProfile, textViewStudentProfile, textViewTutorModule, textViewLocation, textViewReviews, textViewPrice;
-    Button buttonViewUsers, buttonViewFAQ, buttonViewCategory, buttonViewReport, buttonViewBooking, buttonDeleteUser, buttonViewTutorProfile, buttonViewStudentProfile, buttonViewTutorModule, buttonViewModules, buttonViewLocation, buttonViewReviews, buttonViewPrices;
+    TextView textViewUsers, textViewBooking, textViewModules, textViewTutorProfile, textViewStudentProfile, textViewTutorModule, textViewLocation, textViewReviews, textViewPrice, textViewFrequentlyAskedQuestions, textViewTutorAvailability;
+    Button buttonViewUsers, buttonViewBooking, buttonViewTutorProfile, buttonViewStudentProfile, buttonViewTutorModule, buttonViewModules, buttonViewLocation, buttonViewReviews, buttonViewPrices, buttonAdminLogout, buttonViewFAQ, buttonViewTutorAvailability;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -28,9 +37,6 @@ public class AdminHomeActivity extends AppCompatActivity {
 
         db = new DatabaseHelper(this);
         textViewUsers = findViewById(R.id.textViewUsers);
-        textViewCategory = findViewById(R.id.textViewCategories);
-        textViewFAQ = findViewById(R.id.textViewFAQs);
-        textViewReport = findViewById(R.id.textViewReports);
         textViewBooking = findViewById(R.id.textViewBooking);
         textViewModules = findViewById(R.id.textViewModules);
         textViewTutorModule = findViewById(R.id.textViewTutorModule);
@@ -38,20 +44,21 @@ public class AdminHomeActivity extends AppCompatActivity {
         textViewStudentProfile = findViewById(R.id.textViewStudentProfile);
         textViewLocation = findViewById(R.id.textViewLocation);
         textViewPrice = findViewById(R.id.textViewPrices);
+        textViewFrequentlyAskedQuestions = findViewById(R.id.textViewFrequentlyAskedQuestions);
+        textViewTutorAvailability = findViewById(R.id.textViewTutorAvailability);
         textViewReviews = findViewById(R.id.textViewReviews);
         buttonViewUsers = findViewById(R.id.buttonViewUsers);
         buttonViewBooking = findViewById(R.id.buttonViewBooking);
         buttonViewModules = findViewById(R.id.buttonViewModules);
         buttonViewTutorProfile = findViewById(R.id.buttonViewTutorProfile);
         buttonViewStudentProfile = findViewById(R.id.buttonViewStudentProfile);
-        buttonDeleteUser = findViewById(R.id.buttonDeleteUser);
         buttonViewTutorModule = findViewById(R.id.buttonViewTutorModules);
         buttonViewLocation = findViewById(R.id.buttonViewLocation);
         buttonViewPrices = findViewById(R.id.buttonViewPrices);
+        buttonViewFAQ = findViewById(R.id.buttonViewFAQ);
+        buttonViewTutorAvailability = findViewById(R.id.buttonViewTutorAvailability);
         buttonViewReviews = findViewById(R.id.buttonViewReviews);
-        buttonViewReport = findViewById(R.id.buttonViewReports);
-        buttonViewFAQ = findViewById(R.id.buttonViewFAQs);
-        buttonViewCategory = findViewById(R.id.buttonViewCategories);
+        buttonAdminLogout = findViewById(R.id.buttonAdminLogout);
 
         buttonViewUsers.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,13 +95,6 @@ public class AdminHomeActivity extends AppCompatActivity {
             }
         });
 
-        buttonDeleteUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteUser();
-            }
-        });
-
         buttonViewTutorModule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,7 +112,22 @@ public class AdminHomeActivity extends AppCompatActivity {
         buttonViewPrices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //viewStudentProfiles();
+                viewPrices();
+            }
+        });
+
+        buttonViewFAQ.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdminHomeActivity.this, AdminFAQs.class);
+                startActivity(intent);
+            }
+        });
+
+        buttonViewTutorAvailability.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewAvailabilities();
             }
         });
 
@@ -123,26 +138,41 @@ public class AdminHomeActivity extends AppCompatActivity {
             }
         });
 
-        buttonViewCategory.setOnClickListener(new View.OnClickListener() {
+        buttonAdminLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewCategories();
+
+                new android.app.AlertDialog.Builder(AdminHomeActivity.this)
+                        .setTitle("Logout")
+                        .setMessage("Are you sure you want to log out?")
+                        .setPositiveButton("Yes", (dialog, which) -> {
+                            SharedPreferences preferences = getSharedPreferences("AdminPrefs", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.clear();
+                            editor.apply();
+
+                            FirebaseAuth.getInstance().signOut();
+
+                            Intent intent = new Intent(AdminHomeActivity.this, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
             }
         });
 
-        buttonViewFAQ.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewFAQs();
-            }
-        });
+    }
 
-        buttonViewReport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewReports();
-            }
-        });
+    private void viewPrices(){
+        List<String> prices = db.getAllPrices();
+        StringBuilder sb = new StringBuilder();
+        for (String record : prices) {
+            sb.append(record).append("\n");
+        }
+        textViewPrice.setText(sb.toString());
+        textViewPrice.setVisibility(View.VISIBLE);
     }
 
     private void viewBooking() {
@@ -200,12 +230,36 @@ public class AdminHomeActivity extends AppCompatActivity {
         Cursor res = db.getAllTutorModules();
         StringBuilder sb = new StringBuilder();
         while (res.moveToNext()) {
-            sb.append("TUTOR_ID: ").append(res.getString(0))
-                    .append(", MODULE_ID: ").append(res.getString(1)).append("\n");
+            sb.append("TutorId: ").append(res.getString(0))
+                    .append(", ModuleId: ").append(res.getString(1)).append("\n");
         }
         textViewTutorModule.setText(sb.toString());
         textViewTutorModule.setVisibility(View.VISIBLE);
     }
+
+    private void viewAvailabilities() {
+        Cursor res = db.getAllAvailabilities();
+        StringBuilder sb = new StringBuilder();
+
+        while (res.moveToNext()) {
+            sb.append("Tutor Name: ").append(res.getString(0))
+                    .append(", Day of Week: ").append(res.getString(1))
+                    .append(", Start Time: ").append(res.getString(2))
+                    .append(", End Time: ").append(res.getString(3))
+                    .append("\n\n");
+        }
+
+        if (sb.length() > 0) {
+            textViewTutorAvailability.setText(sb.toString());
+            textViewTutorAvailability.setVisibility(View.VISIBLE);
+        } else {
+            textViewTutorAvailability.setText("No availability data found.");
+            textViewTutorAvailability.setVisibility(View.VISIBLE);
+        }
+
+
+    }
+
 
     private void viewReviews() {
         Cursor res = db.getAllReviews();
@@ -217,44 +271,6 @@ public class AdminHomeActivity extends AppCompatActivity {
         textViewReviews.setVisibility(View.VISIBLE);
     }
 
-    private void viewReports() {
-        Cursor res = db.getAllReports();
-        StringBuilder sb = new StringBuilder();
-        while (res.moveToNext()) {
-            sb.append("ID: ").append(res.getString(0))
-                    .append(", USERNAME: ").append(res.getString(1))
-                    .append(", REPORT_TEXT: ").append(res.getString(2))
-                    .append(res.getString(3)).append("\n");
-        }
-        textViewReport.setText(sb.toString());
-        textViewReport.setVisibility(View.VISIBLE);
-    }
-
-    private void viewFAQs() {
-        Cursor res = db.getAllFAQSs();
-        StringBuilder sb = new StringBuilder();
-        while (res.moveToNext()) {
-            sb.append("ID: ").append(res.getString(0))
-                    .append(", QUESTION: ").append(res.getString(1))
-                    .append(", ANSWER: ").append(res.getString(2))
-                    .append(res.getString(3)).append("\n");
-        }
-        textViewFAQ.setText(sb.toString());
-        textViewFAQ.setVisibility(View.VISIBLE);
-    }
-
-    private void viewCategories() {
-        Cursor res = db.getAllCats();
-        StringBuilder sb = new StringBuilder();
-        while (res.moveToNext()) {
-            sb.append("ID: ").append(res.getString(0))
-                    .append(", NAME: ").append(res.getString(1))
-                    .append(res.getString(3)).append("\n");
-        }
-        textViewCategory.setText(sb.toString());
-        textViewCategory.setVisibility(View.VISIBLE);
-    }
-
     private void viewLocation() {
         Cursor res = db.getAllLocations();
         StringBuilder sb = new StringBuilder();
@@ -263,33 +279,6 @@ public class AdminHomeActivity extends AppCompatActivity {
         }
         textViewLocation.setText(sb.toString());
         textViewLocation.setVisibility(View.VISIBLE);
-    }
-
-    private void deleteUser() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Delete User");
-
-        final EditText inputId = new EditText(this);
-        inputId.setHint("Enter User ID");
-
-        builder.setView(inputId);
-
-        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String userId = inputId.getText().toString();
-
-                Integer deletedRows = db.deleteUser(userId);
-                if (deletedRows > 0) {
-                    Toast.makeText(AdminHomeActivity.this, "User Deleted Successfully", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(AdminHomeActivity.this, "Delete Failed", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-        builder.setNegativeButton("Cancel", null);
-        builder.show();
     }
 }
 

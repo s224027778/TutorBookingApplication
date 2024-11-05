@@ -133,6 +133,13 @@ public class StudentProfileActivity extends AppCompatActivity {
                     return;
                 }
 
+                Cursor res1 = db.getStudentProfile(username);
+                if (res1 != null && res1.getCount() > 0) {
+                    Toast.makeText(StudentProfileActivity.this, "Student profile already exists", Toast.LENGTH_LONG).show();
+                    res1.close();
+                    return;
+                }
+
                 boolean isInserted = db.insertStudentProfile(username, firstName, lastName, phoneNumber);
                 if (isInserted) {
                     Toast.makeText(StudentProfileActivity.this, "Profile Created", Toast.LENGTH_SHORT).show();
