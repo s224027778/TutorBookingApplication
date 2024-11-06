@@ -62,11 +62,11 @@ public class TutorAvailability extends AppCompatActivity {
             return;
         }
 
-        int startHour = startTimePicker.getCurrentHour();
         startTimePicker.setIs24HourView(true);
+        int startHour = startTimePicker.getCurrentHour();
         int startMinute = startTimePicker.getCurrentMinute();
-        int endHour = endTimePicker.getCurrentHour();
         endTimePicker.setIs24HourView(true);
+        int endHour = endTimePicker.getCurrentHour();
         int endMinute = endTimePicker.getCurrentMinute();
 
         if (startHour > endHour || (startHour == endHour && startMinute >= endMinute)) {

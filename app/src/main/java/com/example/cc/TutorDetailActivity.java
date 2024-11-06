@@ -50,7 +50,7 @@ public class TutorDetailActivity extends AppCompatActivity {
         btnAddReview = findViewById(R.id.btnAddReview);
 
         back.setOnClickListener(v -> {
-            Intent intent = new Intent(TutorDetailActivity.this,TutorList.class);
+            Intent intent = new Intent(TutorDetailActivity.this,StudentHomeActivity.class);
             startActivity(intent);
         });
 

@@ -44,9 +44,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_REVIEW_RATING = "RATING";
 
     // REPORT Table Columns
-    private static final String COL_REPORT_ID = "ID";
-    private static final String COL_REPORT_USERNAME = "USERNAME";
-    private static final String COL_REPORT_TEXT = "REPORT_TEXT";
+    public static final String COL_REPORT_ID = "ID";
+    public static final String COL_REPORT_USERNAME = "USERNAME";
+    public static final String COL_REPORT_TEXT = "REPORT_TEXT";
 
     // Location Table Columns
     private static final String COL_LOCATION_TUTOR_NAME = "TUTOR_NAME";

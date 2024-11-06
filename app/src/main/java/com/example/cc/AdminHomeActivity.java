@@ -26,8 +26,8 @@ import java.util.List;
 public class AdminHomeActivity extends AppCompatActivity {
 
     DatabaseHelper db;
-    TextView textViewUsers, textViewBooking, textViewModules, textViewTutorProfile, textViewStudentProfile, textViewTutorModule, textViewLocation, textViewReviews, textViewPrice, textViewFrequentlyAskedQuestions, textViewTutorAvailability;
-    Button buttonViewUsers, buttonViewBooking, buttonViewTutorProfile, buttonViewStudentProfile, buttonViewTutorModule, buttonViewModules, buttonViewLocation, buttonViewReviews, buttonViewPrices, buttonAdminLogout, buttonViewFAQ, buttonViewTutorAvailability;
+    TextView textViewUsers, textViewBooking, textViewModules, textViewTutorProfile, textViewStudentProfile, textViewTutorModule, textViewLocation, textViewReviews, textViewReports, textViewPrice, textViewFrequentlyAskedQuestions, textViewTutorAvailability;
+    Button buttonViewUsers, buttonViewBooking, buttonViewTutorProfile, buttonViewStudentProfile, buttonViewTutorModule, buttonViewModules, buttonViewLocation, buttonViewReviews, buttonViewReports, buttonViewPrices, buttonAdminLogout, buttonViewFAQ, buttonViewTutorAvailability;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -47,6 +47,7 @@ public class AdminHomeActivity extends AppCompatActivity {
         textViewFrequentlyAskedQuestions = findViewById(R.id.textViewFrequentlyAskedQuestions);
         textViewTutorAvailability = findViewById(R.id.textViewTutorAvailability);
         textViewReviews = findViewById(R.id.textViewReviews);
+        textViewReports = findViewById(R.id.textViewReports);
         buttonViewUsers = findViewById(R.id.buttonViewUsers);
         buttonViewBooking = findViewById(R.id.buttonViewBooking);
         buttonViewModules = findViewById(R.id.buttonViewModules);
@@ -58,6 +59,7 @@ public class AdminHomeActivity extends AppCompatActivity {
         buttonViewFAQ = findViewById(R.id.buttonViewFAQ);
         buttonViewTutorAvailability = findViewById(R.id.buttonViewTutorAvailability);
         buttonViewReviews = findViewById(R.id.buttonViewReviews);
+        buttonViewReports = findViewById(R.id.buttonViewReports);
         buttonAdminLogout = findViewById(R.id.buttonAdminLogout);
 
         buttonViewUsers.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +137,13 @@ public class AdminHomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 viewReviews();
+            }
+        });
+
+        buttonViewReports.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewReports();
             }
         });
 
@@ -269,6 +278,32 @@ public class AdminHomeActivity extends AppCompatActivity {
         }
         textViewReviews.setText(sb.toString());
         textViewReviews.setVisibility(View.VISIBLE);
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void viewReports() {
+        Cursor cursor = db.getAllReports();
+        StringBuilder sb = new StringBuilder();
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") String username = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_REPORT_USERNAME));
+                @SuppressLint("Range") String text = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_REPORT_TEXT));
+
+                sb.append("Username: ").append(username)
+                        .append(", Report: ").append(text)
+                        .append("\n\n");
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+
+        if (sb.length() > 0) {
+            textViewReports.setText(sb.toString());
+            textViewReports.setVisibility(View.VISIBLE);
+        } else {
+            textViewReports.setText("No reports found.");
+            textViewReports.setVisibility(View.VISIBLE);
+        }
     }
 
     private void viewLocation() {

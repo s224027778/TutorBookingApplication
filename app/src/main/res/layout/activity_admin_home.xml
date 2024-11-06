@@ -81,6 +81,12 @@
             android:layout_height="wrap_content"
             android:text="Logout" />
 
+        <Button
+            android:id="@+id/buttonViewReports"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View Reports" />
+
         <TextView
             android:id="@+id/textViewUsers"
             android:layout_width="match_parent"
@@ -156,6 +162,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Review Records"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/textViewReports"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Report Records"
             android:visibility="gone" />
 
     </LinearLayout>
